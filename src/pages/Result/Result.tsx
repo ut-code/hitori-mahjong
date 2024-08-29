@@ -3,6 +3,13 @@ import { PlayerInfoContext } from "../../App";
 import { PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
 import Button from "@mui/material/Button";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 interface Props {
   setUiState: (uiState: string) => void;
@@ -47,28 +54,30 @@ export default function Result(props: Props) {
       <div>
         {playerInfo.name}さんの得点は{playerInfo.score}点です。
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {scores.length === 0 ? (
-            <tr>
-              <td colSpan={2}>No results available</td>
-            </tr>
-          ) : (
-            scores.map((player, index) => (
-              <tr key={index}>
-                <td>{player.name}</td>
-                <td>{player.score}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Score</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {scores.map((player, index) => (
+              <TableRow
+                key={index}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {player.name}
+                </TableCell>
+                <TableCell>{player.score}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Button
         variant="outlined"
         onClick={() => {
