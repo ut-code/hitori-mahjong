@@ -3,6 +3,7 @@ import Tehai from "./Tehai";
 import sortTehai from "../../utils/sortTehai";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
+import Button from "@mui/material/Button";
 
 interface Props {
   setUiState: (uiState: string) => void;
@@ -84,21 +85,25 @@ export default function Play(props: Props) {
             gameState={gameState}
             setGameState={setGameState}
           />
-          <button onClick={() => props.setUiState("Tutorial")}>
+          <Button
+            variant="outlined"
+            onClick={() => props.setUiState("Tutorial")}
+          >
             チュートリアルへ
-          </button>
+          </Button>
         </>
       ) : (
         <>
           <p>終局</p>
 
-          <button
+          <Button
+            variant="outlined"
             onClick={() => {
               props.setUiState("Result");
             }}
           >
             結果画面へ
-          </button>
+          </Button>
         </>
       )}
     </>

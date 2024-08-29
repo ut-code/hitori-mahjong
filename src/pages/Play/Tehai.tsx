@@ -5,6 +5,7 @@ import { useState, useEffect, useContext } from "react";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import styles from "../../styles/Tehai.module.css";
+import Button from "@mui/material/Button";
 
 type tehaiProps = {
   tehai: Hai[];
@@ -82,7 +83,8 @@ export default function Tehai(props: tehaiProps) {
       {props.gameState.junme === 18 ? (
         <>
           <div>流局</div>
-          <button
+          <Button
+            variant="outlined"
             onClick={() => {
               props.setGameState({
                 junme: 1,
@@ -93,14 +95,15 @@ export default function Tehai(props: tehaiProps) {
             }}
           >
             確認
-          </button>
+          </Button>
         </>
       ) : (
         <>
           {isAgari && (
             <>
               <div>ツモにゃ！！</div>
-              <button
+              <Button
+                variant="outlined"
                 onClick={() => {
                   props.setGameState({
                     junme: 1,
@@ -114,7 +117,7 @@ export default function Tehai(props: tehaiProps) {
                 }}
               >
                 アガリ
-              </button>
+              </Button>
             </>
           )}
           <div>手牌</div>
@@ -127,7 +130,9 @@ export default function Tehai(props: tehaiProps) {
                   width="50"
                   height="70"
                 />
-                <button onClick={() => tedashi(index)}>手出し</button>
+                <Button variant="outlined" onClick={() => tedashi(index)}>
+                  手出し
+                </Button>
               </li>
             ))}
           </ul>
@@ -138,10 +143,13 @@ export default function Tehai(props: tehaiProps) {
               width="50"
               height="70"
             />
-            <button onClick={tsumogiri}>ツモ切り</button>
+            <Button variant="outlined" onClick={tsumogiri}>
+              ツモ切り
+            </Button>
           </div>
           {!isAgari && props.gameState.junme <= 8 && (
-            <button
+            <Button
+              variant="outlined"
               onClick={() => {
                 props.setGameState({
                   junme: 1,
@@ -155,7 +163,7 @@ export default function Tehai(props: tehaiProps) {
               }}
             >
               オリ
-            </button>
+            </Button>
           )}
         </>
       )}
