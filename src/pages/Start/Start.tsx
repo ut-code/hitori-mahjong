@@ -1,5 +1,8 @@
 import { useContext, useState } from "react";
 import { PlayerInfoContext } from "../../App";
+import Button from "@mui/material/Button";
+import { TextField } from "@mui/material";
+import styles from "../../styles/Start.module.css";
 
 interface Props {
   setUiState: (uiState: string) => void;
@@ -11,18 +14,19 @@ export default function Start(props: Props) {
 
   return (
     <>
-      <p>一人麻雀～牌効率について学ぼう～</p>
+      <p className={styles.title}>一人麻雀～牌効率について学ぼう～</p>
       {!clicked ? (
-        <>
-          {" "}
-          <input
+        <div className={styles.formContainer}>
+          <TextField
+            variant="standard"
             value={inputText}
             onChange={(e) => {
               setInputText(e.target.value);
             }}
             placeholder="ユーザー名"
           />
-          <button
+          <Button
+            variant="outlined"
             onClick={() => {
               setClicked(true),
                 setInputText(""),
@@ -30,15 +34,18 @@ export default function Start(props: Props) {
             }}
           >
             ユーザー名を決定
-          </button>
-        </>
+          </Button>
+        </div>
       ) : (
         <>
           <p>こんにちは {playerInfo.name}さん！</p>
 
-          <button onClick={() => props.setUiState("Tutorial")}>
+          <Button
+            variant="outlined"
+            onClick={() => props.setUiState("Tutorial")}
+          >
             チュートリアルへ
-          </button>
+          </Button>
         </>
       )}
     </>
