@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { PlayerInfoContext } from "../../App";
 import { PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
+import Button from "@mui/material/Button";
 
 interface Props {
   setUiState: (uiState: string) => void;
@@ -68,14 +69,15 @@ export default function Result(props: Props) {
           )}
         </tbody>
       </table>
-      <button
+      <Button
+        variant="outlined"
         onClick={() => {
           props.setUiState("Start");
           setPlayerInfo(() => ({ name: "", score: 25000 }));
         }}
       >
         もう一回プレイする
-      </button>
+      </Button>
     </>
   );
 }
