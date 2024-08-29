@@ -39,13 +39,18 @@ export default function Start(props: Props) {
       ) : (
         <>
           <p>こんにちは {playerInfo.name}さん！</p>
+          <div className={styles.buttonContainer}>
+            <Button variant="outlined" onClick={() => setClicked(false)}>
+              ユーザー名を修正
+            </Button>
 
-          <Button
-            variant="outlined"
-            onClick={() => props.setUiState("Tutorial")}
-          >
-            チュートリアルへ
-          </Button>
+            <Button
+              variant="outlined"
+              onClick={() => props.setUiState("Tutorial")}
+            >
+              チュートリアルへ
+            </Button>
+          </div>
         </>
       )}
     </>
