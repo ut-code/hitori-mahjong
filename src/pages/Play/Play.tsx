@@ -85,6 +85,8 @@ export default function Play(props: Props) {
             gameState={gameState}
             setGameState={setGameState}
           />
+          <br></br>
+          <br></br>
           <Button
             variant="outlined"
             onClick={() => props.setUiState("Tutorial")}

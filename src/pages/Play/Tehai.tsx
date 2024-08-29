@@ -146,6 +146,8 @@ export default function Tehai(props: tehaiProps) {
             <Button variant="outlined" onClick={tsumogiri}>
               ツモ切り
             </Button>
+            <br></br>
+            <br></br>
           </div>
           {!isAgari && props.gameState.junme <= 8 && (
             <Button
