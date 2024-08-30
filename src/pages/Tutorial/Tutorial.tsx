@@ -1,19 +1,26 @@
 import Button from "@mui/material/Button";
+import ReactMarkDown from "react-markdown";
+import { useState, useEffect } from "react";
 import styles from "../../styles/Tutorial.module.css";
+import { styled } from "@mui/material";
+
 interface Props {
   setUiState: (uiState: string) => void;
 }
 export default function Tutorial(props: Props) {
+  const [content, setContent] = useState("");
+  useEffect(() => {
+    fetch("/tutorial.md")
+      .then((res) => res.text())
+      .then((text) => setContent(text));
+  });
   return (
     <>
       <div className={styles.textBox}>
-        <p>
-          麻雀は山から牌をツモって捨てることを繰り返し、4面子1雀頭ができたらアガリとなるゲームです。
-        </p>
-        <p>
-          一人麻雀では、アガったら5200点が入り、18巡目までにアガれなかったら3900点を失います。ただ、いつもアガれるわけではないので、8巡目までは「オリ」ボタンを押してオリることができます。オリたら1000点を失います。アガリが見えなかったらオリるのも大切です。
-        </p>
+        {" "}
+        <ReactMarkDown>{content}</ReactMarkDown>
       </div>
+
       <Button variant="outlined" onClick={() => props.setUiState("Play")}>
         プレイ
       </Button>
