@@ -2,7 +2,6 @@ import Button from "@mui/material/Button";
 import ReactMarkDown from "react-markdown";
 import { useState, useEffect } from "react";
 import styles from "../../styles/Tutorial.module.css";
-import { styled } from "@mui/material";
 
 interface Props {
   setUiState: (uiState: string) => void;
