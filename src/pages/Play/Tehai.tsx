@@ -125,7 +125,7 @@ export default function Tehai(props: tehaiProps) {
             {props.tehai.map((hai, index) => (
               <li key={index}>
                 <img
-                  src={`/${hai.kind}_${hai.value}.png`}
+                  src={`/hai/${hai.kind}_${hai.value}.png`}
                   alt={`${hai.kind} ${hai.value}`}
                   width="50"
                   height="70"
@@ -138,7 +138,7 @@ export default function Tehai(props: tehaiProps) {
           </ul>
           <div>
             <img
-              src={`/${props.tsumo.kind}_${props.tsumo.value}.png`}
+              src={`/hai/${props.tsumo.kind}_${props.tsumo.value}.png`}
               alt={`${props.tsumo.kind} ${props.tsumo.value}`}
               width="50"
               height="70"
