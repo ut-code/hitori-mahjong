@@ -9,7 +9,7 @@ interface Props {
 export default function Tutorial(props: Props) {
   const [content, setContent] = useState("");
   useEffect(() => {
-    fetch("/tutorial/tutorial.md")
+    fetch("/tutorial/tutorial.mdx")
       .then((res) => res.text())
       .then((text) => setContent(text));
   });
