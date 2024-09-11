@@ -14,7 +14,7 @@ export default function Start(props: Props) {
 
   return (
     <>
-      <p className={styles.title}>一人麻雀～牌効率について学ぼう～</p>
+      <p className={styles.title}>一人麻雀～麻雀の攻撃と守備を覚えよう～</p>
       {!clicked ? (
         <div className={styles.formContainer}>
           <TextField
