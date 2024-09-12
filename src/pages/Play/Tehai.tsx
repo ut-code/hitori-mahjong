@@ -112,7 +112,7 @@ export default function Tehai(props: tehaiProps) {
                   fetchInitialHaiyama();
                   setPlayerInfo({
                     ...playerInfo,
-                    score: playerInfo.score + 5200,
+                    score: playerInfo.score + 8000,
                   });
                 }}
               >
