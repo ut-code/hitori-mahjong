@@ -5,6 +5,7 @@ import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import Button from "@mui/material/Button";
 import { Hai } from "../../utils/hai";
+import React from "react";
 
 interface Props {
   setUiState: (uiState: string) => void;

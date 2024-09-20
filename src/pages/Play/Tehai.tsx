@@ -1,4 +1,5 @@
-import { Hai, GameState } from "./Play";
+import { Hai } from "../../utils/hai";
+import { GameState } from "./Play";
 import sortTehai from "../../utils/sortTehai";
 import judgeAgari from "../../utils/judgeAgari";
 import { useState, useEffect, useContext } from "react";
@@ -6,6 +7,7 @@ import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import styles from "../../styles/Tehai.module.css";
 import Button from "@mui/material/Button";
+import React from "react";
 
 type tehaiProps = {
   tehai: Hai[];
