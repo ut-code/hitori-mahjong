@@ -4,7 +4,8 @@
     "target": "ES6",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "lib": ["es2020", "dom"]
   },
   "include": ["server/server.ts", "server/createYamahai.ts"]
 }

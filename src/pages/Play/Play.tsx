@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import Tehai from "./Tehai";
-import sortTehai from "../../utils/sortTehai";
+import { sortTehai } from "../../utils/hai";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import Button from "@mui/material/Button";

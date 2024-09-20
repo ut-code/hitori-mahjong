@@ -8,6 +8,26 @@ export type Hai =
       value: JihaiValue;
     };
 
+export function haiToIndex(hai: Hai): number {
+  const kindOrder = {
+    manzu: 0,
+    pinzu: 1,
+    souzu: 2,
+    jihai: 3,
+  };
+
+  const jihaiOrder = {
+    ton: 1,
+    nan: 2,
+    sya: 3,
+    pei: 4,
+    haku: 5,
+    hatsu: 6,
+    tyun: 7,
+  };
+  return 9 * kindOrder[hai.kind] + hai.kind === "jihai" ? jihaiOrder[hai.value] : hai.value
+}
+
 export type JihaiValue =
   | "ton"
   | "nan"
@@ -39,34 +59,8 @@ export function constructHai(
   throw new Error("jihai requires JihaiValue");
 }
 
-export function sortHai(haiArray: Hai[]): Hai[] {
-  const kindOrder = {
-    manzu: 1,
-    pinzu: 2,
-    souzu: 3,
-    zihai: 4,
-  };
-
-  const jihaiOrder = {
-    ton: 1,
-    nan: 2,
-    sya: 3,
-    pei: 4,
-    haku: 5,
-    hatsu: 6,
-    tyun: 7,
-  };
-
-  return haiArray.sort((a, b) => {
-    const kindComparison = kindOrder[a.kind] - kindOrder[b.kind];
-    if (kindComparison !== 0) {
-      return kindComparison;
-    }
-
-    if (a.kind === "jihai" && b.kind === "jihai") {
-      return jihaiOrder[a.value] - jihaiOrder[b.value]; //ブラケット記法...
-    } else if (typeof a.value === "number" && typeof b.value === "number") {
-      return a.value - b.value;
-    }
-  });
+export function sortTehai(haiArray: Hai[]): Hai[] {
+  return haiArray.sort((a, b) => 
+    haiToIndex(a) - haiToIndex(b)
+  );
 }
