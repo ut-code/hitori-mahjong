@@ -1,7 +1,7 @@
 type Hai = {
-  kind: string,
-  value: number,
-}
+  kind: string;
+  value: number;
+};
 export default function createHaiyama(): Hai[] {
   class Hai {
     kind: string; // m子、p子、s子、四風牌、三元牌
@@ -32,7 +32,10 @@ export default function createHaiyama(): Hai[] {
     return array;
   }
 
-  function* haiyamaGenerator(kinds: readonly string[], values: readonly number[]): Generator<Hai> {
+  function* haiyamaGenerator(
+    kinds: readonly string[],
+    values: readonly number[],
+  ): Generator<Hai> {
     for (let kind of kinds) {
       for (let value of values) {
         for (let i = 0; i < 4; i++) {
