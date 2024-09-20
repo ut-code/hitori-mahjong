@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import createHaiyama from "./createHaiyama";
+import createHaiyama from "./createHaiyama.js";
 import { PrismaClient } from "@prisma/client";
 
 const app = express();
