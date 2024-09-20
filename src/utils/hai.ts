@@ -13,24 +13,32 @@ export type HaiKind = SuhaiKind | "jihai";
 
 const kindOrder: HaiKind[] = ["manzu", "pinzu", "souzu", "jihai"];
 
-const jihaiOrder: JihaiValue[] = ["ton", "nan", "sya", "pei", "haku", "hatsu", "tyun"];
+const jihaiOrder: JihaiValue[] = [
+  "ton",
+  "nan",
+  "sya",
+  "pei",
+  "haku",
+  "hatsu",
+  "tyun",
+];
 
 export function haiToIndex(hai: Hai): number {
   if (hai.kind === "jihai") {
-    return 27 + 1 + jihaiOrder.indexOf(hai.value)
+    return 27 + 1 + jihaiOrder.indexOf(hai.value);
   }
-  return 9 * kindOrder[hai.kind] + hai.value
+  return 9 * kindOrder.indexOf(hai.kind) + hai.value;
 }
 
 export function indexToHai(index: number): Hai {
   if (index <= 0 || index > 34) {
-    throw new Error("invalid index")
+    throw new Error("invalid index");
   }
   const hai = constructHai(
     kindOrder[Math.floor(index / 9)],
-    Math.floor(index / 9) === 4 ? jihaiOrder[index % 9] : index % 9
+    Math.floor(index / 9) === 4 ? jihaiOrder[index % 9] : index % 9,
   );
-  return hai
+  return hai;
 }
 
 export type JihaiValue =
@@ -42,10 +50,7 @@ export type JihaiValue =
   | "hatsu"
   | "tyun";
 
-export function constructHai(
-  kind: HaiKind,
-  value: number | JihaiValue,
-): Hai {
+export function constructHai(kind: HaiKind, value: number | JihaiValue): Hai {
   if (kind === "manzu" || kind === "pinzu" || kind === "souzu") {
     if (typeof value === "number") {
       return {
@@ -65,7 +70,5 @@ export function constructHai(
 }
 
 export function sortTehai(haiArray: Hai[]): Hai[] {
-  return haiArray.sort((a, b) => 
-    haiToIndex(a) - haiToIndex(b)
-  );
+  return haiArray.sort((a, b) => haiToIndex(a) - haiToIndex(b));
 }
