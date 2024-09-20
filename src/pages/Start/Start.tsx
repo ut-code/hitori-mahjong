@@ -3,6 +3,7 @@ import { PlayerInfoContext } from "../../App";
 import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
+import React from "react";
 
 interface Props {
   setUiState: (uiState: string) => void;

@@ -1,4 +1,5 @@
-export const exampleHaiyama = [
+import { Hai } from "../utils/hai";
+export const exampleHaiyama: Hai[] = [
   { kind: "manzu", value: 1 },
   { kind: "manzu", value: 2 },
   { kind: "manzu", value: 3 },

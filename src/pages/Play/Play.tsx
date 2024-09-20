@@ -1,18 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import Tehai from "./Tehai";
-import sortTehai from "../../utils/sortTehai";
+import { sortTehai } from "../../utils/hai";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import Button from "@mui/material/Button";
+import { Hai } from "../../utils/hai";
+import React from "react";
 
 interface Props {
   setUiState: (uiState: string) => void;
 }
-
-export type Hai = {
-  kind: string;
-  value: number;
-};
 
 export type GameState = {
   kyoku: number;

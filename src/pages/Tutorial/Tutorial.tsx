@@ -1,5 +1,6 @@
 import Button from "@mui/material/Button";
 import styles from "../../styles/Tutorial.module.css";
+import React from "react";
 
 interface Props {
   setUiState: (uiState: string) => void;
