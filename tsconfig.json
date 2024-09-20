@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
-    "module": "ES6",      
-    "target": "ES6",      
-    "outDir": "./dist",    
-    "esModuleInterop": true, 
+    "module": "ES6",
+    "target": "ES6",
+    "outDir": "./dist",
+    "esModuleInterop": true,
     "moduleResolution": "node"
   },
-  "include": [
-    "server/server.ts",  
-    "server/createYamahai.ts" 
-  ],
+  "include": ["server/server.ts", "server/createYamahai.ts"]
 }
