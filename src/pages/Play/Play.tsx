@@ -4,15 +4,11 @@ import sortTehai from "../../utils/sortTehai";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import Button from "@mui/material/Button";
+import { Hai } from "../../utils/hai";
 
 interface Props {
   setUiState: (uiState: string) => void;
 }
-
-export type Hai = {
-  kind: string;
-  value: number;
-};
 
 export type GameState = {
   kyoku: number;
