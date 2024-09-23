@@ -93,8 +93,8 @@ export default function Play(props: Props) {
           </div>
         </>
       ) : (
-        <>
-          <p>終局</p>
+        <div className={styles.syukyokuContainer}>
+          <div className={styles.syukyoku}>終局</div>
 
           <Button
             variant="contained"
@@ -104,7 +104,7 @@ export default function Play(props: Props) {
           >
             結果画面へ
           </Button>
-        </>
+        </div>
       )}
     </>
   );

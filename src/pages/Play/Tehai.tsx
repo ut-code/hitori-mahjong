@@ -80,7 +80,7 @@ export default function Tehai(props: tehaiProps) {
     <>
       {props.gameState.junme === 18 ? (
         <>
-          <div>流局</div>
+          <div className={styles.ryukyoku}>流局</div>
           <Button
             variant="contained"
             onClick={() => {
@@ -156,7 +156,7 @@ export default function Tehai(props: tehaiProps) {
 
           {isAgari && (
             <>
-              <div>ツモにゃ！！</div>
+              <div className={styles.tsumoClaim}>ツモにゃ！！</div>
               <Button
                 variant="contained"
                 onClick={() => {
