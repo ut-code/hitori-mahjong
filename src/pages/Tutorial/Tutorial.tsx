@@ -88,6 +88,9 @@ export default function Tutorial(props: Props) {
         </p>
       </div>
 
+      <Button variant="outlined" onClick={() => props.setUiState("Start")}>
+        ユーザー名を修正
+      </Button>
       <Button variant="outlined" onClick={() => props.setUiState("Play")}>
         プレイ
       </Button>

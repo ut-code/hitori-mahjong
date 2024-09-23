@@ -9,63 +9,44 @@ import Alert from "@mui/material/Alert";
 interface Props {
   setUiState: (uiState: string) => void;
 }
+
 export default function Start(props: Props) {
   const [inputText, setInputText] = useState("");
-  const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
-  const [clicked, setClicked] = useState(false);
+  const { setPlayerInfo } = useContext(PlayerInfoContext);
   const [isNotValidUsername, setIsNotValidUserName] = useState(false);
+
+  // Function to handle player name input and validation
+  const handleUserNameSubmit = () => {
+    if (inputText !== "") {
+      setPlayerInfo((prevInfo) => ({
+        ...prevInfo,
+        name: inputText,
+      }));
+      props.setUiState("Tutorial");
+    } else {
+      setIsNotValidUserName(true); // Show error message if input is empty
+    }
+  };
 
   return (
     <>
-      <p className={styles.title}>一人麻雀～麻雀の攻撃と守備を覚えよう～</p>
-      {!clicked ? (
-        <div className={styles.formContainer}>
-          <TextField
-            variant="standard"
-            value={inputText}
-            onChange={(e) => {
-              setInputText(e.target.value);
-            }}
-            placeholder="ユーザー名"
-          />
-          <Button
-            variant="outlined"
-            onClick={() => {
-              if (inputText !== "") {
-                setClicked(true),
-                  setInputText(""),
-                  setPlayerInfo((prevInfo) => ({
-                    ...prevInfo,
-                    name: inputText,
-                  }));
-              } else {
-                setIsNotValidUserName(true);
-              }
-            }}
-          >
-            ユーザー名を決定
-          </Button>
-          {isNotValidUsername && (
-            <Alert severity="error">ユーザー名を入力してください</Alert>
-          )}
-        </div>
-      ) : (
-        <>
-          <p>こんにちは {playerInfo.name}さん！</p>
-          <div className={styles.buttonContainer}>
-            <Button variant="outlined" onClick={() => setClicked(false)}>
-              ユーザー名を修正
-            </Button>
+      <p className={styles.title}>一人麻雀～麻雀の基本を覚えよう～</p>
+      <div className={styles.formContainer}>
+        <TextField
+          variant="standard"
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          placeholder="ユーザー名を入力"
+        />
 
-            <Button
-              variant="outlined"
-              onClick={() => props.setUiState("Tutorial")}
-            >
-              チュートリアルへ
-            </Button>
-          </div>
-        </>
-      )}
+        <Button variant="contained" onClick={handleUserNameSubmit}>
+          チュートリアルへ
+        </Button>
+
+        {isNotValidUsername && (
+          <Alert severity="error">ユーザー名を入力してください</Alert>
+        )}
+      </div>
     </>
   );
 }
