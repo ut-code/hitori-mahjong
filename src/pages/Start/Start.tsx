@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
 import React from "react";
+import Alert from "@mui/material/Alert";
 
 interface Props {
   setUiState: (uiState: string) => void;
@@ -12,6 +13,7 @@ export default function Start(props: Props) {
   const [inputText, setInputText] = useState("");
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
   const [clicked, setClicked] = useState(false);
+  const [isNotValidUsername, setIsNotValidUserName] = useState(false);
 
   return (
     <>
@@ -29,13 +31,23 @@ export default function Start(props: Props) {
           <Button
             variant="outlined"
             onClick={() => {
-              setClicked(true),
-                setInputText(""),
-                setPlayerInfo((prevInfo) => ({ ...prevInfo, name: inputText }));
+              if (inputText !== "") {
+                setClicked(true),
+                  setInputText(""),
+                  setPlayerInfo((prevInfo) => ({
+                    ...prevInfo,
+                    name: inputText,
+                  }));
+              } else {
+                setIsNotValidUserName(true);
+              }
             }}
           >
             ユーザー名を決定
           </Button>
+          {isNotValidUsername && (
+            <Alert severity="error">ユーザー名を入力してください</Alert>
+          )}
         </div>
       ) : (
         <>
