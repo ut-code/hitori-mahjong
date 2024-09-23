@@ -2,5 +2,12 @@
   padding: 10px;
   margin: 10px 0;
   text-align: left;
-  background-color: #f9f9f9;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  justify-content: center;
 }
