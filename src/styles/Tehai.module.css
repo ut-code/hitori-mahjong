@@ -2,3 +2,15 @@
   display: flex;
   list-style-type: none;
 }
+
+.tsumoContainer {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameDescription {
+  font-size: 4em;
+}

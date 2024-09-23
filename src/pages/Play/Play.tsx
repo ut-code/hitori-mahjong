@@ -6,6 +6,7 @@ import { PlayerInfoContext } from "../../App";
 import Button from "@mui/material/Button";
 import { Hai } from "../../utils/hai";
 import React from "react";
+import styles from "../../styles/Play.module.css";
 
 interface Props {
   setUiState: (uiState: string) => void;
@@ -72,24 +73,24 @@ export default function Play(props: Props) {
     <>
       {gameState.kyoku <= 4 ? (
         <>
-          <Tehai
-            tehai={tehai}
-            setTehai={setTehai}
-            tsumo={tsumo}
-            setTsumo={setTsumo}
-            haiyama={haiyama}
-            setHaiyama={setHaiyama}
-            gameState={gameState}
-            setGameState={setGameState}
-          />
-          <br></br>
-          <br></br>
-          <Button
-            variant="outlined"
-            onClick={() => props.setUiState("Tutorial")}
-          >
-            チュートリアルへ
-          </Button>
+          <div className={styles.container}>
+            <Tehai
+              tehai={tehai}
+              setTehai={setTehai}
+              tsumo={tsumo}
+              setTsumo={setTsumo}
+              haiyama={haiyama}
+              setHaiyama={setHaiyama}
+              gameState={gameState}
+              setGameState={setGameState}
+            />
+            <Button
+              variant="contained"
+              onClick={() => props.setUiState("Tutorial")}
+            >
+              チュートリアルに戻る
+            </Button>
+          </div>
         </>
       ) : (
         <>
