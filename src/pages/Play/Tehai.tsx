@@ -123,7 +123,7 @@ export default function Tehai(props: tehaiProps) {
                       });
                     }}
                   >
-                    アガリ
+                    確認
                   </Button>
                 </>
               )}
