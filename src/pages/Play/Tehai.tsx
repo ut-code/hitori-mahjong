@@ -106,6 +106,27 @@ export default function Tehai(props: tehaiProps) {
                 東{props.gameState.kyoku}局{props.gameState.junme}巡目
                 {playerInfo.score}点持ち
               </div>
+              {isAgari && (
+                <>
+                  <div className={styles.tsumoClaim}>ツモにゃ！！</div>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      props.setGameState({
+                        junme: 1,
+                        kyoku: props.gameState.kyoku + 1,
+                      });
+                      fetchInitialHaiyama();
+                      setPlayerInfo({
+                        ...playerInfo,
+                        score: playerInfo.score + 8000,
+                      });
+                    }}
+                  >
+                    アガリ
+                  </Button>
+                </>
+              )}
               <ul className={styles.tehai}>
                 {props.tehai.map((hai, index) => (
                   <li key={index}>
@@ -152,28 +173,6 @@ export default function Tehai(props: tehaiProps) {
             >
               オリ
             </Button>
-          )}
-
-          {isAgari && (
-            <>
-              <div className={styles.tsumoClaim}>ツモにゃ！！</div>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  props.setGameState({
-                    junme: 1,
-                    kyoku: props.gameState.kyoku + 1,
-                  });
-                  fetchInitialHaiyama();
-                  setPlayerInfo({
-                    ...playerInfo,
-                    score: playerInfo.score + 8000,
-                  });
-                }}
-              >
-                アガリ
-              </Button>
-            </>
           )}
         </>
       )}
