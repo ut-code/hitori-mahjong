@@ -80,7 +80,7 @@ export default function Result(props: Props) {
         </Table>
       </TableContainer>
       <Button
-        variant="outlined"
+        variant="contained"
         onClick={() => {
           props.setUiState("Start");
           setPlayerInfo(() => ({ name: "", score: 25000 }));

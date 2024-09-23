@@ -97,7 +97,7 @@ export default function Play(props: Props) {
           <p>終局</p>
 
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={() => {
               props.setUiState("Result");
             }}

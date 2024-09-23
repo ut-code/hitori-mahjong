@@ -82,7 +82,7 @@ export default function Tehai(props: tehaiProps) {
         <>
           <div>流局</div>
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={() => {
               props.setGameState({
                 junme: 1,
@@ -137,7 +137,7 @@ export default function Tehai(props: tehaiProps) {
 
           {!isAgari && props.gameState.junme <= 8 && (
             <Button
-              variant="outlined"
+              variant="contained"
               onClick={() => {
                 props.setGameState({
                   junme: 1,
@@ -158,7 +158,7 @@ export default function Tehai(props: tehaiProps) {
             <>
               <div>ツモにゃ！！</div>
               <Button
-                variant="outlined"
+                variant="contained"
                 onClick={() => {
                   props.setGameState({
                     junme: 1,
