@@ -78,84 +78,9 @@ export default function Tehai(props: tehaiProps) {
   };
   return (
     <>
-      {!isAgari ? (
+      {props.gameState.junme === 18 ? (
         <>
-          <div className={styles.gameDescription}>
-            東{props.gameState.kyoku}局{props.gameState.junme}巡目
-            {playerInfo.score}
-            点持ち
-          </div>
-          <ul className={styles.tehai}>
-            {props.tehai.map((hai, index) => (
-              <li key={index}>
-                <img
-                  src={`/hai/${hai.kind}_${hai.value}.png`}
-                  alt={`${hai.kind} ${hai.value}`}
-                  width="50"
-                  height="70"
-                />
-                <Button variant="outlined" onClick={() => tedashi(index)}>
-                  手出し
-                </Button>
-              </li>
-            ))}
-          </ul>
-          <div className={styles.tsumoContainer}>
-            <img
-              src={`/hai/${props.tsumo.kind}_${props.tsumo.value}.png`}
-              alt={`${props.tsumo.kind} ${props.tsumo.value}`}
-              width="50"
-              height="70"
-            />
-            <Button variant="outlined" onClick={tsumogiri}>
-              ツモ切り
-            </Button>
-          </div>
-          {props.gameState.junme <= 8 && (
-            <>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  props.setGameState({
-                    junme: 1,
-                    kyoku: props.gameState.kyoku + 1,
-                  });
-                  fetchInitialHaiyama();
-                  setPlayerInfo({
-                    ...playerInfo,
-                    score: playerInfo.score - 1000,
-                  });
-                }}
-              >
-                オリ
-              </Button>
-              {props.gameState.junme >= 18 && (
-                <>
-                  <div>流局</div>
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      props.setGameState({
-                        junme: 1,
-                        kyoku: props.gameState.kyoku + 1,
-                      });
-                      fetchInitialHaiyama();
-                      setPlayerInfo({
-                        ...playerInfo,
-                        score: playerInfo.score - 3900,
-                      });
-                    }}
-                  >
-                    確認
-                  </Button>
-                </>
-              )}
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          <div>ツモにゃ！！</div>
+          <div>流局</div>
           <Button
             variant="outlined"
             onClick={() => {
@@ -166,12 +91,90 @@ export default function Tehai(props: tehaiProps) {
               fetchInitialHaiyama();
               setPlayerInfo({
                 ...playerInfo,
-                score: playerInfo.score + 8000,
+                score: playerInfo.score - 3900,
               });
             }}
           >
-            アガリ
+            確認
           </Button>
+        </>
+      ) : (
+        <>
+          {props.gameState.junme < 18 && (
+            <>
+              <div className={styles.gameDescription}>
+                東{props.gameState.kyoku}局{props.gameState.junme}巡目
+                {playerInfo.score}点持ち
+              </div>
+              <ul className={styles.tehai}>
+                {props.tehai.map((hai, index) => (
+                  <li key={index}>
+                    <img
+                      src={`/hai/${hai.kind}_${hai.value}.png`}
+                      alt={`${hai.kind} ${hai.value}`}
+                      width="50"
+                      height="70"
+                    />
+                    <Button variant="outlined" onClick={() => tedashi(index)}>
+                      手出し
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+              <div className={styles.tsumoContainer}>
+                <img
+                  src={`/hai/${props.tsumo.kind}_${props.tsumo.value}.png`}
+                  alt={`${props.tsumo.kind} ${props.tsumo.value}`}
+                  width="50"
+                  height="70"
+                />
+                <Button variant="outlined" onClick={tsumogiri}>
+                  ツモ切り
+                </Button>
+              </div>
+            </>
+          )}
+
+          {!isAgari && props.gameState.junme <= 8 && (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                props.setGameState({
+                  junme: 1,
+                  kyoku: props.gameState.kyoku + 1,
+                });
+                fetchInitialHaiyama();
+                setPlayerInfo({
+                  ...playerInfo,
+                  score: playerInfo.score - 1000,
+                });
+              }}
+            >
+              オリ
+            </Button>
+          )}
+
+          {isAgari && (
+            <>
+              <div>ツモにゃ！！</div>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  props.setGameState({
+                    junme: 1,
+                    kyoku: props.gameState.kyoku + 1,
+                  });
+                  fetchInitialHaiyama();
+                  setPlayerInfo({
+                    ...playerInfo,
+                    score: playerInfo.score + 8000,
+                  });
+                }}
+              >
+                アガリ
+              </Button>
+            </>
+          )}
         </>
       )}
     </>
