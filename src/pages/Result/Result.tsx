@@ -11,6 +11,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import React from "react";
+import styles from "../../styles/Result.module.css";
 
 interface Props {
   setUiState: (uiState: string) => void;
@@ -52,42 +53,44 @@ export default function Result(props: Props) {
 
   return (
     <>
-      <div>
-        {playerInfo.name}さんの得点は{playerInfo.score}点です。
-      </div>
+      <div className={styles.container}>
+        <div className={styles.sentence}>
+          {playerInfo.name}さんの得点は{playerInfo.score}点です。
+        </div>
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Score</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {scores.map((player, index) => (
-              <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {player.name}
-                </TableCell>
-                <TableCell>{player.score}</TableCell>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Score</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Button
-        variant="outlined"
-        onClick={() => {
-          props.setUiState("Start");
-          setPlayerInfo(() => ({ name: "", score: 25000 }));
-        }}
-      >
-        もう一回プレイする
-      </Button>
+            </TableHead>
+            <TableBody>
+              {scores.map((player, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {player.name}
+                  </TableCell>
+                  <TableCell>{player.score}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Button
+          variant="contained"
+          onClick={() => {
+            props.setUiState("Start");
+            setPlayerInfo(() => ({ name: "", score: 25000 }));
+          }}
+        >
+          もう一回プレイする
+        </Button>
+      </div>
     </>
   );
 }
