@@ -6,7 +6,6 @@ import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import styles from "../../styles/Tehai.module.css";
 import Button from "@mui/material/Button";
-import React from "react";
 import { sortTehai } from "../../utils/hai";
 
 type tehaiProps = {
