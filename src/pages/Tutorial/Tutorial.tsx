@@ -2,11 +2,7 @@ import Button from "@mui/material/Button";
 import styles from "../../styles/Tutorial.module.css";
 import React from "react";
 
-interface Props {
-  setUiState: (uiState: string) => void;
-}
-
-export default function Tutorial(props: Props) {
+export default function Tutorial() {
   return (
     <>
       <div className={styles.textBox}>
@@ -89,7 +85,10 @@ export default function Tutorial(props: Props) {
       </div>
 
       <div className={styles.buttonContainer}>
-        <Button variant="contained" onClick={() => props.setUiState("Play")}>
+        <Button
+          variant="contained"
+          onClick={() => window.open("/play", "_blank")}
+        >
           プレイ
         </Button>
       </div>

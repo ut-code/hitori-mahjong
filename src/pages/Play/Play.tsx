@@ -7,17 +7,15 @@ import Button from "@mui/material/Button";
 import { Hai } from "../../utils/hai";
 import React from "react";
 import styles from "../../styles/Play.module.css";
-
-interface Props {
-  setUiState: (uiState: string) => void;
-}
+import { useNavigate } from "react-router-dom";
 
 export type GameState = {
   kyoku: number;
   junme: number;
 };
 
-export default function Play(props: Props) {
+export default function Play() {
+  const navigate = useNavigate();
   const { playerInfo } = useContext(PlayerInfoContext);
   const [haiyama, setHaiyama] = useState<Hai[]>([]);
   const [tehai, setTehai] = useState<Hai[]>([]);
@@ -93,7 +91,7 @@ export default function Play(props: Props) {
           <Button
             variant="contained"
             onClick={() => {
-              props.setUiState("Result");
+              navigate("/result");
             }}
           >
             結果画面へ
