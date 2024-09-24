@@ -6,8 +6,8 @@ import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
 import styles from "../../styles/Tehai.module.css";
 import Button from "@mui/material/Button";
-import React from "react";
 import { sortTehai } from "../../utils/hai";
+import React from "react";
 
 type tehaiProps = {
   tehai: Hai[];
@@ -108,7 +108,7 @@ export default function Tehai(props: tehaiProps) {
               </div>
               {isAgari && (
                 <>
-                  <div className={styles.tsumoClaim}>ツモにゃ！！</div>
+                  <div className={styles.tsumoClaim}>ツモ！！</div>
                   <Button
                     variant="contained"
                     onClick={() => {
@@ -127,31 +127,30 @@ export default function Tehai(props: tehaiProps) {
                   </Button>
                 </>
               )}
-              <ul className={styles.tehai}>
-                {props.tehai.map((hai, index) => (
-                  <li key={index}>
-                    <img
-                      src={`/hai/${hai.kind}_${hai.value}.png`}
-                      alt={`${hai.kind} ${hai.value}`}
-                      width="50"
-                      height="70"
-                    />
-                    <Button variant="outlined" onClick={() => tedashi(index)}>
-                      手出し
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-              <div className={styles.tsumoContainer}>
+              <div className={styles.tehaiContainer}>
+                <ul className={styles.tehai}>
+                  {props.tehai.map((hai, index) => (
+                    <li key={index}>
+                      <img
+                        src={`/hai/${hai.kind}_${hai.value}.png`}
+                        alt={`${hai.kind} ${hai.value}`}
+                        width="50"
+                        height="70"
+                        onClick={() => tedashi(index)} // クリックイベントで関数を実行
+                        style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
+                      />
+                    </li>
+                  ))}
+                </ul>
+
                 <img
                   src={`/hai/${props.tsumo.kind}_${props.tsumo.value}.png`}
                   alt={`${props.tsumo.kind} ${props.tsumo.value}`}
                   width="50"
                   height="70"
+                  onClick={() => tsumogiri()} // クリックイベントでtsumogiri関数を実行
+                  style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
                 />
-                <Button variant="outlined" onClick={tsumogiri}>
-                  ツモ切り
-                </Button>
               </div>
             </>
           )}

@@ -21,7 +21,7 @@ export default function Tutorial(props: Props) {
         />
         <ul>
           <li>手持ちの牌は13枚</li>
-          <li>山から1枚引き、不要な牌を捨てる</li>
+          <li>山から1枚引き、1枚捨てる</li>
           <li>これを繰り返し最初にアガった人に得点が入る</li>
           <li>
             アガるためには14枚目を山から引いた時に、面子（メンツ）を3牌1組で4セット、雀頭（アタマ）を1組そろえる
@@ -29,7 +29,7 @@ export default function Tutorial(props: Props) {
         </ul>
 
         <h3>面子とは？</h3>
-        <p>同じ牌3枚または同じ種類の連続した数字の牌3枚</p>
+        <p>同じ牌3枚（刻子）または同じ種類の連続した数字の牌3枚（順子）</p>
         <img
           src="/tutorial/Kotsu.png"
           alt="刻子"
@@ -58,8 +58,8 @@ export default function Tutorial(props: Props) {
         />
         <p>
           ※実戦では4面子1雀頭揃えてもアガリにはならないことがあります。ポンやチーなどをせずにテンパイしているときに
-          <strong>立直（リーチ</strong>
-          ）することで、立直という役がつき、その牌を持ってきたときにアガリになります。また、立直以外にも役はありますが、初心者のうちはポンやチーなどはせず、立直に向かうことが大切です。
+          <strong>立直（リーチ）</strong>
+          することで、立直という役がつき、その牌を持ってきたときにアガリになります。また、立直以外にも役はありますが、初心者のうちはポンやチーなどはせず、立直に向かうことが大切です。
         </p>
 
         <h2>アガリが見えないときは？</h2>
@@ -78,7 +78,7 @@ export default function Tutorial(props: Props) {
         />
         <p>
           6巡目でこの手牌はあまりにも悪くてアガリは到底見えません。そこで、この局は基本的にはロンされにくい牌を抱えて、他家から立直が入ったら、ロンされにく牌を切っていく（
-          <strong>オリていく</strong>
+          オリていく
           ）ことになります。どういった牌がロンされにくいかという話はとても難しいのですが、ここでは自分の手にアガリが見えなかったらオリるということを覚えていただければ十分です。
         </p>
 
@@ -89,9 +89,6 @@ export default function Tutorial(props: Props) {
       </div>
 
       <div className={styles.buttonContainer}>
-        <Button variant="contained" onClick={() => props.setUiState("Start")}>
-          ユーザー名を修正
-        </Button>
         <Button variant="contained" onClick={() => props.setUiState("Play")}>
           プレイ
         </Button>
