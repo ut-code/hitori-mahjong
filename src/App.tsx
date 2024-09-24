@@ -4,7 +4,7 @@ import Tutorial from "./pages/Tutorial/Tutorial";
 import Play from "./pages/Play/Play";
 import Result from "./pages/Result/Result";
 import "./App.css";
-import CssBaseline from '@mui/material/CssBaseline'
+import CssBaseline from "@mui/material/CssBaseline";
 
 export type PlayerInfo = {
   name: string;
