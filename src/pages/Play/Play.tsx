@@ -84,12 +84,6 @@ export default function Play(props: Props) {
               gameState={gameState}
               setGameState={setGameState}
             />
-            <Button
-              variant="contained"
-              onClick={() => props.setUiState("Tutorial")}
-            >
-              チュートリアルに戻る
-            </Button>
           </div>
         </>
       ) : (
