@@ -89,9 +89,6 @@ export default function Tutorial(props: Props) {
       </div>
 
       <div className={styles.buttonContainer}>
-        <Button variant="contained" onClick={() => props.setUiState("Start")}>
-          ユーザー名を修正
-        </Button>
         <Button variant="contained" onClick={() => props.setUiState("Play")}>
           プレイ
         </Button>
