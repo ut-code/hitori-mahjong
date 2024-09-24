@@ -4,6 +4,7 @@ import Tutorial from "./pages/Tutorial/Tutorial";
 import Play from "./pages/Play/Play";
 import Result from "./pages/Result/Result";
 import "./App.css";
+import CssBaseline from '@mui/material/CssBaseline'
 
 export type PlayerInfo = {
   name: string;
@@ -23,6 +24,7 @@ function App() {
   const [playerInfo, setPlayerInfo] = useState({ name: "", score: 25000 });
   return (
     <PlayerInfoContext.Provider value={{ playerInfo, setPlayerInfo }}>
+      <CssBaseline />
       {uiState === "Start" && <Start setUiState={setUiState} />}
       {uiState === "Tutorial" && <Tutorial setUiState={setUiState} />}
       {uiState === "Play" && <Play setUiState={setUiState} />}
