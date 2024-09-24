@@ -21,7 +21,7 @@ export default function Tutorial(props: Props) {
         />
         <ul>
           <li>手持ちの牌は13枚</li>
-          <li>山から1枚引き、不要な牌を捨てる</li>
+          <li>山から1枚引き、1枚捨てる</li>
           <li>これを繰り返し最初にアガった人に得点が入る</li>
           <li>
             アガるためには14枚目を山から引いた時に、面子（メンツ）を3牌1組で4セット、雀頭（アタマ）を1組そろえる
@@ -29,7 +29,7 @@ export default function Tutorial(props: Props) {
         </ul>
 
         <h3>面子とは？</h3>
-        <p>同じ牌3枚または同じ種類の連続した数字の牌3枚</p>
+        <p>同じ牌3枚（刻子）または同じ種類の連続した数字の牌3枚（順子）</p>
         <img
           src="/tutorial/Kotsu.png"
           alt="刻子"

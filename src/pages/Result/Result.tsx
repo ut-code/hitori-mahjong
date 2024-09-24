@@ -88,7 +88,7 @@ export default function Result(props: Props) {
             setPlayerInfo(() => ({ name: "", score: 25000 }));
           }}
         >
-          もう一回プレイする
+          スタート画面に戻る
         </Button>
       </div>
     </>
