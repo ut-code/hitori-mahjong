@@ -7,6 +7,7 @@ import { PlayerInfoContext } from "../../App";
 import styles from "../../styles/Tehai.module.css";
 import Button from "@mui/material/Button";
 import { sortTehai } from "../../utils/hai";
+import React from "react";
 
 type tehaiProps = {
   tehai: Hai[];
