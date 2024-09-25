@@ -5,15 +5,13 @@ import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
 import React from "react";
 import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 
-interface Props {
-  setUiState: (uiState: string) => void;
-}
-
-export default function Start(props: Props) {
+export default function Start() {
   const [inputText, setInputText] = useState("");
   const { setPlayerInfo } = useContext(PlayerInfoContext);
   const [isNotValidUsername, setIsNotValidUserName] = useState(false);
+  const navigate = useNavigate();
 
   // Function to handle player name input and validation
   const handleUserNameSubmit = () => {
@@ -22,7 +20,7 @@ export default function Start(props: Props) {
         ...prevInfo,
         name: inputText,
       }));
-      props.setUiState("Tutorial");
+      navigate("/tutorial");
     } else {
       setIsNotValidUserName(true); // Show error message if input is empty
     }

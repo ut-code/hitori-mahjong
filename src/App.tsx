@@ -5,6 +5,7 @@ import Play from "./pages/Play/Play";
 import Result from "./pages/Result/Result";
 import "./App.css";
 import CssBaseline from "@mui/material/CssBaseline";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export type PlayerInfo = {
   name: string;
@@ -20,15 +21,18 @@ export const PlayerInfoContext = createContext<{
 });
 
 function App() {
-  const [uiState, setUiState] = useState("Start");
   const [playerInfo, setPlayerInfo] = useState({ name: "", score: 25000 });
   return (
     <PlayerInfoContext.Provider value={{ playerInfo, setPlayerInfo }}>
       <CssBaseline />
-      {uiState === "Start" && <Start setUiState={setUiState} />}
-      {uiState === "Tutorial" && <Tutorial setUiState={setUiState} />}
-      {uiState === "Play" && <Play setUiState={setUiState} />}
-      {uiState === "Result" && <Result setUiState={setUiState} />}
+      <Router>
+        <Routes>
+          <Route path="/" element={<Start />} />
+          <Route path="/tutorial" element={<Tutorial />} />
+          <Route path="/play" element={<Play />} />
+          <Route path="/result" element={<Result />} />
+        </Routes>
+      </Router>
     </PlayerInfoContext.Provider>
   );
 }

@@ -12,15 +12,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import React from "react";
 import styles from "../../styles/Result.module.css";
+import { useNavigate } from "react-router-dom";
 
-interface Props {
-  setUiState: (uiState: string) => void;
-}
-
-export default function Result(props: Props) {
+export default function Result() {
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
   const [scores, setScores] = useState<PlayerInfo[]>([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchResult = async () => {
       try {
@@ -84,7 +81,7 @@ export default function Result(props: Props) {
         <Button
           variant="contained"
           onClick={() => {
-            props.setUiState("Start");
+            navigate("/");
             setPlayerInfo(() => ({ name: "", score: 25000 }));
           }}
         >
