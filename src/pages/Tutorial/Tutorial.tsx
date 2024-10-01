@@ -14,7 +14,7 @@ export default function Tutorial() {
         <img
           src="/tutorial/exampleTehai.png"
           alt="手牌の例"
-          width="1300"
+          width="700"
           height="80"
         />
         <ul>
@@ -31,15 +31,15 @@ export default function Tutorial() {
         <img
           src="/tutorial/Kotsu.png"
           alt="刻子"
-          width="300"
+          width="200"
           height="90"
           style={{ marginRight: "20px" }}
         />
-        <img src="/tutorial/Syuntsu.png" alt="順子" width="270" height="90" />
+        <img src="/tutorial/Syuntsu.png" alt="順子" width="200" height="90" />
 
         <h3>雀頭とは？</h3>
         <p>同じ牌2枚</p>
-        <img src="/tutorial/Jantou.png" alt="雀頭" width="200" height="90" />
+        <img src="/tutorial/Jantou.png" alt="雀頭" width="130" height="90" />
 
         <h3>テンパイとは？</h3>
         <p>
@@ -51,7 +51,7 @@ export default function Tutorial() {
         <img
           src="/tutorial/exampleTenpai.png"
           alt="聴牌の例"
-          width="1300"
+          width="700"
           height="90"
         />
         <p>
@@ -71,7 +71,7 @@ export default function Tutorial() {
         <img
           src="/tutorial/badTehai.png"
           alt="アガリが見えない手牌の例"
-          width="1300"
+          width="700"
           height="90"
         />
         <p>
