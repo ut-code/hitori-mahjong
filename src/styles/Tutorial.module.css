@@ -2,6 +2,7 @@
   padding: 10px;
   margin: 10px 0;
   text-align: left;
+  max-width: 100%;
 }
 
 .buttonContainer {
@@ -10,4 +11,8 @@
   align-items: center;
   gap: 30px;
   justify-content: center;
+}
+
+img {
+  max-width: 100%;
 }
