@@ -51,8 +51,12 @@ export default function Tehai(props: tehaiProps) {
   const [isAgari, setIsAgari] = useState(
     judgeAgari(sortTehai([...props.tehai, props.tsumo])),
   );
+  const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+  const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
   useEffect(() => {
     setIsAgari(judgeAgari(sortTehai([...props.tehai, props.tsumo])));
+    setMentsuSyanten(2); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+    setToitsuSyanten(3); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   }, [props.tehai, props.tsumo]);
 
   const tedashi = (index: number) => {
@@ -123,6 +127,7 @@ export default function Tehai(props: tehaiProps) {
                   </Button>
                 </>
               )}
+
               <div className={styles.tehaiContainer}>
                 <ul className={styles.tehai}>
                   {props.tehai.map((hai, index) => (
@@ -148,6 +153,18 @@ export default function Tehai(props: tehaiProps) {
                   style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
                 />
               </div>
+              {!isAgari &&
+                (mentsuSyanten === 0 ? (
+                  <div>メンツ手: 聴牌</div>
+                ) : (
+                  <div>メンツ手: {mentsuSyanten}シャンテン</div>
+                ))}
+              {!isAgari &&
+                (toitsuSyanten === 0 ? (
+                  <div>七対子: 聴牌</div>
+                ) : (
+                  <div>七対子: {toitsuSyanten}シャンテン</div>
+                ))}
             </>
           )}
         </>
