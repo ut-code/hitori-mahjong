@@ -23,12 +23,13 @@ export default function createHaiyama(): Hai[] {
 
   for (const kind of kinds) {
     if (kind === "jihai") {
+      continue;
       sortedHaiyama = sortedHaiyama.concat(
         ...jihaiValues.map((value) => {
           return new Array<Hai>(4).fill(constructHai("jihai", value));
         }),
       );
-    } else if (kind === "manzu" || kind === "manzu" || kind === "pinzu") {
+    } else if (kind === "manzu" || kind === "pinzu" || kind === "souzu") {
       for (let value = 1; value < 10; value++) {
         sortedHaiyama = sortedHaiyama.concat(
           new Array<Hai>(4).fill(constructHai(kind, value)),

@@ -51,8 +51,12 @@ export default function Tehai(props: tehaiProps) {
   const [isAgari, setIsAgari] = useState(
     judgeAgari(sortTehai([...props.tehai, props.tsumo])),
   );
+  const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+  const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
   useEffect(() => {
     setIsAgari(judgeAgari(sortTehai([...props.tehai, props.tsumo])));
+    setMentsuSyanten(0); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+    setToitsuSyanten(3); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   }, [props.tehai, props.tsumo]);
 
   const tedashi = (index: number) => {
@@ -89,10 +93,16 @@ export default function Tehai(props: tehaiProps) {
                 kyoku: props.gameState.kyoku + 1,
               });
               fetchInitialHaiyama();
-              setPlayerInfo({
-                ...playerInfo,
-                score: playerInfo.score - 3900,
-              });
+              const bonusPoint =
+                toitsuSyanten === 0 || mentsuSyanten === 0
+                  ? 1000
+                  : toitsuSyanten === 1 || mentsuSyanten === 1
+                    ? 500
+                    : 0; //聴牌してたら1000点、イーシャンテンなら500点
+              setPlayerInfo((prevInfo) => ({
+                ...prevInfo,
+                score: prevInfo.score + bonusPoint,
+              }));
             }}
           >
             確認
@@ -127,6 +137,7 @@ export default function Tehai(props: tehaiProps) {
                   </Button>
                 </>
               )}
+
               <div className={styles.tehaiContainer}>
                 <ul className={styles.tehai}>
                   {props.tehai.map((hai, index) => (
@@ -152,26 +163,21 @@ export default function Tehai(props: tehaiProps) {
                   style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
                 />
               </div>
+              <div className={styles.syantenContainer}>
+                {!isAgari &&
+                  (mentsuSyanten === 0 ? (
+                    <div>メンツ手: 聴牌</div>
+                  ) : (
+                    <div>メンツ手: {mentsuSyanten}シャンテン</div>
+                  ))}
+                {!isAgari &&
+                  (toitsuSyanten === 0 ? (
+                    <div>七対子: 聴牌</div>
+                  ) : (
+                    <div>七対子: {toitsuSyanten}シャンテン</div>
+                  ))}
+              </div>
             </>
-          )}
-
-          {!isAgari && props.gameState.junme <= 8 && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                props.setGameState({
-                  junme: 1,
-                  kyoku: props.gameState.kyoku + 1,
-                });
-                fetchInitialHaiyama();
-                setPlayerInfo({
-                  ...playerInfo,
-                  score: playerInfo.score - 1000,
-                });
-              }}
-            >
-              オリ
-            </Button>
           )}
         </>
       )}

@@ -1,9 +1,15 @@
-.title {
+.mainTitle {
   font-size: 4em;
   text-align: center;
   margin-bottom: 20px;
+  font-family: "MS PMincho";
 }
 
+.subTitle {
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 20px;
+}
 .formContainer {
   display: flex;
   flex-direction: column;
