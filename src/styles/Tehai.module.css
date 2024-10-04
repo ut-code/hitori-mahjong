@@ -13,14 +13,17 @@
 
 .gameDescription {
   font-size: 4em;
+  font-family: "MS PMincho";
 }
 
 .ryukyoku {
   font-size: 4em;
+  font-family: "MS PMincho";
 }
 
 .tsumoClaim {
   font-size: 3em;
+  font-family: "MS PMincho";
 }
 
 .tehaiContainer {
@@ -29,4 +32,9 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+.syantenContainer {
+  font-size: 2em;
+  font-family: "MS PMincho";
 }

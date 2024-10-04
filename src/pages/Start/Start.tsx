@@ -13,7 +13,6 @@ export default function Start() {
   const [isNotValidUsername, setIsNotValidUserName] = useState(false);
   const navigate = useNavigate();
 
-  // Function to handle player name input and validation
   const handleUserNameSubmit = () => {
     if (inputText !== "") {
       setPlayerInfo((prevInfo) => ({
@@ -22,7 +21,7 @@ export default function Start() {
       }));
       navigate("/tutorial");
     } else {
-      setIsNotValidUserName(true); // Show error message if input is empty
+      setIsNotValidUserName(true);
     }
   };
 
