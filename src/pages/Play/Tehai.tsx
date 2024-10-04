@@ -89,10 +89,6 @@ export default function Tehai(props: tehaiProps) {
                 kyoku: props.gameState.kyoku + 1,
               });
               fetchInitialHaiyama();
-              setPlayerInfo({
-                ...playerInfo,
-                score: playerInfo.score - 3900,
-              });
             }}
           >
             確認
