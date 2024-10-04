@@ -55,7 +55,7 @@ export default function Tehai(props: tehaiProps) {
   const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
   useEffect(() => {
     setIsAgari(judgeAgari(sortTehai([...props.tehai, props.tsumo])));
-    setMentsuSyanten(2); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+    setMentsuSyanten(0); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
     setToitsuSyanten(3); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   }, [props.tehai, props.tsumo]);
 
@@ -93,6 +93,16 @@ export default function Tehai(props: tehaiProps) {
                 kyoku: props.gameState.kyoku + 1,
               });
               fetchInitialHaiyama();
+              const bonusPoint =
+                toitsuSyanten === 0 || mentsuSyanten === 0
+                  ? 1000
+                  : toitsuSyanten === 1 || mentsuSyanten === 1
+                    ? 500
+                    : 0; //聴牌してたら1000点、イーシャンテンなら500点
+              setPlayerInfo((prevInfo) => ({
+                ...prevInfo,
+                score: prevInfo.score + bonusPoint,
+              }));
             }}
           >
             確認
