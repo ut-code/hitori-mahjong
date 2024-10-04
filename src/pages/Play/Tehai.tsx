@@ -154,25 +154,6 @@ export default function Tehai(props: tehaiProps) {
               </div>
             </>
           )}
-
-          {!isAgari && props.gameState.junme <= 8 && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                props.setGameState({
-                  junme: 1,
-                  kyoku: props.gameState.kyoku + 1,
-                });
-                fetchInitialHaiyama();
-                setPlayerInfo({
-                  ...playerInfo,
-                  score: playerInfo.score - 1000,
-                });
-              }}
-            >
-              オリ
-            </Button>
-          )}
         </>
       )}
     </>
