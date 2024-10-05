@@ -27,8 +27,11 @@ export default function Start() {
 
   return (
     <>
-      <p className={styles.mainTitle}>一人麻雀</p>
-      <p className={styles.subTitle}>～麻雀の基本を覚えよう～</p>
+      <div className={styles.titleContainer}>
+        <div className={styles.mainTitle}>一人麻雀</div>
+        <div className={styles.subTitle}>～麻雀の基本を覚えよう～</div>
+      </div>
+
       <div className={styles.formContainer}>
         <TextField
           variant="standard"
