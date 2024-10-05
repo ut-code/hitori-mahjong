@@ -166,13 +166,13 @@ export default function Tehai(props: tehaiProps) {
               <div className={styles.syantenContainer}>
                 {!isAgari &&
                   (mentsuSyanten === 0 ? (
-                    <div>メンツ手: 聴牌</div>
+                    <div>メンツ手: テンパイ</div>
                   ) : (
                     <div>メンツ手: {mentsuSyanten}シャンテン</div>
                   ))}
                 {!isAgari &&
                   (toitsuSyanten === 0 ? (
-                    <div>七対子: 聴牌</div>
+                    <div>七対子: テンパイ</div>
                   ) : (
                     <div>七対子: {toitsuSyanten}シャンテン</div>
                   ))}
