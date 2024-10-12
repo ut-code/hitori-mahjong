@@ -59,6 +59,7 @@ export default function Result() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
+                <TableCell>Ranking</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Score</TableCell>
               </TableRow>
@@ -69,10 +70,25 @@ export default function Result() {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {player.name}
-                  </TableCell>
-                  <TableCell>{player.score}</TableCell>
+                  {index <= 2 ? (
+                    <>
+                      <TableCell>
+                        <div className={styles.topRankers}>{index + 1}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.topRankers}>{player.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.topRankers}>{player.score}</div>
+                      </TableCell>
+                    </>
+                  ) : (
+                    <>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{player.name}</TableCell>
+                      <TableCell>{player.score}</TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

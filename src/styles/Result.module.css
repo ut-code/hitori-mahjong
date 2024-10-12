@@ -8,3 +8,8 @@
 .sentence {
   font-size: 3em;
 }
+
+.topRankers {
+  font-weight: bold;
+  font-size: 1.3em;
+}
