@@ -38,6 +38,7 @@ export default function Start() {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="ユーザー名を入力"
+          autoComplete='off'
         />
 
         <Button variant="contained" onClick={handleUserNameSubmit}>
