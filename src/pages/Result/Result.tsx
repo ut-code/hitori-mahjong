@@ -70,19 +70,46 @@ export default function Result() {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  {index <= 2 ? (
+                  {index + 1 === 1 && (
                     <>
                       <TableCell>
-                        <div className={styles.topRankers}>{index + 1}</div>
+                        <div className={styles.rankOne}>{index + 1}</div>
                       </TableCell>
                       <TableCell>
-                        <div className={styles.topRankers}>{player.name}</div>
+                        <div className={styles.rankOne}>{player.name}</div>
                       </TableCell>
                       <TableCell>
-                        <div className={styles.topRankers}>{player.score}</div>
+                        <div className={styles.rankOne}>{player.score}</div>
                       </TableCell>
                     </>
-                  ) : (
+                  )}
+                  {index + 1 === 2 && (
+                    <>
+                      <TableCell>
+                        <div className={styles.rankTwo}>{index + 1}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankTwo}>{player.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankTwo}>{player.score}</div>
+                      </TableCell>
+                    </>
+                  )}
+                  {index + 1 === 3 && (
+                    <>
+                      <TableCell>
+                        <div className={styles.rankThree}>{index + 1}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankThree}>{player.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankThree}>{player.score}</div>
+                      </TableCell>
+                    </>
+                  )}
+                  {index + 1 >= 4 && (
                     <>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{player.name}</TableCell>

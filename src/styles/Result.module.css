@@ -9,7 +9,20 @@
   font-size: 3em;
 }
 
-.topRankers {
+.rankOne {
+  color: #b8860b;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.rankTwo {
+  color: #a0a0a0;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.rankThree {
+  color: #8b4513;
   font-weight: bold;
   font-size: 1.3em;
 }
