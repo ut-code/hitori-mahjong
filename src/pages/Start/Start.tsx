@@ -14,10 +14,12 @@ export default function Start() {
   const navigate = useNavigate();
 
   const handleUserNameSubmit = () => {
-    if (inputText !== "") {
+    const trimmedInput = inputText.trim();
+
+    if (trimmedInput !== "") {
       setPlayerInfo((prevInfo) => ({
         ...prevInfo,
-        name: inputText,
+        name: trimmedInput,
       }));
       navigate("/tutorial");
     } else {
