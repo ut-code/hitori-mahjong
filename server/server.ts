@@ -29,8 +29,14 @@ app.post("/end", async (req: Request, res: Response) => {
   const { name, score } = req.body;
 
   try {
-    await prisma.user.create({
-      data: {
+    await prisma.user.upsert({
+      where: {
+        name,
+      },
+      update: {
+        score,
+      },
+      create: {
         name,
         score,
       },
