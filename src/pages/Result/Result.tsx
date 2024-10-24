@@ -59,6 +59,7 @@ export default function Result() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
+                <TableCell>Ranking</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Score</TableCell>
               </TableRow>
@@ -69,10 +70,52 @@ export default function Result() {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {player.name}
-                  </TableCell>
-                  <TableCell>{player.score}</TableCell>
+                  {index + 1 === 1 && (
+                    <>
+                      <TableCell>
+                        <div className={styles.rankOne}>{index + 1}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankOne}>{player.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankOne}>{player.score}</div>
+                      </TableCell>
+                    </>
+                  )}
+                  {index + 1 === 2 && (
+                    <>
+                      <TableCell>
+                        <div className={styles.rankTwo}>{index + 1}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankTwo}>{player.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankTwo}>{player.score}</div>
+                      </TableCell>
+                    </>
+                  )}
+                  {index + 1 === 3 && (
+                    <>
+                      <TableCell>
+                        <div className={styles.rankThree}>{index + 1}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankThree}>{player.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.rankThree}>{player.score}</div>
+                      </TableCell>
+                    </>
+                  )}
+                  {index + 1 >= 4 && (
+                    <>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{player.name}</TableCell>
+                      <TableCell>{player.score}</TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
