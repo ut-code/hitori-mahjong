@@ -4,7 +4,7 @@ watch:
 	@bun run dev
 
 start:
-	@bun run build && bun run tsc && node dist/server/server.js
+	@bun run build && bun run server/server.ts
 
 format:
 	@bunx prettier . --write
