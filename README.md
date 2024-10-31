@@ -2,7 +2,7 @@
 
 ## 環境構築
 
-clone後、プロジェクトフォルダで `npm install`
+clone後、プロジェクトフォルダで `bun install`
 
 ## 開発環境
 

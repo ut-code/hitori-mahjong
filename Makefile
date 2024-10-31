@@ -1,10 +1,10 @@
 .PHONY: dev build format
 
 watch:
-	@npm run dev
+	@bun run dev
 
 start:
-	@npm run build && npx tsc && node dist/server/server.js
+	@bun run build && bun run server/server.ts
 
 format:
-	@npx prettier . --write
+	@bunx prettier . --write
