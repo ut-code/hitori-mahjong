@@ -4,8 +4,8 @@
 
 このリポジトリをクローンし、依存パッケージをインストールします。
 
-`git clone git@github.com:ut-code/hitori-mahjong.git`
-`cd hitori-mahjong`
+`git clone git@github.com:ut-code/hitori-mahjong.git`  
+`cd hitori-mahjong`  
 `bun install`
 
 次に、ルートディレクトリに `.env`ファイルを作成してください。（envの内容はSlackのDMで共有します）
