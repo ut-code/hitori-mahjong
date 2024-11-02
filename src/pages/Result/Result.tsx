@@ -2,19 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { PlayerInfoContext } from "../../App";
 import { PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { FaCrown } from "react-icons/fa";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import React from "react";
-import styles from "../../styles/Result.module.css";
 import { useNavigate } from "react-router-dom";
 import { darken } from '@mui/material/styles';
 import RankingTable from "./RankingTable";
@@ -176,7 +167,7 @@ export default function Result() {
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
-    padding: "8px 32px",
+    // padding: "8px 32px",
     color: "#2B2B2B",
     fontSize: "0.9rem",
     gap: "8px",
@@ -189,6 +180,11 @@ export default function Result() {
   const top1Player: PlayerInfo = scores.length > 1 ? scores[0] : exampleUsers[0];
   const top2Player: PlayerInfo = scores.length > 2 ? scores[1] : exampleUsers[0];
   const top3Player: PlayerInfo = scores.length > 3 ? scores[2] : exampleUsers[0];
+
+  const bottomToolbar = (<div style={footerStyle}>
+    <span style={footerEmojiStyle}>🎉</span>
+    <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
+  </div>);
 
   return (
     <div style={containerStyle}>
@@ -241,122 +237,7 @@ export default function Result() {
         </div>
       </div>
 
-      <div style={rankListStyle}>
-        <table style={rankListTableStyle}>
-          <tr style={rankItemStyle}>
-            <td style={rankNumberStyle}>4</td>
-            <td>ユーザー</td>
-            <td>18058</td>
-          </tr>
-          <tr style={rankItemStyle}>
-            <td style={rankNumberStyle}>5</td>
-            <td>ユーザー</td>
-            <td>15055</td>
-          </tr>
-          <tr style={rankItemStyle}>
-            <td style={rankNumberStyle}>6</td>
-            <td>ユーザー</td>
-            <td>13044</td>
-          </tr>
-          <tr style={currentRankingStyle}>
-            <td style={rankNumberStyle}>13</td>
-            <td>{playerInfo.name}</td>
-            <td>{playerInfo.score}</td>
-          </tr>
-        </table>
-        <div style={footerStyle}>
-          <span style={footerEmojiStyle}>🎉</span>
-          <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
-        </div>
-      </div>
-
-      <RankingTable scores={scores} />
+      <RankingTable scores={scores.length > 3 ? scores.slice(3) : []} customToolbarActions={bottomToolbar} />
     </div>
-  );
-
-  return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.sentence}>
-          {playerInfo.name}さんの得点は{playerInfo.score}点です。
-        </div>
-
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Ranking</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Score</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {scores.map((player, index) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  {index + 1 === 1 && (
-                    <>
-                      <TableCell>
-                        <div className={styles.rankOne}>{index + 1}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div className={styles.rankOne}>{player.name}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div className={styles.rankOne}>{player.score}</div>
-                      </TableCell>
-                    </>
-                  )}
-                  {index + 1 === 2 && (
-                    <>
-                      <TableCell>
-                        <div className={styles.rankTwo}>{index + 1}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div className={styles.rankTwo}>{player.name}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div className={styles.rankTwo}>{player.score}</div>
-                      </TableCell>
-                    </>
-                  )}
-                  {index + 1 === 3 && (
-                    <>
-                      <TableCell>
-                        <div className={styles.rankThree}>{index + 1}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div className={styles.rankThree}>{player.name}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div className={styles.rankThree}>{player.score}</div>
-                      </TableCell>
-                    </>
-                  )}
-                  {index + 1 >= 4 && (
-                    <>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{player.name}</TableCell>
-                      <TableCell>{player.score}</TableCell>
-                    </>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Button
-          variant="contained"
-          onClick={() => {
-            navigate("/");
-            setPlayerInfo(() => ({ rank: null, name: "", score: 25000 }));
-          }}
-        >
-          スタート画面に戻る
-        </Button>
-      </div>
-    </>
   );
 }
