@@ -3,9 +3,34 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
+  font-family: Arial, sans-serif;
+  min-width: 400px;
+  gap: 16px;
+  color: #2b2b2b;
+  background-color: white;
+  border-radius: 10px;
 }
-.mainContent {
-  display: flex;
-  justify-content: space-between;
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns: left (DiscardTile) and right */
+  grid-template-rows: 1fr 1fr; /* Two rows for the right column */
   width: 100%;
+  height: 100%;
+  gap: 10px;
+}
+
+.discardTile {
+  grid-column: 1 / 2; /* Position DiscardTile on the left */
+  grid-row: 1 / 3; /* Span DiscardTile vertically across two rows */
+}
+
+.handStatus {
+  grid-column: 2 / 3; /* Position HandStatus on the top right */
+  grid-row: 1 / 2;
+}
+
+.waitingTiles {
+  grid-column: 2 / 3; /* Position WaitingTiles on the bottom right */
+  grid-row: 2 / 3;
 }

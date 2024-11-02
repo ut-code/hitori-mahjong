@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from '../styles/HandTiles.module.css';
-import Tile from "./Tile.tsx"
+import React from "react";
+import styles from "../styles/HandTiles.module.css";
+import Tile from "./Tile.tsx";
 
 const HandTiles = () => {
   return (

@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from '../styles/DiscardArea.module.css';
-import Tile from "./Tile"
+import React from "react";
+import styles from "../styles/DiscardArea.module.css";
+import Tile from "./Tile";
 
 const DiscardArea = () => {
   return (

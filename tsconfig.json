@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "module": "ESNext",               // ESNextに設定（BunはESMを推奨）
-    "target": "ESNext",               // 最新のESNextをターゲットに設定
+    "module": "ESNext", // ESNextに設定（BunはESMを推奨）
+    "target": "ESNext", // 最新のESNextをターゲットに設定
     "outDir": "./dist",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "lib": ["es2020", "dom"],
-    "strict": true,                   // 型の厳格なチェックを有効に
-    "skipLibCheck": true,             // ライブラリの型チェックをスキップ（ビルド高速化）
+    "strict": true, // 型の厳格なチェックを有効に
+    "skipLibCheck": true, // ライブラリの型チェックをスキップ（ビルド高速化）
     "forceConsistentCasingInFileNames": true // ファイル名の大文字小文字の一貫性を強制
   },
   "include": ["server/server.ts", "server/createYamahai.ts"]
