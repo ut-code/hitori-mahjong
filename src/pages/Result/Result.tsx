@@ -2,7 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { PlayerInfoContext } from "../../App";
 import { PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
-import Button from "@mui/material/Button";
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -58,6 +60,23 @@ export default function Result() {
     minWidth: "400px",
     gap: "16px",
     color: "#2B2B2B",
+    backgroundColor: "white",
+    borderRadius: "10px",
+  };
+
+  const headerStyle: { [key: string]: string } = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    position: "relative",
+    paddingBottom: "16px",
+  };
+
+  const headerTitleStyle: { [key: string]: string } = {
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
   };
 
   const topRankingStyle: { [key: string]: string } = {
@@ -155,17 +174,17 @@ export default function Result() {
 
   return (
     <div style={containerStyle}>
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate("/");
-          setPlayerInfo(() => ({ name: "", score: 25000 }));
-        }}
-      >
-        スタート画面に戻る
-      </Button>
-
-      <h2>ランキング</h2>
+      <div style={headerStyle}>
+        <IconButton
+          onClick={() => {
+            navigate("/");
+            setPlayerInfo(() => ({ name: "", score: 25000 }));
+          }}
+        >
+          <HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />
+        </IconButton>
+        <h2 style={headerTitleStyle}>ランキング</h2>
+      </div>
 
       <div style={topRankingStyle}>
         <div style={topRankItemStyle("#CDCDCD")}>
