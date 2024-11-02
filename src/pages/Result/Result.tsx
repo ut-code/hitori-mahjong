@@ -14,7 +14,6 @@ import React from "react";
 import styles from "../../styles/Result.module.css";
 import { useNavigate } from "react-router-dom";
 import { darken } from '@mui/material/styles';
-import { height, padding, width } from "@mui/system";
 
 export default function Result() {
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
