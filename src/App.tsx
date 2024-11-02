@@ -4,7 +4,6 @@ import Tutorial from "./pages/Tutorial/Tutorial";
 import Play from "./pages/Play/Play";
 import Result from "./pages/Result/Result";
 import "./App.css";
-import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export type PlayerInfo = {
@@ -24,7 +23,6 @@ function App() {
   const [playerInfo, setPlayerInfo] = useState({ name: "", score: 25000 });
   return (
     <PlayerInfoContext.Provider value={{ playerInfo, setPlayerInfo }}>
-      <CssBaseline />
       <Router>
         <Routes>
           <Route path="/" element={<Start />} />
