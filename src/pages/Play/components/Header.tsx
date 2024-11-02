@@ -5,6 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { PlayerInfoContext } from "../../../App";
 import { useContext } from "react";
+import ProgressBar from "./ProgressBar.tsx";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -21,10 +22,7 @@ const Header = () => {
         <HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />
       </IconButton>
       <div className={styles.title}>東風戦 東一局 25000点</div>
-      <div className={styles.progressBar}>
-        <div className={styles.progress} style={{ width: "30%" }}></div>
-      </div>
-      <div className={styles.turnInfo}>15巡目</div>
+      <ProgressBar progress={30} label="3rd Step" />
     </div>
   );
 };

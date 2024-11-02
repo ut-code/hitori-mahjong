@@ -4,7 +4,8 @@
   align-items: center;
   padding: 10px;
   font-family: Arial, sans-serif;
-  min-width: 400px;
+  min-width: 70vw;
+  min-height: 70vh;
   gap: 16px;
   color: #2b2b2b;
   background-color: white;
@@ -14,7 +15,8 @@
 .gridContainer {
   display: grid;
   width: 100%;
-  height: auto;
+  height: 80%;
+  min-height: 250px;
   gap: 10px;
 }
 

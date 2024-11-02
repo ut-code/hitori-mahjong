@@ -5,20 +5,6 @@
   width: 100%;
 }
 .title {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
-}
-.progressBar {
-  background-color: #eee;
-  height: 8px;
-  flex-grow: 1;
-  margin: 0 10px;
-  border-radius: 4px;
-}
-.progress {
-  background-color: orange;
-  height: 100%;
-}
-.turnInfo {
-  font-size: 16px;
 }
