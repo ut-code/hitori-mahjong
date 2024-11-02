@@ -17,6 +17,7 @@ import React from "react";
 import styles from "../../styles/Result.module.css";
 import { useNavigate } from "react-router-dom";
 import { darken } from '@mui/material/styles';
+import RankingTable from "./RankingTable";
 
 export default function Result() {
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
@@ -39,7 +40,10 @@ export default function Result() {
 
         const sortedScores = data
           .sort((a: PlayerInfo, b: PlayerInfo) => b.score - a.score)
-          .slice(0, 10);
+          .map((player: PlayerInfo, index: number) => ({
+            ...player,
+            rank: index + 1,
+          }));
 
         setScores(sortedScores);
       } catch (e) {
@@ -192,7 +196,7 @@ export default function Result() {
         <IconButton
           onClick={() => {
             navigate("/");
-            setPlayerInfo(() => ({ name: "", score: 25000 }));
+            setPlayerInfo(() => ({ rank: null, name: "", score: 25000 }));
           }}
         >
           <HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />
@@ -265,6 +269,8 @@ export default function Result() {
           <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
         </div>
       </div>
+
+      <RankingTable scores={scores} />
     </div>
   );
 
@@ -345,7 +351,7 @@ export default function Result() {
           variant="contained"
           onClick={() => {
             navigate("/");
-            setPlayerInfo(() => ({ name: "", score: 25000 }));
+            setPlayerInfo(() => ({ rank: null, name: "", score: 25000 }));
           }}
         >
           スタート画面に戻る

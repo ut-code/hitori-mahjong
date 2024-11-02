@@ -7,6 +7,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export type PlayerInfo = {
+  rank: number | null;
   name: string;
   score: number;
 };
@@ -15,12 +16,12 @@ export const PlayerInfoContext = createContext<{
   playerInfo: PlayerInfo;
   setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
 }>({
-  playerInfo: { name: "", score: 25000 },
+  playerInfo: { rank: null, name: "", score: 25000 },
   setPlayerInfo: () => {},
 });
 
 function App() {
-  const [playerInfo, setPlayerInfo] = useState({ name: "", score: 25000 });
+  const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({ rank: null, name: "", score: 25000 });
   return (
     <PlayerInfoContext.Provider value={{ playerInfo, setPlayerInfo }}>
       <Router>
