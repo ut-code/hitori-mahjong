@@ -48,6 +48,101 @@ export default function Result() {
     fetchResult();
   }, []);
 
+  const containerStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px",
+    fontFamily: "'Arial', sans-serif",
+  };
+
+  const topRankingStyle = {
+    display: "flex",
+    justifyContent: "center",
+    gap: "10px",
+    marginBottom: "20px",
+  };
+
+  const rankingItemStyle = (backgroundColor) => ({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "10px 20px",
+    backgroundColor,
+    borderRadius: "10px",
+    fontWeight: "bold",
+    color: "#333",
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+  });
+
+  const currentRankingStyle = {
+    backgroundColor: "#fff4e6",
+    color: "#ff6600",
+    fontWeight: "bold",
+  };
+
+  const rankNumberStyle = {
+    fontSize: "2rem",
+  };
+
+  const userRankStyle = {
+    fontSize: "1rem",
+    marginTop: "5px",
+  };
+
+  const rankListStyle = {
+    width: "100%",
+    maxWidth: "300px",
+    backgroundColor: "#f5f5f5",
+    padding: "15px",
+    borderRadius: "10px",
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+  };
+
+  const footerStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "10px",
+    color: "#666",
+    fontSize: "0.9rem",
+  };
+
+  return (
+    <div style={containerStyle}>
+      <h2>ランキング</h2>
+
+      <div style={topRankingStyle}>
+        <div style={rankingItemStyle("#f0f0f0")}>
+          <div style={rankNumberStyle}>2</div>
+          <div style={userRankStyle}>ユーザー</div>
+          <div>22761</div>
+        </div>
+        <div style={rankingItemStyle("#f7e6af")}>
+          <div style={rankNumberStyle}>1</div>
+          <div style={userRankStyle}>ユーザー</div>
+          <div>28138</div>
+        </div>
+        <div style={rankingItemStyle("#f9e6e6")}>
+          <div style={rankNumberStyle}>3</div>
+          <div style={userRankStyle}>ユーザー</div>
+          <div>19232</div>
+        </div>
+      </div>
+
+      <div style={rankListStyle}>
+        <p>4 ユーザー 18058</p>
+        <p>5 ユーザー 15055</p>
+        <p>6 ユーザー 13044</p>
+        <p style={currentRankingStyle}>13 現在のユーザー 8581</p>
+      </div>
+
+      <div style={footerStyle}>
+        <span>🎉 非常に優秀な成績です！この調子で頑張りましょう！</span>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <div className={styles.container}>
