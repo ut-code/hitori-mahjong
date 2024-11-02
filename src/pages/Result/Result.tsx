@@ -48,58 +48,70 @@ export default function Result() {
     fetchResult();
   }, []);
 
-  const containerStyle = {
+  const containerStyle: { [key: string]: string } = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "20px",
     fontFamily: "'Arial', sans-serif",
+    minWidth: "400px",
+    gap: "16px",
   };
 
-  const topRankingStyle = {
+  const topRankingStyle: { [key: string]: string } = {
     display: "flex",
     justifyContent: "center",
-    gap: "10px",
-    marginBottom: "20px",
+    gap: "16px",
   };
 
-  const rankingItemStyle = (backgroundColor) => ({
+  const rankingItemStyle = (backgroundColor): { [key: string]: string } => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "10px 20px",
-    backgroundColor,
+    backgroundColor: "white",
     borderRadius: "10px",
     fontWeight: "bold",
     color: "#333",
     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+    borderTop: `5px solid ${backgroundColor}`,
+    position: "relative",
+    width: "200px",
+    height: "100px",
   });
 
-  const currentRankingStyle = {
-    backgroundColor: "#fff4e6",
-    color: "#ff6600",
-    fontWeight: "bold",
+  const currentRankingStyle: { [key: string]: string } = {
+    backgroundColor: "#FFF7F2",
+    color: "#FD903C",
   };
 
-  const rankNumberStyle = {
+  const rankNumberStyle: { [key: string]: string } = {
     fontSize: "2rem",
+    position: "absolute",
+    top: "-25px",
   };
 
-  const userRankStyle = {
+  const userRankStyle: { [key: string]: string } = {
     fontSize: "1rem",
     marginTop: "5px",
   };
 
-  const rankListStyle = {
+  const rankListStyle: { [key: string]: string } = {
     width: "100%",
-    maxWidth: "300px",
-    backgroundColor: "#f5f5f5",
-    padding: "15px",
+    backgroundColor: "white",
+    padding: "0px 16px",
     borderRadius: "10px",
     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+    margin: "0 auto",
   };
 
-  const footerStyle = {
+  const rankListTableStyle: { [key: string]: string } = {
+    width: "100%",
+    padding: "0px",
+    borderCollapse: "collapse",
+  };
+
+  const footerStyle: { [key: string]: string } = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -110,20 +122,20 @@ export default function Result() {
 
   return (
     <div style={containerStyle}>
-      <h2>ランキング</h2>
+      <h2 style={{ marginBottom: "8px" }}>ランキング</h2>
 
       <div style={topRankingStyle}>
-        <div style={rankingItemStyle("#f0f0f0")}>
+        <div style={rankingItemStyle("#CDCDCD")}>
           <div style={rankNumberStyle}>2</div>
           <div style={userRankStyle}>ユーザー</div>
           <div>22761</div>
         </div>
-        <div style={rankingItemStyle("#f7e6af")}>
+        <div style={rankingItemStyle("#DBC27E")}>
           <div style={rankNumberStyle}>1</div>
           <div style={userRankStyle}>ユーザー</div>
           <div>28138</div>
         </div>
-        <div style={rankingItemStyle("#f9e6e6")}>
+        <div style={rankingItemStyle("#DABEB3")}>
           <div style={rankNumberStyle}>3</div>
           <div style={userRankStyle}>ユーザー</div>
           <div>19232</div>
@@ -131,14 +143,31 @@ export default function Result() {
       </div>
 
       <div style={rankListStyle}>
-        <p>4 ユーザー 18058</p>
-        <p>5 ユーザー 15055</p>
-        <p>6 ユーザー 13044</p>
-        <p style={currentRankingStyle}>13 現在のユーザー 8581</p>
-      </div>
-
-      <div style={footerStyle}>
-        <span>🎉 非常に優秀な成績です！この調子で頑張りましょう！</span>
+        <table style={rankListTableStyle}>
+          <tr>
+            <td>4</td>
+            <td>ユーザー</td>
+            <td>18058</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>ユーザー</td>
+            <td>15055</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>ユーザー</td>
+            <td>13044</td>
+          </tr>
+          <tr style={currentRankingStyle}>
+            <td>13</td>
+            <td>現在のユーザー</td>
+            <td>8581</td>
+          </tr>
+        </table>
+        <div style={footerStyle}>
+          <span>🎉 非常に優秀な成績です！この調子で頑張りましょう！</span>
+        </div>
       </div>
     </div>
   );
