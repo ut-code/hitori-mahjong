@@ -9,9 +9,10 @@ import { PlayerInfo } from "../../App";
 type RankingTableProps = {
 	scores: PlayerInfo[];
 	customToolbarActions?: React.ReactNode;
+	myRank: number | null;
 };
 
-export default function RankingTable({ scores, customToolbarActions }: RankingTableProps) {
+export default function RankingTable({ scores, customToolbarActions, myRank }: RankingTableProps) {
   const columns = useMemo<MRT_ColumnDef<PlayerInfo>[]>(
     () => [
 			{
@@ -44,19 +45,19 @@ export default function RankingTable({ scores, customToolbarActions }: RankingTa
     enableHiding: false,
     enableSorting: false,
     enableColumnActions: false,
-    getRowId: (row) => `${row.rank ?? ''}`,
+		enableRowSelection: false,
+    getRowId: (row) => `rank-${row.rank ?? ''}`,
     initialState: {
       rowPinning: {
-        top: [],
-        bottom: [],
+        top: myRank ? [`rank-${myRank}`] : [],
       },
 			columnVisibility: {
-				// "mrt-row-pin": false,
+				"mrt-row-pin": false,
 			},
     },
     muiTableContainerProps: {
       sx: {
-        maxHeight: '210px',
+        maxHeight: '200px',
       },
     },
 		muiTablePaperProps: {
@@ -78,6 +79,9 @@ export default function RankingTable({ scores, customToolbarActions }: RankingTa
               }px`
             : undefined,
 					backgroundColor: row.getIsPinned() ? "#FFF7F2" : undefined,
+					'& td:after': {
+						backgroundColor: "transparent !important",
+					},
         },
       };
     },
