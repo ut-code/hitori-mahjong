@@ -11,15 +11,15 @@ const GameInterface = () => {
     <div className={styles.container}>
       <Header />
       <div className={styles.gridContainer}>
-        <div className={styles.discardArea}>
+        <span className={styles.discardArea}>
           <DiscardArea />
-        </div>
-        <div className={styles.handStatus}>
+        </span>
+        <span className={styles.handStatus}>
           <HandStatus />
-        </div>
-        <div className={styles.waitingTiles}>
+        </span>
+        <span className={styles.waitingTiles}>
           <WaitingTiles />
-        </div>
+        </span>
       </div>
       <HandTiles />
     </div>
