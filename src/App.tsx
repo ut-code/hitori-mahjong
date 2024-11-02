@@ -16,7 +16,7 @@ export const PlayerInfoContext = createContext<{
   playerInfo: PlayerInfo;
   setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
 }>({
-  playerInfo: { name: "", score: 25000 },
+  playerInfo: { name: "default", score: 25000 },
   setPlayerInfo: () => {},
 });
 
