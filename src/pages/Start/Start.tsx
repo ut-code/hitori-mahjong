@@ -21,7 +21,7 @@ export default function Start() {
         ...prevInfo,
         name: trimmedInput,
       }));
-      navigate("/tutorial");
+      navigate("/play");
     } else {
       setIsNotValidUserName(true);
     }
@@ -44,7 +44,13 @@ export default function Start() {
         />
 
         <Button variant="contained" onClick={handleUserNameSubmit}>
-          チュートリアルへ
+          プレイ
+        </Button>
+        <Button variant="contained" onClick={() => navigate("/tutorial")}>
+          遊び方
+        </Button>
+        <Button variant="contained" onClick={() => navigate("/result")}>
+          ランキング
         </Button>
 
         {isNotValidUsername && (

@@ -11,7 +11,7 @@ import { darken } from '@mui/material/styles';
 import RankingTable from "./RankingTable";
 
 export default function Result() {
-  const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
+  const { setPlayerInfo } = useContext(PlayerInfoContext);
   const [scores, setScores] = useState<PlayerInfo[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -58,6 +58,7 @@ export default function Result() {
     padding: "20px",
     fontFamily: "'Arial', sans-serif",
     minWidth: "400px",
+    maxHeight: "800px",
     gap: "16px",
     color: "#2B2B2B",
     backgroundColor: "white",
@@ -104,11 +105,6 @@ export default function Result() {
     height: "110px",
   });
 
-  const currentRankingStyle: { [key: string]: string } = {
-    backgroundColor: "#FFF7F2",
-    color: "#FD903C",
-  };
-
   const topRankNumberStyle = (backgroundColor: string): { [key: string]: string } => ({
     fontSize: "1.6rem",
     position: "absolute",
@@ -135,32 +131,6 @@ export default function Result() {
 
   const topRankUsernameStyle: { [key: string]: string } = {
     fontSize: "1rem",
-  };
-
-  const rankListStyle: { [key: string]: string } = {
-    width: "100%",
-    backgroundColor: "white",
-    padding: "0px",
-    borderRadius: "10px",
-    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-    margin: "0 auto",
-  };
-
-  const rankListTableStyle: { [key: string]: string } = {
-    width: "100%",
-    padding: "0px",
-    borderCollapse: "collapse",
-    color: "#2B2B2B",
-    fontSize: "1rem",
-  };
-
-  const rankItemStyle: { [key: string]: string } = {
-    padding: "16px 16px",
-  };
-
-  const rankNumberStyle: { [key: string]: string } = {
-    fontSize: "0.9rem",
-    color: "#7F7E7E",
   };
 
   const footerStyle: { [key: string]: string } = {
