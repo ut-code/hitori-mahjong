@@ -13,6 +13,7 @@ import Paper from "@mui/material/Paper";
 import React from "react";
 import styles from "../../styles/Result.module.css";
 import { useNavigate } from "react-router-dom";
+import { darken } from '@mui/material/styles';
 
 export default function Result() {
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
@@ -47,6 +48,191 @@ export default function Result() {
 
     fetchResult();
   }, []);
+
+  const containerStyle: { [key: string]: string } = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "20px",
+    fontFamily: "'Arial', sans-serif",
+    minWidth: "400px",
+    gap: "16px",
+    color: "#2B2B2B",
+  };
+
+  const topRankingStyle: { [key: string]: string } = {
+    display: "flex",
+    justifyContent: "center",
+    gap: "16px",
+    width: "100%",
+    alignItems: "flex-end",
+  };
+
+  const topRankItemStyle = (backgroundColor: string): { [key: string]: string } => ({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: "8px",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    fontWeight: "bold",
+    color: "#2B2B2B",
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+    borderTop: `5px solid ${backgroundColor}`,
+    position: "relative",
+    width: "200px",
+    height: "110px",
+  });
+
+  const currentRankingStyle: { [key: string]: string } = {
+    backgroundColor: "#FFF7F2",
+    color: "#FD903C",
+  };
+
+  const topRankNumberStyle = (backgroundColor: string): { [key: string]: string } => ({
+    fontSize: "1.6rem",
+    position: "absolute",
+    top: "-25px",
+    width: "40px",
+    height: "40px",
+    color: "white",
+    background: `linear-gradient(to bottom right, ${backgroundColor}, ${darken(backgroundColor, 0.2)})`,
+    borderRadius: "10px",
+  });
+
+  const topRankScoreStyle: { [key: string]: string } = {
+    fontSize: "2rem",
+  };
+
+  const topRankUsernameStyle: { [key: string]: string } = {
+    fontSize: "1rem",
+  };
+
+  const rankListStyle: { [key: string]: string } = {
+    width: "100%",
+    backgroundColor: "white",
+    padding: "0px",
+    borderRadius: "10px",
+    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+    margin: "0 auto",
+  };
+
+  const rankListTableStyle: { [key: string]: string } = {
+    width: "100%",
+    padding: "0px",
+    borderCollapse: "collapse",
+    color: "#2B2B2B",
+    fontSize: "1rem",
+  };
+
+  const rankItemStyle: { [key: string]: string } = {
+    padding: "16px 16px",
+  };
+
+  const rankNumberStyle: { [key: string]: string } = {
+    fontSize: "0.9rem",
+    color: "#7F7E7E",
+  };
+
+  const footerStyle: { [key: string]: string } = {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    padding: "8px 32px",
+    color: "#2B2B2B",
+    fontSize: "0.9rem",
+    gap: "8px",
+  };
+
+  const footerEmojiStyle: { [key: string]: string } = {
+    fontSize: "1.4rem",
+  };
+
+  const top1Player: PlayerInfo = scores.length > 1 ? scores[0] : exampleUsers[0];
+  const top2Player: PlayerInfo = scores.length > 2 ? scores[1] : exampleUsers[0];
+  const top3Player: PlayerInfo = scores.length > 3 ? scores[2] : exampleUsers[0];
+
+  return (
+    <div style={containerStyle}>
+      <Button
+        variant="contained"
+        onClick={() => {
+          navigate("/");
+          setPlayerInfo(() => ({ name: "", score: 25000 }));
+        }}
+      >
+        スタート画面に戻る
+      </Button>
+
+      <h2>ランキング</h2>
+
+      <div style={topRankingStyle}>
+        <div style={topRankItemStyle("#CDCDCD")}>
+          <div style={topRankNumberStyle("#CDCDCD")}>
+            <i>2</i>
+          </div>
+          <div style={topRankUsernameStyle}>
+            <span>{top2Player.name}</span>
+          </div>
+          <div style={topRankScoreStyle}>
+            <i>{top2Player.score}</i>
+          </div>
+        </div>
+        <div style={{...topRankItemStyle("#DBC27E"), height: "130px"}}>
+          <div style={topRankNumberStyle("#DBC27E")}>
+            <i>1</i>
+          </div>
+          <div style={topRankUsernameStyle}>
+            {top1Player.name}
+          </div>
+          <div style={topRankScoreStyle}>
+            <i>{top1Player.score}</i>
+          </div>
+        </div>
+        <div style={topRankItemStyle("#DABEB3")}>
+          <div style={topRankNumberStyle("#DABEB3")}>
+            <i>3</i>
+          </div>
+          <div style={topRankUsernameStyle}>
+            {top3Player.name}
+          </div>
+          <div style={topRankScoreStyle}>
+            <i>{top3Player.score}</i>
+          </div>
+        </div>
+      </div>
+
+      <div style={rankListStyle}>
+        <table style={rankListTableStyle}>
+          <tr style={rankItemStyle}>
+            <td style={rankNumberStyle}>4</td>
+            <td>ユーザー</td>
+            <td>18058</td>
+          </tr>
+          <tr style={rankItemStyle}>
+            <td style={rankNumberStyle}>5</td>
+            <td>ユーザー</td>
+            <td>15055</td>
+          </tr>
+          <tr style={rankItemStyle}>
+            <td style={rankNumberStyle}>6</td>
+            <td>ユーザー</td>
+            <td>13044</td>
+          </tr>
+          <tr style={currentRankingStyle}>
+            <td style={rankNumberStyle}>13</td>
+            <td>{playerInfo.name}</td>
+            <td>{playerInfo.score}</td>
+          </tr>
+        </table>
+        <div style={footerStyle}>
+          <span style={footerEmojiStyle}>🎉</span>
+          <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <>

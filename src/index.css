@@ -35,6 +35,10 @@ h1 {
   line-height: 1.1;
 }
 
+th, td {
+  padding: 0.8em 0em;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
