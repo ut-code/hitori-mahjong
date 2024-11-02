@@ -58,6 +58,7 @@ export default function Result() {
     padding: "20px",
     fontFamily: "'Arial', sans-serif",
     minWidth: "400px",
+    maxHeight: "800px",
     gap: "16px",
     color: "#2B2B2B",
     backgroundColor: "white",
@@ -103,11 +104,6 @@ export default function Result() {
     width: "200px",
     height: "110px",
   });
-
-  const currentRankingStyle: { [key: string]: string } = {
-    backgroundColor: "#FFF7F2",
-    color: "#FD903C",
-  };
 
   const topRankNumberStyle = (backgroundColor: string): { [key: string]: string } => ({
     fontSize: "1.6rem",
