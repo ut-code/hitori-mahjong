@@ -11,8 +11,9 @@ import { darken } from '@mui/material/styles';
 import RankingTable from "./RankingTable";
 
 export default function Result() {
-  const { setPlayerInfo } = useContext(PlayerInfoContext);
+  const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
   const [scores, setScores] = useState<PlayerInfo[]>([]);
+  const [myRank, setMyRank] = useState<number | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchResult = async () => {
@@ -29,14 +30,18 @@ export default function Result() {
 
         const data = await res.json();
 
-        const sortedScores = data
+        const sortedScores: PlayerInfo[] = data
           .sort((a: PlayerInfo, b: PlayerInfo) => b.score - a.score)
           .map((player: PlayerInfo, index: number) => ({
             ...player,
             rank: index + 1,
-          }));
-
+          }));  
         setScores(sortedScores);
+        
+        const myScore = sortedScores.find((player) => player.name === playerInfo.name);
+        if (myScore?.rank != null && myScore.rank > 3) {
+          setMyRank(myScore.rank);
+        }
       } catch (e) {
         console.error("Failed to fetch results:", e);
         // エラーが発生した場合はデフォルトの例を表示
@@ -170,6 +175,10 @@ export default function Result() {
         <h2 style={headerTitleStyle}>ランキング</h2>
       </div>
 
+      {scores.length !== 0 && (
+        <>
+
+      
       <div style={topRankingStyle}>
         <div style={topRankItemStyle(top2Color)}>
           <div style={topRankNumberStyle(top2Color)}>
@@ -207,7 +216,12 @@ export default function Result() {
         </div>
       </div>
 
-      <RankingTable scores={scores.length > 3 ? scores.slice(3) : []} customToolbarActions={bottomToolbar} />
+      <RankingTable
+        scores={scores.length > 3 ? scores.slice(3) : []}
+        customToolbarActions={bottomToolbar}
+        myRank={myRank}
+      />
+    </>)}
     </div>
   );
 }
