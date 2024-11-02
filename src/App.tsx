@@ -2,6 +2,7 @@ import React, { useState, createContext } from "react";
 import Start from "./pages/Start/Start";
 import Tutorial from "./pages/Tutorial/Tutorial";
 import Play from "./pages/Play/Play";
+import GameInterface from "./pages/Play/GameInterface"
 import Result from "./pages/Result/Result";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -28,7 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Start />} />
           <Route path="/tutorial" element={<Tutorial />} />
-          <Route path="/play" element={<Play />} />
+          <Route path="/play" element={<GameInterface />} />
           <Route path="/result" element={<Result />} />
         </Routes>
       </Router>

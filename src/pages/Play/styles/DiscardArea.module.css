@@ -1,0 +1,9 @@
+.discardArea {
+  width: 30%;
+}
+.title {
+  font-weight: bold;
+}
+.tiles {
+  display: flex;
+}

@@ -1,0 +1,23 @@
+.handTiles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+.tile {
+  margin: 0 4px;
+  width: 40px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 14px;
+  color: #333;
+}
