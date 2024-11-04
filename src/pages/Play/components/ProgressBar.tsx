@@ -9,9 +9,15 @@ const ProgressBar = ({ progress, label }) => {
         <Box className={styles.progressBar} style={{ width: `${progress}%` }} />
         {/* <Box className={styles.progressLabel}>{progress}%</Box> */}
       </Box>
-      <Box className={styles.arrowContainer} style={{ left: `${progress}%` }}>
+{/*       <Box className={styles.arrowContainer} style={{ left: `${progress}%` }}>
         <div className={styles.arrow}></div>
         {<div className={styles.arrowText}>{label}</div>}
+      </Box> */}
+      <Box
+        className={styles.labelContainer}
+        style={{ left: `${progress}%` }} // Adjusts label position
+      >
+        <div className={styles.labelText}>{label}</div>
       </Box>
     </Box>
   );

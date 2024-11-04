@@ -50,3 +50,36 @@
   font-size: 0.8rem;
   color: #333;
 }
+
+.labelContainer {
+  position: absolute;
+  top: 25px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  color: white;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateX(-50%);
+}
+
+.labelContainer::before {
+  content: "";
+  position: absolute;
+  top: -4px; /* Adjusts the position above the label */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px; /* Width of the semicircle */
+  height: 6px; /* Height of the semicircle (half of width) */
+  background-color: #333; /* Matches label box color */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.labelText {
+  font-size: 12px;
+  color: white;
+}
