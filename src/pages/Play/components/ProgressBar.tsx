@@ -7,11 +7,11 @@ const ProgressBar = ({ progress, label }) => {
     <Box className={styles.progressWrapper}>
       <Box className={styles.progressContainer}>
         <Box className={styles.progressBar} style={{ width: `${progress}%` }} />
-        <Box className={styles.progressLabel}>{progress}%</Box>
+        {/* <Box className={styles.progressLabel}>{progress}%</Box> */}
       </Box>
       <Box className={styles.arrowContainer} style={{ left: `${progress}%` }}>
         <div className={styles.arrow}></div>
-        <div className={styles.arrowText}>{label}</div>
+        {<div className={styles.arrowText}>{label}</div>}
       </Box>
     </Box>
   );

@@ -14,10 +14,12 @@
   font-size: 20px;
   color: #333;
   margin-bottom: 8px;
+  padding-left: 10px;
 }
 
 .tiles {
   display: flex;
+  padding-left: 10px;
 }
 
 .tile {
