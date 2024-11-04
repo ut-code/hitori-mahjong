@@ -173,7 +173,12 @@ const GameInterface = () => {
               </>
             )}
           </div>
-          <HandTiles />
+          <HandTiles
+            tehai={tehai}
+            tsumo={tsumo}
+            tedashi={tedashi}
+            tsumogiri={tsumogiri}
+          />
         </div>
       </>
     )
