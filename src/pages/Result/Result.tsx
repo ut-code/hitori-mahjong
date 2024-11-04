@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { PlayerInfoContext } from "../../App";
 import { PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { FaCrown } from "react-icons/fa";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { darken } from '@mui/material/styles';
+import { darken } from "@mui/material/styles";
 import RankingTable from "./RankingTable";
 
 export default function Result() {
@@ -35,10 +35,12 @@ export default function Result() {
           .map((player: PlayerInfo, index: number) => ({
             ...player,
             rank: index + 1,
-          }));  
+          }));
         setScores(sortedScores);
-        
-        const myScore = sortedScores.find((player) => player.name === playerInfo.name);
+
+        const myScore = sortedScores.find(
+          (player) => player.name === playerInfo.name,
+        );
         if (myScore?.rank != null && myScore.rank > 3) {
           setMyRank(myScore.rank);
         }
@@ -93,7 +95,9 @@ export default function Result() {
     alignItems: "flex-end",
   };
 
-  const topRankItemStyle = (backgroundColor: string): { [key: string]: string } => ({
+  const topRankItemStyle = (
+    backgroundColor: string,
+  ): { [key: string]: string } => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -110,7 +114,9 @@ export default function Result() {
     height: "110px",
   });
 
-  const topRankNumberStyle = (backgroundColor: string): { [key: string]: string } => ({
+  const topRankNumberStyle = (
+    backgroundColor: string,
+  ): { [key: string]: string } => ({
     fontSize: "1.6rem",
     position: "absolute",
     top: "-25px",
@@ -121,7 +127,9 @@ export default function Result() {
     borderRadius: "10px",
   });
 
-  const crownIconStyle = (backgroundColor: string): { [key: string]: string } => ({
+  const crownIconStyle = (
+    backgroundColor: string,
+  ): { [key: string]: string } => ({
     position: "absolute",
     top: "-48px",
     left: "50%",
@@ -152,14 +160,19 @@ export default function Result() {
     fontSize: "1.4rem",
   };
 
-  const top1Player: PlayerInfo = scores.length > 1 ? scores[0] : exampleUsers[0];
-  const top2Player: PlayerInfo = scores.length > 2 ? scores[1] : exampleUsers[0];
-  const top3Player: PlayerInfo = scores.length > 3 ? scores[2] : exampleUsers[0];
+  const top1Player: PlayerInfo =
+    scores.length > 1 ? scores[0] : exampleUsers[0];
+  const top2Player: PlayerInfo =
+    scores.length > 2 ? scores[1] : exampleUsers[0];
+  const top3Player: PlayerInfo =
+    scores.length > 3 ? scores[2] : exampleUsers[0];
 
-  const bottomToolbar = (<div style={footerStyle}>
-    <span style={footerEmojiStyle}>🎉</span>
-    <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
-  </div>);
+  const bottomToolbar = (
+    <div style={footerStyle}>
+      <span style={footerEmojiStyle}>🎉</span>
+      <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
+    </div>
+  );
 
   return (
     <div style={containerStyle}>
@@ -177,51 +190,46 @@ export default function Result() {
 
       {scores.length !== 0 && (
         <>
+          <div style={topRankingStyle}>
+            <div style={topRankItemStyle(top2Color)}>
+              <div style={topRankNumberStyle(top2Color)}>
+                <i>2</i>
+              </div>
+              <div style={topRankUsernameStyle}>
+                <span>{top2Player.name}</span>
+              </div>
+              <div style={topRankScoreStyle}>
+                <i>{top2Player.score}</i>
+              </div>
+            </div>
+            <div style={{ ...topRankItemStyle(top1Color), height: "130px" }}>
+              <FaCrown style={crownIconStyle(top1Color)} />
+              <div style={topRankNumberStyle(top1Color)}>
+                <i>1</i>
+              </div>
+              <div style={topRankUsernameStyle}>{top1Player.name}</div>
+              <div style={topRankScoreStyle}>
+                <i>{top1Player.score}</i>
+              </div>
+            </div>
+            <div style={topRankItemStyle(top3Color)}>
+              <div style={topRankNumberStyle(top3Color)}>
+                <i>3</i>
+              </div>
+              <div style={topRankUsernameStyle}>{top3Player.name}</div>
+              <div style={topRankScoreStyle}>
+                <i>{top3Player.score}</i>
+              </div>
+            </div>
+          </div>
 
-      
-      <div style={topRankingStyle}>
-        <div style={topRankItemStyle(top2Color)}>
-          <div style={topRankNumberStyle(top2Color)}>
-            <i>2</i>
-          </div>
-          <div style={topRankUsernameStyle}>
-            <span>{top2Player.name}</span>
-          </div>
-          <div style={topRankScoreStyle}>
-            <i>{top2Player.score}</i>
-          </div>
-        </div>
-        <div style={{...topRankItemStyle(top1Color), height: "130px"}}>
-          <FaCrown style={crownIconStyle(top1Color)} />
-          <div style={topRankNumberStyle(top1Color)}>
-            <i>1</i>
-          </div>
-          <div style={topRankUsernameStyle}>
-            {top1Player.name}
-          </div>
-          <div style={topRankScoreStyle}>
-            <i>{top1Player.score}</i>
-          </div>
-        </div>
-        <div style={topRankItemStyle(top3Color)}>
-          <div style={topRankNumberStyle(top3Color)}>
-            <i>3</i>
-          </div>
-          <div style={topRankUsernameStyle}>
-            {top3Player.name}
-          </div>
-          <div style={topRankScoreStyle}>
-            <i>{top3Player.score}</i>
-          </div>
-        </div>
-      </div>
-
-      <RankingTable
-        scores={scores.length > 3 ? scores.slice(3) : []}
-        customToolbarActions={bottomToolbar}
-        myRank={myRank}
-      />
-    </>)}
+          <RankingTable
+            scores={scores.length > 3 ? scores.slice(3) : []}
+            customToolbarActions={bottomToolbar}
+            myRank={myRank}
+          />
+        </>
+      )}
     </div>
   );
 }

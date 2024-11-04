@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import BasicRules from "./BasicRules";
 import LocalRules from "./LocalRules";
@@ -45,7 +45,11 @@ export default function Tutorial() {
   return (
     <div style={containerStyle}>
       <div style={headerStyle}>
-        <IconButton onClick={() => {navigate("/");}}>
+        <IconButton
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           <HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />
         </IconButton>
         <h2 style={headerTitleStyle}>遊び方</h2>

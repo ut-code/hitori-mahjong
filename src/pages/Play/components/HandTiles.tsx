@@ -12,8 +12,8 @@ type HandTilesProps = {
 function HandTiles(props: HandTilesProps) {
   return (
     <>
-      <div className={styles.tehaiContainer}>
-        <ul className={styles.tehai}>
+      <div className={styles.tilesContainer}>
+        <ul className={styles.tiles}>
           {props.tehai.map((hai, index) => (
             <li key={index}>
               <img

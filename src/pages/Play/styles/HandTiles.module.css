@@ -1,23 +1,12 @@
-.handTiles {
+.tiles {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  background-color: #ffffff;
-  border-top: 1px solid #ddd;
-  margin-top: 10px;
+  list-style-type: none;
 }
 
-.tile {
-  margin: 0 4px;
-  width: 40px;
-  height: 50px;
+.tilesContainer {
   display: flex;
+  gap: 10px;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  font-size: 14px;
-  color: #333;
 }
