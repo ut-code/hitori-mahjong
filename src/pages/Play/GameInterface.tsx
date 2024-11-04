@@ -107,21 +107,51 @@ const GameInterface = () => {
   };
 
   return gameState.kyoku <= 4 ? (
-    <div className={styles.container}>
-      <Header />
-      <div className={styles.gridContainer}>
-        <span className={styles.discardArea}>
-          <DiscardArea />
-        </span>
-        <span className={styles.handStatus}>
-          <HandStatus />
-        </span>
-        <span className={styles.waitingTiles}>
-          <WaitingTiles />
-        </span>
-      </div>
-      <HandTiles />
-    </div>
+    gameState.junme === 18 ? (
+      <>
+        <div className={styles.ryukyoku}>流局</div>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setGameState({
+              junme: 1,
+              kyoku: gameState.kyoku + 1,
+            });
+            fetchInitialHaiyama();
+            const bonusPoint =
+              toitsuSyanten === 0 || mentsuSyanten === 0
+                ? 1000
+                : toitsuSyanten === 1 || mentsuSyanten === 1
+                  ? 500
+                  : 0; //聴牌してたら1000点、イーシャンテンなら500点
+            setPlayerInfo((prevInfo) => ({
+              ...prevInfo,
+              score: prevInfo.score + bonusPoint,
+            }));
+          }}
+        >
+          確認
+        </Button>
+      </>
+    ) : (
+      <>
+        <div className={styles.container}>
+          <Header />
+          <div className={styles.gridContainer}>
+            <span className={styles.discardArea}>
+              <DiscardArea />
+            </span>
+            <span className={styles.handStatus}>
+              <HandStatus />
+            </span>
+            <span className={styles.waitingTiles}>
+              <WaitingTiles />
+            </span>
+          </div>
+          <HandTiles />
+        </div>
+      </>
+    )
   ) : (
     <>
       <div>終局</div>
