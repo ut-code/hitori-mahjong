@@ -14,7 +14,7 @@ type HeaderProps = {
 function Header(props: HeaderProps) {
   const navigate = useNavigate();
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
-
+  const progress = (props.junme / 18) * 100;
   return (
     <div className={styles.header}>
       <IconButton
@@ -28,7 +28,7 @@ function Header(props: HeaderProps) {
       <div className={styles.title}>
         東風戦 東{props.kyoku}局 {playerInfo.score}点
       </div>
-      <ProgressBar progress={30} label="3rd Step" />
+      <ProgressBar progress={progress} label={`${props.junme}巡目`} />
     </div>
   );
 }
