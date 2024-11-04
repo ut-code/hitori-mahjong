@@ -26,6 +26,11 @@ const GameInterface = () => {
   const [tehai, setTehai] = useState<Hai[]>([]);
   const [tsumo, setTsumo] = useState<Hai>({ kind: "manzu", value: 1 }); //適当な値を設定している
   const [gameState, setGameState] = useState<GameState>({ kyoku: 1, junme: 1 });
+  const [isAgari, setIsAgari] = useState(
+    judgeAgari(sortTehai([...tehai, tsumo])),
+  );
+  const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+  const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
 
   const fetchInitialHaiyama = async () => {
     try {
@@ -73,11 +78,6 @@ const GameInterface = () => {
     }
   }, [gameState.kyoku]);
 
-  const [isAgari, setIsAgari] = useState(
-    judgeAgari(sortTehai([...tehai, tsumo])),
-  );
-  const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
-  const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
   useEffect(() => {
     setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
     setMentsuSyanten(0); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
