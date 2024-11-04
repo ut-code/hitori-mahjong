@@ -11,9 +11,7 @@ export default function TsumoEnd(props: TsumoEndProps) {
       <div>ツモ！！</div>
       <Button
         variant="contained"
-        onClick={() => {
-          props.tsumoEnd;
-        }}
+        onClick={props.tsumoEnd}
       >
         確認
       </Button>
