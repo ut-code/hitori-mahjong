@@ -146,43 +146,43 @@ const GameInterface = () => {
     navigate("/result");
   };
 
-  return gameState.kyoku <= 4 ? (
-    gameState.junme === 18 ? (
-      <>
-        <DrawEnd drawEnd={drawEnd} />
-      </>
-    ) : (
-      <>
-        <div className={styles.container}>
-          <Header kyoku={gameState.kyoku} junme={gameState.junme} />
-          <div className={styles.gridContainer}>
-            {isAgari ? (
-              <TsumoEnd tsumoEnd={tsumoEnd} />
-            ) : (
-              <>
-                <span className={styles.discardArea}>
-                  <DiscardArea />
-                </span>
-                <span className={styles.handStatus}>
-                  <HandStatus />
-                </span>
-                <span className={styles.waitingTiles}>
-                  <WaitingTiles />
-                </span>
-              </>
-            )}
+  return (
+    <div className={styles.container}>
+      {gameState.kyoku <= 4 ? (
+        gameState.junme === 18 ? (
+          <DrawEnd drawEnd={drawEnd} />
+        ) : (
+          <div className={styles.container}>
+            <Header kyoku={gameState.kyoku} junme={gameState.junme} />
+            <div className={styles.gridContainer}>
+              {isAgari ? (
+                <TsumoEnd tsumoEnd={tsumoEnd} />
+              ) : (
+                <>
+                  <span className={styles.discardArea}>
+                    <DiscardArea />
+                  </span>
+                  <span className={styles.handStatus}>
+                    <HandStatus />
+                  </span>
+                  <span className={styles.waitingTiles}>
+                    <WaitingTiles />
+                  </span>
+                </>
+              )}
+            </div>
+            <HandTiles
+              tehai={tehai}
+              tsumo={tsumo}
+              tedashi={tedashi}
+              tsumogiri={tsumogiri}
+            />
           </div>
-          <HandTiles
-            tehai={tehai}
-            tsumo={tsumo}
-            tedashi={tedashi}
-            tsumogiri={tsumogiri}
-          />
-        </div>
-      </>
-    )
-  ) : (
-    <FinishGame finishGame={finishGame} />
+        )
+      ) : (
+        <FinishGame finishGame={finishGame} />
+      )}
+    </div>
   );
 };
 

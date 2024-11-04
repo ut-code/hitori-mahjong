@@ -9,10 +9,7 @@ export default function TsumoEnd(props: TsumoEndProps) {
   return (
     <>
       <div>ツモ！！</div>
-      <Button
-        variant="contained"
-        onClick={props.tsumoEnd}
-      >
+      <Button variant="contained" onClick={props.tsumoEnd}>
         確認
       </Button>
     </>
