@@ -60,7 +60,7 @@ function Header(props: HeaderProps) {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-           遊んだデータが失われますが、スタート画面に戻りますか？
+            遊んだデータが失われますが、スタート画面に戻りますか？
           </DialogContentText>
         </DialogContent>
         <DialogActions>
