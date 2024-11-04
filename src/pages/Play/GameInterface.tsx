@@ -79,7 +79,11 @@ const GameInterface = () => {
   }, [gameState.kyoku]);
 
   useEffect(() => {
-    setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
+    const currentAgari = judgeAgari(sortTehai([...tehai, tsumo]));
+    if (currentAgari !== isAgari) {
+      // Only set state if there's a change
+      setIsAgari(currentAgari);
+    }
     setMentsuSyanten(0); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
     setToitsuSyanten(3); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   }, [tehai, tsumo]);
@@ -138,15 +142,39 @@ const GameInterface = () => {
         <div className={styles.container}>
           <Header />
           <div className={styles.gridContainer}>
-            <span className={styles.discardArea}>
-              <DiscardArea />
-            </span>
-            <span className={styles.handStatus}>
-              <HandStatus />
-            </span>
-            <span className={styles.waitingTiles}>
-              <WaitingTiles />
-            </span>
+            {isAgari ? (
+              <>
+                <div className={styles.tsumoClaim}>ツモ！！</div>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setGameState({
+                      junme: 1,
+                      kyoku: gameState.kyoku + 1,
+                    });
+                    fetchInitialHaiyama();
+                    setPlayerInfo({
+                      ...playerInfo,
+                      score: playerInfo.score + 8000,
+                    });
+                  }}
+                >
+                  確認
+                </Button>
+              </>
+            ) : (
+              <>
+                <span className={styles.discardArea}>
+                  <DiscardArea />
+                </span>
+                <span className={styles.handStatus}>
+                  <HandStatus />
+                </span>
+                <span className={styles.waitingTiles}>
+                  <WaitingTiles />
+                </span>
+              </>
+            )}
           </div>
           <HandTiles />
         </div>
