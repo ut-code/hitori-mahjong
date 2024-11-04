@@ -12,6 +12,7 @@ import { PlayerInfoContext } from "../../App";
 import Button from "@mui/material/Button";
 import { Hai } from "../../utils/hai";
 import { useNavigate } from "react-router-dom";
+import judgeAgari from "../../utils/judgeAgari";
 
 export type GameState = {
   kyoku: number;
@@ -20,7 +21,7 @@ export type GameState = {
 
 const GameInterface = () => {
   const navigate = useNavigate();
-  const { playerInfo } = useContext(PlayerInfoContext);
+  const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
   const [haiyama, setHaiyama] = useState<Hai[]>([]);
   const [tehai, setTehai] = useState<Hai[]>([]);
   const [tsumo, setTsumo] = useState<Hai>({ kind: "manzu", value: 1 }); //適当な値を設定している
@@ -71,6 +72,39 @@ const GameInterface = () => {
       sendResult();
     }
   }, [gameState.kyoku]);
+
+  const [isAgari, setIsAgari] = useState(
+    judgeAgari(sortTehai([...tehai, tsumo])),
+  );
+  const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+  const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
+  useEffect(() => {
+    setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
+    setMentsuSyanten(0); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+    setToitsuSyanten(3); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+  }, [tehai, tsumo]);
+
+  const tedashi = (index: number) => {
+    const newTehai = [...tehai];
+    newTehai.splice(index, 1);
+    const sortedTehai = sortTehai([...newTehai, tsumo]);
+    setTehai(sortedTehai);
+    setTsumo(haiyama[0]);
+    setHaiyama(haiyama.slice(1));
+    setGameState({
+      ...gameState,
+      junme: gameState.junme + 1,
+    });
+  };
+
+  const tsumogiri = () => {
+    setTsumo(haiyama[0]);
+    setHaiyama(haiyama.slice(1));
+    setGameState({
+      ...gameState,
+      junme: gameState.junme + 1,
+    });
+  };
 
   return gameState.kyoku <= 4 ? (
     <div className={styles.container}>
