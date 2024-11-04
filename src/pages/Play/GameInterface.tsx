@@ -14,6 +14,7 @@ import { Hai } from "../../utils/hai";
 import { useNavigate } from "react-router-dom";
 import judgeAgari from "../../utils/judgeAgari";
 import DrawEnd from "./components/DrawEnd.tsx";
+import TsumoEnd from "./components/TsumoEnd.tsx";
 
 export type GameState = {
   kyoku: number;
@@ -129,6 +130,18 @@ const GameInterface = () => {
     }));
   };
 
+  const tsumoEnd = () => {
+    setGameState({
+      junme: 1,
+      kyoku: gameState.kyoku + 1,
+    });
+    fetchInitialHaiyama();
+    setPlayerInfo({
+      ...playerInfo,
+      score: playerInfo.score + 8000,
+    });
+  };
+
   return gameState.kyoku <= 4 ? (
     gameState.junme === 18 ? (
       <>
@@ -140,25 +153,7 @@ const GameInterface = () => {
           <Header />
           <div className={styles.gridContainer}>
             {isAgari ? (
-              <>
-                <div className={styles.tsumoClaim}>ツモ！！</div>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    setGameState({
-                      junme: 1,
-                      kyoku: gameState.kyoku + 1,
-                    });
-                    fetchInitialHaiyama();
-                    setPlayerInfo({
-                      ...playerInfo,
-                      score: playerInfo.score + 8000,
-                    });
-                  }}
-                >
-                  確認
-                </Button>
-              </>
+              <TsumoEnd tsumoEnd={tsumoEnd} />
             ) : (
               <>
                 <span className={styles.discardArea}>
