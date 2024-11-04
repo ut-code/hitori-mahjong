@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import { Hai } from "../../utils/hai";
 import { useNavigate } from "react-router-dom";
 import judgeAgari from "../../utils/judgeAgari";
+import DrawEnd from "./components/DrawEnd.tsx";
 
 export type GameState = {
   kyoku: number;
@@ -110,32 +111,28 @@ const GameInterface = () => {
     });
   };
 
+  const drawEnd = () => {
+    setGameState({
+      junme: 1,
+      kyoku: gameState.kyoku + 1,
+    });
+    fetchInitialHaiyama();
+    const bonusPoint =
+      toitsuSyanten === 0 || mentsuSyanten === 0
+        ? 1000
+        : toitsuSyanten === 1 || mentsuSyanten === 1
+          ? 500
+          : 0; //聴牌してたら1000点、イーシャンテンなら500点
+    setPlayerInfo((prevInfo) => ({
+      ...prevInfo,
+      score: prevInfo.score + bonusPoint,
+    }));
+  };
+
   return gameState.kyoku <= 4 ? (
     gameState.junme === 18 ? (
       <>
-        <div className={styles.ryukyoku}>流局</div>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setGameState({
-              junme: 1,
-              kyoku: gameState.kyoku + 1,
-            });
-            fetchInitialHaiyama();
-            const bonusPoint =
-              toitsuSyanten === 0 || mentsuSyanten === 0
-                ? 1000
-                : toitsuSyanten === 1 || mentsuSyanten === 1
-                  ? 500
-                  : 0; //聴牌してたら1000点、イーシャンテンなら500点
-            setPlayerInfo((prevInfo) => ({
-              ...prevInfo,
-              score: prevInfo.score + bonusPoint,
-            }));
-          }}
-        >
-          確認
-        </Button>
+        <DrawEnd drawEnd={drawEnd} />
       </>
     ) : (
       <>
