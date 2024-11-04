@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import judgeAgari from "../../utils/judgeAgari";
 import DrawEnd from "./components/DrawEnd.tsx";
 import TsumoEnd from "./components/TsumoEnd.tsx";
+import FinishGame from "./components/FinishGame.tsx";
 
 export type GameState = {
   kyoku: number;
@@ -142,6 +143,10 @@ const GameInterface = () => {
     });
   };
 
+  const finishGame = () => {
+    navigate("/result");
+  };
+
   return gameState.kyoku <= 4 ? (
     gameState.junme === 18 ? (
       <>
@@ -173,17 +178,7 @@ const GameInterface = () => {
       </>
     )
   ) : (
-    <>
-      <div>終局</div>
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate("/result");
-        }}
-      >
-        結果画面へ
-      </Button>
-    </>
+    <FinishGame finishGame={finishGame} />
   );
 };
 
