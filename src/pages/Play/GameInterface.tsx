@@ -9,7 +9,6 @@ import { useState, useEffect, useContext } from "react";
 import { sortTehai } from "../../utils/hai";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { PlayerInfoContext } from "../../App";
-import Button from "@mui/material/Button";
 import { Hai } from "../../utils/hai";
 import { useNavigate } from "react-router-dom";
 import judgeAgari from "../../utils/judgeAgari";
@@ -155,7 +154,7 @@ const GameInterface = () => {
     ) : (
       <>
         <div className={styles.container}>
-          <Header />
+          <Header kyoku={gameState.kyoku} junme={gameState.junme} />
           <div className={styles.gridContainer}>
             {isAgari ? (
               <TsumoEnd tsumoEnd={tsumoEnd} />

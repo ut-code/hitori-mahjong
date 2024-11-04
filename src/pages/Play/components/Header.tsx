@@ -7,7 +7,11 @@ import { PlayerInfoContext } from "../../../App";
 import { useContext } from "react";
 import ProgressBar from "./ProgressBar.tsx";
 
-const Header = () => {
+type HeaderProps = {
+  kyoku: number;
+  junme: number;
+};
+function Header(props: HeaderProps) {
   const navigate = useNavigate();
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
 
@@ -21,10 +25,12 @@ const Header = () => {
       >
         <HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />
       </IconButton>
-      <div className={styles.title}>東風戦 東一局 25000点</div>
+      <div className={styles.title}>
+        東風戦 東{props.kyoku}局 {playerInfo.score}点
+      </div>
       <ProgressBar progress={30} label="3rd Step" />
     </div>
   );
-};
+}
 
 export default Header;
