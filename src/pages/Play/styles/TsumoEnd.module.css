@@ -1,0 +1,15 @@
+.container {
+  justify-content: center;
+}
+
+.title {
+  margin-top: 10px;
+  font-family: serif;
+  font-size: 80px;
+  margin-bottom: 20px;
+}
+
+.checkButton {
+  width: 10%;
+  height: 20%;
+}
