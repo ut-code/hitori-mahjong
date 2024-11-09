@@ -1,8 +1,15 @@
 import React from "react";
 import styles from "../styles/WaitingTiles.module.css";
 import Tile from "./Tile.tsx";
+import { Hai } from "../../../utils/hai.ts";
 
-const WaitingTiles = () => {
+interface WaitingTilesProps {
+  mentsuSyanten: number;
+  toitsuSyanten: number;
+  tehai: Hai[];
+}
+
+function WaitingTiles(props: WaitingTilesProps) {
   return (
     <div className={styles.waitingTiles}>
       <div className={styles.title}>待ち</div>
