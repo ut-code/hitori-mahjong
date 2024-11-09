@@ -1,5 +1,5 @@
 import judgeAgari from "./judgeAgari";
-import { Hai, JihaiValue, HaiKind } from "./hai.ts";
+import { Hai, JihaiValue, HaiKind, constructHai } from "./hai.ts";
 
 export default function calculateMachihai(tehai: Hai[]): Hai[] {
   const machihai: Hai[] = [];
@@ -16,7 +16,7 @@ export default function calculateMachihai(tehai: Hai[]): Hai[] {
   for (const kind of haiKinds) {
     if (kind === "jihai") {
       for (const value of jihaiValues) {
-        const newHai: Hai = { kind: kind, value: value };
+        const newHai: Hai = constructHai(kind, value);
         const newTehai: Hai[] = [...tehai, newHai];
         if (judgeAgari(newTehai)) {
           machihai.push(newHai);
@@ -24,7 +24,7 @@ export default function calculateMachihai(tehai: Hai[]): Hai[] {
       }
     } else {
       for (let value = 1; value < 10; value++) {
-        const newHai: Hai = { kind: kind, value: value };
+        const newHai: Hai = constructHai(kind, value);
         const newTehai: Hai[] = [...tehai, newHai];
         if (judgeAgari(newTehai)) {
           machihai.push(newHai);
