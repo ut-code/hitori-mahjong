@@ -4,9 +4,20 @@
 
 .title {
   margin-top: 10px;
-  font-family: serif;
-  font-size: 80px;
+  font-family: "Noto Serif JP", "Source Han Serif JP", "Hiragino Mincho ProN",
+    "Yu Mincho", serif;
+  font-size: 100px;
   margin-bottom: 20px;
+  font-weight: bold;
+
+  background: -webkit-linear-gradient(#ff7050, #ffe4c4);
+  background: linear-gradient(#ff7050, #ffe4c4);
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .checkButton {
