@@ -9,7 +9,7 @@ type TsumoEndProps = {
 export default function TsumoEnd(props: TsumoEndProps) {
   return (
     <div className={styles.container}>
-      <div className={styles.title}>ツモ！！</div>
+      <div className={styles.title}>ツモ！</div>
       <Button
         variant="contained"
         onClick={props.tsumoEnd}

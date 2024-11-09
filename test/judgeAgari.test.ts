@@ -1,5 +1,5 @@
-import {expect, test} from "bun:test";
-import { constructHai, Hai } from '../src/utils/hai';
+import { expect, test } from "bun:test";
+import { constructHai, Hai } from "../src/utils/hai";
 import judgeAgari from "../src/utils/judgeAgari";
 
 const chinitsu1: Hai[] = [
@@ -38,7 +38,7 @@ const chinitsu2: Hai[] = [
   constructHai("pinzu", 6),
   constructHai("pinzu", 6),
   constructHai("pinzu", 6),
-]
+];
 
 test("judgeAgari chinitsu2", () => {
   expect(judgeAgari(chinitsu2)).toBe(true);
