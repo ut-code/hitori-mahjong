@@ -18,6 +18,7 @@
 }
 
 .tiles {
+  list-style-type: none;
   display: flex;
   padding-left: 10px;
 }
