@@ -19,6 +19,6 @@ function WaitingTiles(props: WaitingTilesProps) {
       </div>
     </div>
   );
-};
+}
 
 export default WaitingTiles;
