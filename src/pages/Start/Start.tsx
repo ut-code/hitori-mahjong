@@ -30,8 +30,10 @@ export default function Start() {
   return (
     <>
       <div className={styles.titleContainer}>
-        <div className={styles.mainTitle}>一人麻雀</div>
-        <div className={styles.subTitle}>～麻雀の基本を覚えよう～</div>
+        <div className={styles.mainTitle}>ひとり麻雀</div>
+        <div className={styles.subTitle}>
+          自分のペースで麻雀の基礎を身につけよう
+        </div>
       </div>
 
       <div className={styles.formContainer}>

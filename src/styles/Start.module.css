@@ -1,13 +1,16 @@
 .mainTitle {
-  font-size: 4em;
+  font-size: 6em;
   text-align: center;
-  font-family: "MS PMincho";
+  font-family: "Noto Sans";
+  font-weight: bold;
+  color: #ffffff;
 }
 
 .subTitle {
-  font-size: 2em;
+  font-size: 1.5em;
   text-align: center;
-  font-family: "MS PMincho";
+  font-family: "Noto Sans";
+  color: #ffffff;
 }
 
 .formContainer {
@@ -22,4 +25,5 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
 }
