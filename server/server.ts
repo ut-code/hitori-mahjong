@@ -1,24 +1,17 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import createHaiyama from "./createHaiyama.js";
 import { PrismaClient } from "@prisma/client";
+import cors from "cors";
 
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
-app.use(express.static("dist"));
-
-const allowCrossDomain = (req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, access_token",
-  );
-  next();
-};
-
-app.use(allowCrossDomain);
+if (process.env.NODE_ENV === "development") {
+  app.use(cors());
+} else {
+  app.use(express.static("dist"));
+}
 
 app.post("/start", (req: Request, res: Response) => {
   const haiyama = createHaiyama();
