@@ -53,11 +53,12 @@ const GameInterface = () => {
       setHaiyama(data.slice(14));
       console.log(haiyama.slice(0, 13));
     } catch (error) {
-      console.error("Failed to fetch initial haiyama:", error);
+/*       console.error("Failed to fetch initial haiyama:", error);
       setTehai(sortTehai(exampleHaiyama.slice(0, 13)));
       setTsumo(exampleHaiyama[13]);
       setHaiyama(exampleHaiyama.slice(14));
-      console.log(exampleHaiyama.slice(0, 13));
+      console.log(exampleHaiyama.slice(0, 13)); */
+      throw new Error("Failed to fetch initial haiyama");
     }
   };
 
