@@ -33,10 +33,11 @@ const GameInterface = () => {
   );
   const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchInitialHaiyama = async () => {
     try {
-      const response = await fetch("/start", {
+      const response = await fetch(`${apiUrl}/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         mode: "cors",
