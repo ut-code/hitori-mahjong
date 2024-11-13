@@ -38,11 +38,13 @@ export default function Start() {
 
       <div className={styles.formContainer}>
         <TextField
-          variant="standard"
+          label="ユーザーネーム"
+          variant="filled"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="ユーザー名を入力"
           autoComplete="off"
+          className={styles.textField}
         />
 
         <Button variant="contained" onClick={handleUserNameSubmit}>

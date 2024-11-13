@@ -21,6 +21,12 @@
   margin-top: 30px;
 }
 
+.textField {
+  background-color: white;
+  border-radius: 6px;
+  width: 460px;
+}
+
 .titleContainer {
   display: flex;
   flex-direction: column;
