@@ -1,54 +1,73 @@
-import { Hai } from "../pages/Play/Play";
-function deleteKoTsu(remainingTehai: Hai[]) {
-  for (let i = 0; i < remainingTehai.length - 2; i++) {
-    if (
-      remainingTehai[i].kind === remainingTehai[i + 1].kind &&
-      remainingTehai[i].kind === remainingTehai[i + 2].kind &&
-      remainingTehai[i].value === remainingTehai[i + 1].value &&
-      remainingTehai[i].value === remainingTehai[i + 2].value
-    ) {
-      remainingTehai = remainingTehai
-        .slice(0, i)
-        .concat(remainingTehai.slice(i + 3));
-      i -= 1; // 削除後のインデックスを調整
+import { Hai, haiToIndex } from "./hai.ts";
+function deleteSyuntsu(remainingTehai: TehaiIndex): number {
+  let extractCount = 0;
+  for (let kind = 0; kind < 3; kind++) {
+    for (let i = 0; i <= 6; i++) {
+      if (extractCount >= 4) {
+        return extractCount;
+      }
+      const index = kind * 9 + i;
+      while (
+        remainingTehai[index] >= 1 &&
+        remainingTehai[index + 1] >= 1 &&
+        remainingTehai[index + 2] >= 1
+      ) {
+        remainingTehai[index] -= 1;
+        remainingTehai[index + 1] -= 1;
+        remainingTehai[index + 2] -= 1;
+        extractCount += 1;
+      }
     }
   }
-  return remainingTehai;
+  return extractCount;
 }
 
-function deleteSyuntsu(remainingTehai: Hai[]) {
-  for (let i = 0; i < remainingTehai.length - 2; i++) {
-    if (
-      remainingTehai[i].kind === remainingTehai[i + 1].kind &&
-      remainingTehai[i].kind === remainingTehai[i + 2].kind &&
-      remainingTehai[i].value + 1 === remainingTehai[i + 1].value &&
-      remainingTehai[i].value + 2 === remainingTehai[i + 2].value
-    ) {
-      remainingTehai = remainingTehai
-        .slice(0, i)
-        .concat(remainingTehai.slice(i + 3));
-      i -= 1; // 削除後のインデックスを調整
-    }
-  }
-  return remainingTehai;
-}
+type TehaiIndex = number[];
 
 export default function judgeAgari(tehai: Hai[]) {
-  for (let i = 0; i < tehai.length - 1; i++) {
-    if (
-      tehai[i].kind === tehai[i + 1].kind &&
-      tehai[i].value === tehai[i + 1].value
-    ) {
-      // まず雀頭候補を探す
-      let remainingTehai = tehai.slice(0, i).concat(tehai.slice(i + 2));
-      // 刻子を消していく
-      remainingTehai = deleteKoTsu(remainingTehai);
-      // 順子を消していく
-      remainingTehai = deleteSyuntsu(remainingTehai);
-      if (remainingTehai.length === 0) {
+  const tehaiIndex: TehaiIndex = Array(34).fill(0);
+  tehai.forEach((hai) => {
+    tehaiIndex[haiToIndex(hai) - 1] += 1;
+  });
+
+  // 雀頭を探す
+  const jantoCandidates: number[] = [];
+  for (let i = 0; i < tehaiIndex.length; i++) {
+    if (tehaiIndex[i] >= 2) {
+      jantoCandidates.push(i);
+    }
+  }
+
+  for (const janto of jantoCandidates) {
+    const tehaiCopy = tehaiIndex.concat();
+    tehaiCopy[janto] -= 2;
+
+    // 刻子を探す
+    const koutsuCandidates: number[] = [];
+    for (let i = 0; i < tehaiCopy.length; i++) {
+      if (tehaiCopy[i] >= 3) {
+        koutsuCandidates.push(i);
+      }
+    }
+
+    // 刻子を選ぶ
+    for (let bit = 0; bit < 1 << koutsuCandidates.length; bit++) {
+      const tehaiWithoutJanto = tehaiCopy.concat();
+      let extractCount = 0;
+      for (let i = 0; i < koutsuCandidates.length; i++) {
+        if (bit & (1 << i)) {
+          tehaiWithoutJanto[koutsuCandidates[i]] -= 3;
+          extractCount += 1;
+        }
+      }
+      extractCount += deleteSyuntsu(tehaiWithoutJanto);
+      if (extractCount === 4) {
         return true;
       }
     }
+  }
+  if (new Set(jantoCandidates).size === 7) {
+    return true;
   }
   return false;
 }

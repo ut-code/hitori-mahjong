@@ -168,7 +168,7 @@ const GameInterface = () => {
                     <HandStatus />
                   </span>
                   <span className={styles.waitingTiles}>
-                    <WaitingTiles />
+                    <WaitingTiles tehai={tehai} />
                   </span>
                 </>
               )}
