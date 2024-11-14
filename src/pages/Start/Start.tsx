@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { PlayerInfoContext } from "../../App";
-import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
 import React from "react";
