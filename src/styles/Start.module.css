@@ -45,9 +45,14 @@
 }
 
 .howToPlayButton {
-  width: 200px;
+  width: 220px;
   background-color: #85a4ba;
   color: white;
   font-family: "Noto Sans";
   border-radius: 6px;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 20px;
 }

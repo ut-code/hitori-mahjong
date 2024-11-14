@@ -50,18 +50,20 @@ export default function Start() {
         <button onClick={handleUserNameSubmit} className={styles.playButton}>
           プレイ
         </button>
-        <button
-          onClick={() => navigate("/tutorial")}
-          className={styles.howToPlayButton}
-        >
-          遊び方
-        </button>
-        <button
-          onClick={() => navigate("/result")}
-          className={styles.howToPlayButton}
-        >
-          ランキング
-        </button>
+        <div className={styles.buttonContainer}>
+          <button
+            onClick={() => navigate("/tutorial")}
+            className={styles.howToPlayButton}
+          >
+            遊び方
+          </button>
+          <button
+            onClick={() => navigate("/result")}
+            className={styles.howToPlayButton}
+          >
+            ランキング
+          </button>
+        </div>
 
         {isNotValidUsername && (
           <Alert severity="error">ユーザー名を入力してください</Alert>
