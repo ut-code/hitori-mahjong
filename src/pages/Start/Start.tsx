@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { PlayerInfoContext } from "../../App";
-import Button from "@mui/material/Button";
 import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
 import React from "react";
@@ -30,28 +29,40 @@ export default function Start() {
   return (
     <>
       <div className={styles.titleContainer}>
-        <div className={styles.mainTitle}>一人麻雀</div>
-        <div className={styles.subTitle}>～麻雀の基本を覚えよう～</div>
+        <div className={styles.mainTitle}>ひとり麻雀</div>
+        <div className={styles.subTitle}>
+          自分のペースで麻雀の基礎を身につけよう
+        </div>
       </div>
 
       <div className={styles.formContainer}>
         <TextField
-          variant="standard"
+          label="ユーザーネーム"
+          variant="filled"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="ユーザー名を入力"
           autoComplete="off"
+          className={styles.textField}
         />
 
-        <Button variant="contained" onClick={handleUserNameSubmit}>
+        <button onClick={handleUserNameSubmit} className={styles.playButton}>
           プレイ
-        </Button>
-        <Button variant="contained" onClick={() => navigate("/tutorial")}>
-          遊び方
-        </Button>
-        <Button variant="contained" onClick={() => navigate("/result")}>
-          ランキング
-        </Button>
+        </button>
+        <div className={styles.buttonContainer}>
+          <button
+            onClick={() => navigate("/tutorial")}
+            className={styles.grayButton}
+          >
+            遊び方
+          </button>
+          <button
+            onClick={() => navigate("/result")}
+            className={styles.grayButton}
+          >
+            ランキング
+          </button>
+        </div>
 
         {isNotValidUsername && (
           <Alert severity="error">ユーザー名を入力してください</Alert>
