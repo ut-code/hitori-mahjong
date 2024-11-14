@@ -53,13 +53,13 @@ export default function Start() {
         <div className={styles.buttonContainer}>
           <button
             onClick={() => navigate("/tutorial")}
-            className={styles.howToPlayButton}
+            className={styles.grayButton}
           >
             遊び方
           </button>
           <button
             onClick={() => navigate("/result")}
-            className={styles.howToPlayButton}
+            className={styles.grayButton}
           >
             ランキング
           </button>
