@@ -47,9 +47,9 @@ export default function Start() {
           className={styles.textField}
         />
 
-        <Button variant="contained" onClick={handleUserNameSubmit}>
+        <button onClick={handleUserNameSubmit} className={styles.playButton}>
           プレイ
-        </Button>
+        </button>
         <Button variant="contained" onClick={() => navigate("/tutorial")}>
           遊び方
         </Button>

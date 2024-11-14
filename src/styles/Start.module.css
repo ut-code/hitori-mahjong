@@ -32,3 +32,14 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.playButton {
+  width: 460px;
+  height: 70px;
+  background-color: #fd903c;
+  color: white;
+  font-family: "Noto Sans";
+  font-size: 1.5em;
+  border-radius: 6px;
+  margin: 15px;
+}
