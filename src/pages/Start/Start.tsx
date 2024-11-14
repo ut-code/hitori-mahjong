@@ -56,9 +56,12 @@ export default function Start() {
         >
           遊び方
         </button>
-        <Button variant="contained" onClick={() => navigate("/result")}>
+        <button
+          onClick={() => navigate("/result")}
+          className={styles.howToPlayButton}
+        >
           ランキング
-        </Button>
+        </button>
 
         {isNotValidUsername && (
           <Alert severity="error">ユーザー名を入力してください</Alert>
