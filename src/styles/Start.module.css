@@ -18,7 +18,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: 30px;
+  margin-top: 60px;
 }
 
 .textField {
@@ -30,7 +30,6 @@
 .titleContainer {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .playButton {
