@@ -50,9 +50,12 @@ export default function Start() {
         <button onClick={handleUserNameSubmit} className={styles.playButton}>
           プレイ
         </button>
-        <Button variant="contained" onClick={() => navigate("/tutorial")}>
+        <button
+          onClick={() => navigate("/tutorial")}
+          className={styles.howToPlayButton}
+        >
           遊び方
-        </Button>
+        </button>
         <Button variant="contained" onClick={() => navigate("/result")}>
           ランキング
         </Button>
