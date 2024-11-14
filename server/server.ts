@@ -11,9 +11,9 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL, // 許可するオリジンを環境変数から設定
-    methods: ["GET", "POST", "PUT", "DELETE"], // 許可するHTTPメソッド
-    allowedHeaders: ["Content-Type", "Authorization", "access_token"], // 許可するヘッダー
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    allowedHeaders: ["Content-Type", "Authorization", "access_token"], 
   }),
 );
 
