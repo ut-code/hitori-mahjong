@@ -7,11 +7,7 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
-if (process.env.NODE_ENV === "development") {
-  app.use(cors());
-} else {
-  app.use(express.static("dist"));
-}
+app.use(cors());
 
 app.post("/start", (req: Request, res: Response) => {
   const haiyama = createHaiyama();

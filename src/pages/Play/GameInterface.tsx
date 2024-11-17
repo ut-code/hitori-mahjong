@@ -68,7 +68,7 @@ const GameInterface = () => {
   useEffect(() => {
     if (gameState.kyoku === 5) {
       const sendResult = () => {
-        fetch("/end", {
+        fetch(`${apiUrl}/end`, {
           method: "post",
           headers: { "Content-Type": "application/json" },
           mode: "cors",
