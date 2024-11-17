@@ -1,6 +1,6 @@
 .PHONY: dev build format
 
-watch:
+dev:
 	@bun run dev
 
 start:

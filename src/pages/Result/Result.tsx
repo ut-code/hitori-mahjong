@@ -15,10 +15,11 @@ export default function Result() {
   const [scores, setScores] = useState<PlayerInfo[]>([]);
   const [myRank, setMyRank] = useState<number | null>(null);
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchResult = async () => {
       try {
-        const res = await fetch("/result", {
+        const res = await fetch(`${apiUrl}/result`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           mode: "cors",

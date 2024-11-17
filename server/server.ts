@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import createHaiyama from "./createHaiyama.js";
 import { PrismaClient } from "@prisma/client";
 import cors from "cors";
@@ -7,15 +7,7 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
-//app.use(express.static("dist"));
-
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
-    methods: ["GET", "POST", "PUT", "DELETE"], 
-    allowedHeaders: ["Content-Type", "Authorization", "access_token"], 
-  }),
-);
+app.use(cors());
 
 app.post("/start", (req: Request, res: Response) => {
   const haiyama = createHaiyama();
