@@ -1,10 +1,10 @@
 .PHONY: dev build format
 
-dev:
-	@bun run dev
+watch:
+	@bun vite
 
 start:
-	@bun run build && bun run server/server.ts
+	@bun run dev
 
 format:
 	@bunx prettier . --write
