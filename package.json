@@ -16,12 +16,9 @@
     "@mui/icons-material": "^6.1.3",
     "@mui/material": "^6.0.0",
     "@prisma/client": "^5.18.0",
-<<<<<<< HEAD
     "@types/cors": "^2.8.17",
     "cors": "^2.8.5",
-=======
     "concurrently": "^9.1.0",
->>>>>>> a46b85f297f92c5795e45e86bb1edcc968b4fd68
     "express": "^4.19.2",
     "material-react-table": "^3.0.1",
     "react": "^18.3.1",
