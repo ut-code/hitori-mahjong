@@ -33,6 +33,7 @@ const GameInterface = () => {
   );
   const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
+  const [sutehai, setSutehai] = useState<Hai[]>([]);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchInitialHaiyama = async () => {
@@ -93,6 +94,7 @@ const GameInterface = () => {
   }, [tehai, tsumo]);
 
   const tedashi = (index: number) => {
+    setSutehai((sutehai) => [...sutehai, tehai[index]]);
     const newTehai = [...tehai];
     newTehai.splice(index, 1);
     const sortedTehai = sortTehai([...newTehai, tsumo]);
@@ -106,6 +108,7 @@ const GameInterface = () => {
   };
 
   const tsumogiri = () => {
+    setSutehai((sutehai) => [...sutehai, tsumo]);
     setTsumo(haiyama[0]);
     setHaiyama(haiyama.slice(1));
     setGameState({
@@ -115,6 +118,7 @@ const GameInterface = () => {
   };
 
   const drawEnd = () => {
+    setSutehai([]);
     setGameState({
       junme: 1,
       kyoku: gameState.kyoku + 1,
@@ -133,6 +137,7 @@ const GameInterface = () => {
   };
 
   const tsumoEnd = () => {
+    setSutehai([]);
     setGameState({
       junme: 1,
       kyoku: gameState.kyoku + 1,
@@ -162,7 +167,7 @@ const GameInterface = () => {
               ) : (
                 <>
                   <span className={styles.discardArea}>
-                    <DiscardArea />
+                    <DiscardArea sutehai={sutehai} />
                   </span>
                   <span className={styles.handStatus}>
                     <HandStatus />

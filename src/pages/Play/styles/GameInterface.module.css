@@ -23,15 +23,20 @@
 .discardArea {
   grid-column: 1;
   grid-row: 1 / 3;
-  height: 100%;
+  height: 300px;
+  width: 500px;
 }
 
 .handStatus {
   grid-column: 2;
   grid-row: 1;
+  height: 150px;
+  width: 500px;
 }
 
 .waitingTile {
   grid-column: 2;
   grid-row: 2;
+  height: 150px;
+  width: 500px;
 }
