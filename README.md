@@ -14,4 +14,4 @@ bun install
 
 ## 開発環境
 
-`make start` で開発環境を立ち上げ、localhostの3001番にアクセスします。
+`make start` で開発環境を立ち上げ、localhostの5173番にアクセスします。

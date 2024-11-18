@@ -33,10 +33,11 @@ const GameInterface = () => {
   );
   const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchInitialHaiyama = async () => {
     try {
-      const response = await fetch("/start", {
+      const response = await fetch(`${apiUrl}/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         mode: "cors",
@@ -52,11 +53,12 @@ const GameInterface = () => {
       setHaiyama(data.slice(14));
       console.log(haiyama.slice(0, 13));
     } catch (error) {
-      console.error("Failed to fetch initial haiyama:", error);
+      /*       console.error("Failed to fetch initial haiyama:", error);
       setTehai(sortTehai(exampleHaiyama.slice(0, 13)));
       setTsumo(exampleHaiyama[13]);
       setHaiyama(exampleHaiyama.slice(14));
-      console.log(exampleHaiyama.slice(0, 13));
+      console.log(exampleHaiyama.slice(0, 13)); */
+      throw new Error("Failed to fetch initial haiyama");
     }
   };
 
@@ -66,7 +68,7 @@ const GameInterface = () => {
   useEffect(() => {
     if (gameState.kyoku === 5) {
       const sendResult = () => {
-        fetch("/end", {
+        fetch(`${apiUrl}/end`, {
           method: "post",
           headers: { "Content-Type": "application/json" },
           mode: "cors",

@@ -1,7 +1,6 @@
 import React, { useState, createContext } from "react";
 import Start from "./pages/Start/Start";
 import Tutorial from "./pages/Tutorial/Tutorial";
-import Play from "./pages/Play/Play";
 import GameInterface from "./pages/Play/GameInterface";
 import Result from "./pages/Result/Result";
 import "./App.css";
