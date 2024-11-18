@@ -96,7 +96,7 @@ const GameInterface = () => {
   }, [tehai, tsumo]);
 
   const tedashi = (index: number) => {
-    setSutehai(sutehai => [...sutehai, tehai[index]]);
+    setSutehai((sutehai) => [...sutehai, tehai[index]]);
     const newTehai = [...tehai];
     newTehai.splice(index, 1);
     const sortedTehai = sortTehai([...newTehai, tsumo]);
@@ -110,7 +110,7 @@ const GameInterface = () => {
   };
 
   const tsumogiri = () => {
-    setSutehai(sutehai => [...sutehai, tsumo])
+    setSutehai((sutehai) => [...sutehai, tsumo]);
     setTsumo(haiyama[0]);
     setHaiyama(haiyama.slice(1));
     setGameState({
@@ -167,7 +167,7 @@ const GameInterface = () => {
               ) : (
                 <>
                   <span className={styles.discardArea}>
-                    <DiscardArea />
+                    <DiscardArea sutehai={sutehai} />
                   </span>
                   <span className={styles.handStatus}>
                     <HandStatus />
