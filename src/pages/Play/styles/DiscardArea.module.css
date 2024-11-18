@@ -13,23 +13,23 @@
 
 .tiles {
   padding-top: 10px;
-  padding-left: 50px; 
+  padding-left: 50px;
   display: grid;
-  grid-template-columns: repeat(6, 50px); 
-  grid-auto-rows: 70px; 
-  list-style: none; 
-  margin: 0; 
-  gap: 0; 
+  grid-template-columns: repeat(6, 50px);
+  grid-auto-rows: 70px;
+  list-style: none;
+  margin: 0;
+  gap: 0;
 }
 
 .tiles li {
-  margin: 0; 
+  margin: 0;
   padding: 0;
 }
 
 .tiles img {
   margin: 0;
   padding: 0;
-  display: block; 
+  display: block;
   box-sizing: border-box;
 }
