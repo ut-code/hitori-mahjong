@@ -12,7 +12,7 @@
 .tiles {
   padding-top: 10px;
   padding-left: 50px;
-  display: grid; 
-  grid-template-columns: repeat(6, 1fr); 
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   list-style-type: none;
 }

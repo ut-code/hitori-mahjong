@@ -52,11 +52,9 @@ const GameInterface = () => {
       setTehai(sortTehai(data.slice(0, 13)));
       setTsumo(data[13]);
       setHaiyama(data.slice(14));
-      setSutehai([]);
       console.log(haiyama.slice(0, 13));
     } catch (error) {
       console.error("Failed to fetch initial haiyama:", error);
-      setSutehai([]);
       setTehai(sortTehai(exampleHaiyama.slice(0, 13)));
       setTsumo(exampleHaiyama[13]);
       setHaiyama(exampleHaiyama.slice(14));
@@ -120,6 +118,7 @@ const GameInterface = () => {
   };
 
   const drawEnd = () => {
+    setSutehai([]);
     setGameState({
       junme: 1,
       kyoku: gameState.kyoku + 1,
@@ -138,6 +137,7 @@ const GameInterface = () => {
   };
 
   const tsumoEnd = () => {
+    setSutehai([]);
     setGameState({
       junme: 1,
       kyoku: gameState.kyoku + 1,
