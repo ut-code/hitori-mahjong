@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+  <!-- 白い背景の麻雀牌 -->
+  <rect x="20" y="20" width="260" height="360" rx="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+  
+  <!-- オレンジ色の上部ライン -->
+  <rect x="20" y="20" width="260" height="30" rx="15" fill="#FF8C00"/>
+  
+  <!-- 中の文字 - 位置を下げました -->
+  <text x="150" y="280" 
+        font-family="serif" 
+        font-size="180" 
+        text-anchor="middle" 
+        fill="#FF0000" 
+        font-weight="bold">中</text>
+</svg>
