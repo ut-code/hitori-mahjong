@@ -33,6 +33,7 @@ const GameInterface = () => {
   );
   const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
+  const [sutehai, setSutehai] = useState<Hai[]>([]);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchInitialHaiyama = async () => {
@@ -51,9 +52,11 @@ const GameInterface = () => {
       setTehai(sortTehai(data.slice(0, 13)));
       setTsumo(data[13]);
       setHaiyama(data.slice(14));
+      setSutehai([]);
       console.log(haiyama.slice(0, 13));
     } catch (error) {
       console.error("Failed to fetch initial haiyama:", error);
+      setSutehai([]);
       setTehai(sortTehai(exampleHaiyama.slice(0, 13)));
       setTsumo(exampleHaiyama[13]);
       setHaiyama(exampleHaiyama.slice(14));
@@ -93,6 +96,7 @@ const GameInterface = () => {
   }, [tehai, tsumo]);
 
   const tedashi = (index: number) => {
+    setSutehai(sutehai => [...sutehai, tehai[index]]);
     const newTehai = [...tehai];
     newTehai.splice(index, 1);
     const sortedTehai = sortTehai([...newTehai, tsumo]);
@@ -106,6 +110,7 @@ const GameInterface = () => {
   };
 
   const tsumogiri = () => {
+    setSutehai(sutehai => [...sutehai, tsumo])
     setTsumo(haiyama[0]);
     setHaiyama(haiyama.slice(1));
     setGameState({
