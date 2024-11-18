@@ -24,6 +24,7 @@
   grid-column: 1;
   grid-row: 1 / 3;
   height: 100%;
+  width: 500px;
 }
 
 .handStatus {
