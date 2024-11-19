@@ -15,6 +15,7 @@ import judgeAgari from "../../utils/judgeAgari";
 import DrawEnd from "./components/DrawEnd.tsx";
 import TsumoEnd from "./components/TsumoEnd.tsx";
 import FinishGame from "./components/FinishGame.tsx";
+import Loading from "./components/Loading.tsx";
 
 export type GameState = {
   kyoku: number;
@@ -34,10 +35,12 @@ const GameInterface = () => {
   const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
   const [sutehai, setSutehai] = useState<Hai[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchInitialHaiyama = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(`${apiUrl}/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,7 +56,9 @@ const GameInterface = () => {
       setTsumo(data[13]);
       setHaiyama(data.slice(14));
       console.log(haiyama.slice(0, 13));
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(true);
       console.error("Failed to fetch initial haiyama:", error);
       setTehai(sortTehai(exampleHaiyama.slice(0, 13)));
       setTsumo(exampleHaiyama[13]);
@@ -174,12 +179,16 @@ const GameInterface = () => {
                 </>
               )}
             </div>
-            <HandTiles
-              tehai={tehai}
-              tsumo={tsumo}
-              tedashi={tedashi}
-              tsumogiri={tsumogiri}
-            />
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <HandTiles
+                tehai={tehai}
+                tsumo={tsumo}
+                tedashi={tedashi}
+                tsumogiri={tsumogiri}
+              />
+            )}
           </div>
         )
       ) : (
