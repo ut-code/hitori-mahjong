@@ -170,8 +170,20 @@ export default function Result() {
 
   const bottomToolbar = (
     <div style={footerStyle}>
-      <span style={footerEmojiStyle}>🎉</span>
-      <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
+      {myRank !== null && myRank <= 10 ? (
+        <>
+          <span style={footerEmojiStyle}>🎉</span>
+          <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
+        </>
+      ) : (
+        <>
+          {myRank !== null && (
+            <>
+              <span>これから勉強していきましょう！</span>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 

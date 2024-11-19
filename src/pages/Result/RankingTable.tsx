@@ -5,6 +5,7 @@ import {
   type MRT_ColumnDef,
 } from "material-react-table";
 import { PlayerInfo } from "../../App";
+import React from "react";
 
 type RankingTableProps = {
   scores: PlayerInfo[];

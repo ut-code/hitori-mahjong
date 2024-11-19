@@ -64,6 +64,7 @@ const GameInterface = () => {
       setTsumo(exampleHaiyama[13]);
       setHaiyama(exampleHaiyama.slice(14));
       console.log(exampleHaiyama.slice(0, 13));
+      setIsLoading(false);
       throw new Error("Failed to fetch initial haiyama");
     }
   };
