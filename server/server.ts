@@ -32,6 +32,9 @@ app.post("/end", async (req: Request, res: Response) => {
     });
     res.sendStatus(201); // 201 Created
   } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
     res.status(500).json({ error: "Failed to create user" });
   }
 });
@@ -41,6 +44,9 @@ app.post("/result", async (req: Request, res: Response) => {
     const data = await prisma.user.findMany();
     res.json(data);
   } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
     res.status(500).json({ error: "Failed to fetch results" });
   }
 });

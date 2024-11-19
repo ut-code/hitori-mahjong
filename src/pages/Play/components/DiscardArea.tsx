@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "../styles/DiscardArea.module.css";
-import Tile from "./Tile";
 import { Hai } from "../../../utils/hai.ts";
 
 interface DiscardAreaProps {
