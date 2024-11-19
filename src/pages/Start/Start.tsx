@@ -29,7 +29,7 @@ export default function Start() {
   return (
     <>
       <a href="https://kf75.utcode.net/" className={styles.home}>
-        ＜ホームに戻る
+        ＜駒場祭ホームに戻る
       </a>
       <div className={styles.titleContainer}>
         <div className={styles.mainTitle}>ひとり麻雀</div>
