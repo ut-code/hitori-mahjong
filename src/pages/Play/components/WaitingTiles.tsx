@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "../styles/WaitingTiles.module.css";
-import Tile from "./Tile.tsx";
 import { Hai } from "../../../utils/hai.ts";
 import calculateMachihai from "../../../utils/calculateMachihai.ts";
 
