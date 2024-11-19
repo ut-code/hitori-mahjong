@@ -147,45 +147,12 @@ export default function Result() {
     fontSize: "1rem",
   };
 
-  const footerStyle: { [key: string]: string } = {
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    // padding: "8px 32px",
-    color: "#2B2B2B",
-    fontSize: "0.9rem",
-    gap: "8px",
-  };
-
-  const footerEmojiStyle: { [key: string]: string } = {
-    fontSize: "1.4rem",
-  };
-
   const top1Player: PlayerInfo =
     scores.length > 1 ? scores[0] : exampleUsers[0];
   const top2Player: PlayerInfo =
     scores.length > 2 ? scores[1] : exampleUsers[0];
   const top3Player: PlayerInfo =
     scores.length > 3 ? scores[2] : exampleUsers[0];
-
-  const bottomToolbar = (
-    <div style={footerStyle}>
-      {myRank !== null && myRank <= 10 ? (
-        <>
-          <span style={footerEmojiStyle}>🎉</span>
-          <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
-        </>
-      ) : (
-        <>
-          {myRank !== null && (
-            <>
-              <span>これから勉強していきましょう！</span>
-            </>
-          )}
-        </>
-      )}
-    </div>
-  );
 
   return (
     <div style={containerStyle}>
@@ -238,7 +205,6 @@ export default function Result() {
 
           <RankingTable
             scores={scores.length > 3 ? scores.slice(3) : []}
-            customToolbarActions={bottomToolbar}
             myRank={myRank}
           />
         </>
