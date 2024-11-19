@@ -5,18 +5,45 @@ import {
   type MRT_ColumnDef,
 } from "material-react-table";
 import { PlayerInfo } from "../../App";
+import React from "react";
 
 type RankingTableProps = {
   scores: PlayerInfo[];
-  customToolbarActions?: React.ReactNode;
   myRank: number | null;
 };
 
-export default function RankingTable({
-  scores,
-  customToolbarActions,
-  myRank,
-}: RankingTableProps) {
+export default function RankingTable({ scores, myRank }: RankingTableProps) {
+  const footerStyle: { [key: string]: string } = {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    // padding: "8px 32px",
+    color: "#2B2B2B",
+    fontSize: "0.9rem",
+    gap: "8px",
+  };
+
+  const footerEmojiStyle: { [key: string]: string } = {
+    fontSize: "1.4rem",
+  };
+  const bottomToolbar = (
+    <div style={footerStyle}>
+      {myRank !== null && myRank <= 10 ? (
+        <>
+          <span style={footerEmojiStyle}>🎉</span>
+          <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
+        </>
+      ) : (
+        <>
+          {myRank !== null && (
+            <>
+              <span>これから勉強していきましょう！</span>
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
   const columns = useMemo<MRT_ColumnDef<PlayerInfo>[]>(
     () => [
       {
@@ -117,7 +144,7 @@ export default function RankingTable({
         justifyContent: "flex-end",
       },
     },
-    renderBottomToolbarCustomActions: () => customToolbarActions,
+    renderBottomToolbarCustomActions: () => bottomToolbar,
   });
 
   return <MaterialReactTable table={table} />;
