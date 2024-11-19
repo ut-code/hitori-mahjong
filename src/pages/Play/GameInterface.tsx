@@ -55,7 +55,6 @@ const GameInterface = () => {
       setTehai(sortTehai(data.slice(0, 13)));
       setTsumo(data[13]);
       setHaiyama(data.slice(14));
-      console.log(haiyama.slice(0, 13));
       setIsLoading(false);
     } catch (error) {
       setIsLoading(true);
@@ -63,7 +62,6 @@ const GameInterface = () => {
       setTehai(sortTehai(exampleHaiyama.slice(0, 13)));
       setTsumo(exampleHaiyama[13]);
       setHaiyama(exampleHaiyama.slice(14));
-      console.log(exampleHaiyama.slice(0, 13));
       setIsLoading(false);
       throw new Error("Failed to fetch initial haiyama");
     }
