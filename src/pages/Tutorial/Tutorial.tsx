@@ -14,8 +14,6 @@ export default function Tutorial() {
     alignItems: "center",
     padding: "20px",
     fontFamily: "'Arial', sans-serif",
-    minWidth: "400px",
-    maxHeight: "800px",
     gap: "16px",
     color: "#2B2B2B",
     backgroundColor: "white",
@@ -37,7 +35,6 @@ export default function Tutorial() {
   };
 
   const rulesStyle: { [key: string]: string } = {
-    overflowY: "scroll",
     textAlign: "left",
     padding: "0 16px",
   };
