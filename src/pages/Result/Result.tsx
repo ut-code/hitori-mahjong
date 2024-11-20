@@ -43,6 +43,7 @@ export default function Result() {
           (player) => player.name === playerInfo.name,
         );
         if (myScore?.rank != null && myScore.rank > 3) {
+          //3位以内をsetMyRankするとエラーが返ってくる
           setMyRank(myScore.rank);
         }
       } catch (e) {
