@@ -41,12 +41,15 @@ export default function RankingTable({
       ) : (
         <>
           {myRank !== null ? (
-            <span>これから勉強していきましょう！</span>
+            <>
+              <span style={footerEmojiStyle}>🀄</span>
+              <span>これから勉強していきましょう！</span>
+            </>
           ) : (
             <>
               {myRank === null && isTop === true && (
                 <>
-                  <span style={footerEmojiStyle}>🎉</span>
+                  <span style={footerEmojiStyle}>🀄</span>
                   <span>もうあなたが麻雀です</span>
                 </>
               )}
