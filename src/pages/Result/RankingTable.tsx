@@ -28,18 +28,14 @@ export default function RankingTable({ scores, myRank }: RankingTableProps) {
   };
   const bottomToolbar = (
     <div style={footerStyle}>
-      {myRank !== null && myRank <= 10 ? (
+      {myRank === null || myRank <= 10 ? ( //3位以内だとnull
         <>
           <span style={footerEmojiStyle}>🎉</span>
           <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
         </>
       ) : (
         <>
-          {myRank !== null && (
-            <>
-              <span>これから勉強していきましょう！</span>
-            </>
-          )}
+          <span>これから勉強していきましょう！</span>
         </>
       )}
     </div>
