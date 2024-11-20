@@ -14,6 +14,7 @@ export default function Result() {
   const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
   const [scores, setScores] = useState<PlayerInfo[]>([]);
   const [myRank, setMyRank] = useState<number | null>(null);
+  const [isTop, setIsTop] = useState<boolean>(false);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
@@ -45,6 +46,8 @@ export default function Result() {
         if (myScore?.rank != null && myScore.rank > 3) {
           //3位以内をsetMyRankするとエラーが返ってくる
           setMyRank(myScore.rank);
+        } else if (myScore?.rank != null && myScore.rank <= 3) {
+          setIsTop(true);
         }
       } catch (e) {
         console.error("Failed to fetch results:", e);
@@ -207,6 +210,7 @@ export default function Result() {
           <RankingTable
             scores={scores.length > 3 ? scores.slice(3) : []}
             myRank={myRank}
+            isTop={isTop}
           />
         </>
       )}
