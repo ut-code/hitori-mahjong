@@ -42,7 +42,7 @@ export default function Result() {
         const myScore = sortedScores.find(
           (player) => player.name === playerInfo.name,
         );
-        if (myScore?.rank != null && myScore.rank > 3) {
+        if (myScore?.rank != null && myScore.rank > 3) { //3位以上もsetMyRankしたい
           setMyRank(myScore.rank);
         }
       } catch (e) {

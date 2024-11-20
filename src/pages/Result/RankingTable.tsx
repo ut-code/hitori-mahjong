@@ -80,7 +80,7 @@ export default function RankingTable({ scores, myRank }: RankingTableProps) {
     getRowId: (row) => `rank-${row.rank ?? ""}`,
     initialState: {
       rowPinning: {
-        top: myRank ? [`rank-${myRank}`] : [],
+        top: myRank ? [`rank-${myRank}`] : [], //3位以上をsetMyRankするとここでエラーを吐く
       },
       columnVisibility: {
         "mrt-row-pin": false,
