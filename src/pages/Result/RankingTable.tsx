@@ -10,9 +10,14 @@ import React from "react";
 type RankingTableProps = {
   scores: PlayerInfo[];
   myRank: number | null;
+  isTop: boolean;
 };
 
-export default function RankingTable({ scores, myRank }: RankingTableProps) {
+export default function RankingTable({
+  scores,
+  myRank,
+  isTop,
+}: RankingTableProps) {
   const footerStyle: { [key: string]: string } = {
     display: "flex",
     justifyContent: "flex-start",
@@ -28,14 +33,25 @@ export default function RankingTable({ scores, myRank }: RankingTableProps) {
   };
   const bottomToolbar = (
     <div style={footerStyle}>
-      {myRank === null || myRank <= 10 ? ( //3位以内だとmyRankはnull
+      {myRank !== null && myRank <= 10 ? ( //3位以内だとmyRankはnull
         <>
           <span style={footerEmojiStyle}>🎉</span>
           <span>非常に優秀な成績です！この調子で頑張りましょう！</span>
         </>
       ) : (
         <>
-          <span>これから勉強していきましょう！</span>
+          {myRank !== null ? (
+            <span>これから勉強していきましょう！</span>
+          ) : (
+            <>
+              {myRank === null && isTop === true && (
+                <>
+                  <span style={footerEmojiStyle}>🎉</span>
+                  <span>もうあなたが麻雀です</span>
+                </>
+              )}
+            </>
+          )}
         </>
       )}
     </div>
