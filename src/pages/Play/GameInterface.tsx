@@ -156,7 +156,7 @@ const GameInterface = () => {
   return (
     <div className={styles.container}>
       {gameState.kyoku <= 4 ? (
-        gameState.junme === 18 ? (
+        gameState.junme === 19 ? (
           <DrawEnd drawEnd={drawEnd} />
         ) : (
           <div className={styles.container}>
