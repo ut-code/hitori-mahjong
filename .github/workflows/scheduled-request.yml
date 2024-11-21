@@ -3,6 +3,7 @@ name: Keep Render Server Alive
 on:
   schedule:
     - cron: "*/15 * * * *"
+  workflow_dispatch:
 
 jobs:
   keep-alive:
