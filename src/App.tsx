@@ -3,6 +3,7 @@ import Start from "./pages/Start/Start";
 import Tutorial from "./pages/Tutorial/Tutorial";
 import GameInterface from "./pages/Play/GameInterface";
 import Result from "./pages/Result/Result";
+import NotFound from "./pages/NotFound/NotFound";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="/tutorial" element={<Tutorial />} />
           <Route path="/play" element={<GameInterface />} />
           <Route path="/result" element={<Result />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </PlayerInfoContext.Provider>
