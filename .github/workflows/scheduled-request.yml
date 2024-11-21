@@ -1,0 +1,14 @@
+name: Keep Render Server Alive
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Keep Alive Request
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" ${{ secrets.API_URL }}/health
