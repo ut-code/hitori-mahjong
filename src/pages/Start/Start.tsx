@@ -20,6 +20,7 @@ export default function Start() {
         ...prevInfo,
         name: trimmedInput,
       }));
+      sessionStorage["name"] = trimmedInput;
       navigate("/play");
     } else {
       setIsNotValidUserName(true);

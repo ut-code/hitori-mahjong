@@ -78,7 +78,7 @@ const GameInterface = () => {
           headers: { "Content-Type": "application/json" },
           mode: "cors",
           body: JSON.stringify({
-            name: playerInfo.name,
+            name: sessionStorage["name"],
             score: playerInfo.score,
           }),
         });
