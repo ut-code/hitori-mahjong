@@ -32,8 +32,8 @@ const GameInterface = () => {
   const [isAgari, setIsAgari] = useState(
     judgeAgari(sortTehai([...tehai, tsumo])),
   );
-  const [mentsuSyanten, setMentsuSyanten] = useState(13); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
-  const [toitsuSyanten, setToitsuSyanten] = useState(2); //ここでチートイのシャンテン数を計算する関数を呼び出す
+  const [mentsuSyanten, setMentsuSyanten] = useState(13); //適当な初期値を設定
+  const [toitsuSyanten, setToitsuSyanten] = useState(2); //適当な初期値を設定
   const [sutehai, setSutehai] = useState<Hai[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -172,7 +172,10 @@ const GameInterface = () => {
                     <DiscardArea sutehai={sutehai} />
                   </span>
                   <span className={styles.handStatus}>
-                    <HandStatus />
+                    <HandStatus
+                      mentsuSyanten={mentsuSyanten}
+                      toitsuSyanten={toitsuSyanten}
+                    />
                   </span>
                   <span className={styles.waitingTiles}>
                     <WaitingTiles tehai={tehai} />
