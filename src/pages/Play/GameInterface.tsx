@@ -78,7 +78,7 @@ const GameInterface = () => {
           headers: { "Content-Type": "application/json" },
           mode: "cors",
           body: JSON.stringify({
-            name: playerInfo.name,
+            name: sessionStorage["name"],
             score: playerInfo.score,
           }),
         });
@@ -88,7 +88,9 @@ const GameInterface = () => {
   }, [gameState.kyoku]);
 
   useEffect(() => {
-    setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
+    if (gameState.junme <= 18) {
+      setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
+    }
     setMentsuSyanten(0); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
     setToitsuSyanten(3); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
   }, [tehai, tsumo]);

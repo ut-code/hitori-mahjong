@@ -20,6 +20,7 @@ export default function Start() {
         ...prevInfo,
         name: trimmedInput,
       }));
+      sessionStorage["name"] = trimmedInput;
       navigate("/play");
     } else {
       setIsNotValidUserName(true);
@@ -60,7 +61,14 @@ export default function Start() {
             遊び方
           </button>
           <button
-            onClick={() => navigate("/result")}
+            onClick={() => {
+              setPlayerInfo({
+                rank: null,
+                name: "",
+                score: 25000,
+              }),
+                navigate("/result");
+            }}
             className={styles.grayButton}
           >
             ランキング
