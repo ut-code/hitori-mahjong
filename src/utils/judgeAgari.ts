@@ -1,4 +1,5 @@
 import { Hai, haiToIndex } from "./hai.ts";
+
 function deleteSyuntsu(remainingTehai: TehaiIndex): number {
   let extractCount = 0;
   for (let kind = 0; kind < 3; kind++) {
