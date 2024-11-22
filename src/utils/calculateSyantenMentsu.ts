@@ -181,15 +181,17 @@ export function calculateInfo(
   haiIndex: HaiIndex | null,
   info: MentsuCountInfo
 ): [HaiIndex, MentsuCountInfo][] {
+  // haiIndex === null
   if (!haiIndex) {
     return [];
   }
-  if (!haiIndex.length) {
-    return [[haiIndex, info]];
+  // 高々1つの牌しか残っていない = これ以上面子も面子候補も増えない
+  if (haiIndex.reduce((acc, cur) => acc + cur) <= 1) {
+    return [[Array(9).fill(0), info]];
   }
   const result: [HaiIndex, MentsuCountInfo][] = [];
-  // 手牌の中の最小の数
-  const minIndex = haiIndex.findIndex(v => v) + 1;
+  // 手牌の中の最小の数のインデックス(0-8)
+  const minIndex = haiIndex.findIndex(v => v);
   // 1-1.
   result.push(
     ...calculateInfo(
@@ -234,16 +236,16 @@ export function calculateInfo(
 /**
  * 一種の数牌の集合から特定の牌を抜き出す。不正な場合null
  * @param haiIndex 
- * @param target インデックス基準(0-8)で指定
+ * @param targetIndices インデックス基準(0-8)で指定
  * @returns 
  */
-export function extractHai(haiIndex: HaiIndex, target: number[]): HaiIndex | null {
+export function extractHai(haiIndex: HaiIndex, targetIndices: number[]): HaiIndex | null {
   // 下側から走査するため0未満かの判定は不要
-  if (target.some(v => v >= 9)) {
+  if (targetIndices.some(v => v >= 9)) {
     return null
   }
   const haiIndexCopy = [...haiIndex];
-  target.forEach(v => --haiIndexCopy[v]);
+  targetIndices.forEach(v => --haiIndexCopy[v]);
   return haiIndexCopy.some(v => v < 0) ? null : haiIndexCopy;
 }
 
