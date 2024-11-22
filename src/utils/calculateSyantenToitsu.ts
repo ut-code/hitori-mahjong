@@ -1,6 +1,6 @@
 import { Hai } from "./hai.ts";
 
-export default function calculateShantenToitsu(tehai: Hai[]): number {
+export default function calculateSyantenToitsu(tehai: Hai[]): number {
   const tehaiSet: Hai[] = [];
   for (const hai of tehai) {
     if (!tehaiSet.filter(v => sameHai(v, hai)).length) {
