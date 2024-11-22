@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { calculateCountInfo, calculateInfo, iterProduct } from "../src/utils/calculateSyantenMentsu";
+import { calculateCountInfo, calculateInfo, HaiIndex, MentsuCountInfo } from "../src/utils/calculateSyantenMentsu";
 
 const info1: MentsuCountInfo = {
   mentsu: 2,

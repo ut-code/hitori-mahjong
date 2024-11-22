@@ -9,13 +9,13 @@ test("check: countHaiIndex", () => {
 });
 
 test("check: extractHai1", () => {
-  expect(JSON.stringify(extractHai(tenpai, [4, 5, 6]))).toBe(JSON.stringify([1, 2, 2, 0, 2, 0, 1, 1, 1]));
+  expect(JSON.stringify(extractHai(tenpai, [3, 4, 5]))).toBe(JSON.stringify([1, 2, 2, 0, 2, 0, 1, 1, 1]));
 });
 
 test("check: extractHai2", () => {
-  expect(JSON.stringify(extractHai(tenpai, [8, 10]))).toBe(JSON.stringify(null));
+  expect(JSON.stringify(extractHai(tenpai, [7, 9]))).toBe(JSON.stringify(null));
 });
 
 test("check: extractHai3", () => {
-  expect(JSON.stringify(extractHai(tenpai, [4, 4, 4]))).toBe(JSON.stringify(null));
+  expect(JSON.stringify(extractHai(tenpai, [3, 3, 3]))).toBe(JSON.stringify(null));
 });

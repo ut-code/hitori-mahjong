@@ -128,7 +128,9 @@ export function screenMentsuCount(infoCandidate: MentsuCountInfo[]): MentsuCount
 }
 
 /**
- * aのほうがbよりも効率の良い面子/面子候補の取り出し方であるか
+ * 面子/面子候補の取り出し方として効率の良さが
+ * a > b の場合true
+ * a < b の場合false
  * 順序が定義できない場合undefined
  * @param a 
  * @param b 
@@ -232,12 +234,12 @@ export function calculateInfo(
 /**
  * 一種の数牌の集合から特定の牌を抜き出す。不正な場合null
  * @param haiIndex 
- * @param target 
+ * @param target インデックス基準(0-8)で指定
  * @returns 
  */
 export function extractHai(haiIndex: HaiIndex, target: number[]): HaiIndex | null {
-  // 下側から走査するため0以下かの判定は不要
-  if (target.some(v => v > 9)) {
+  // 下側から走査するため0未満かの判定は不要
+  if (target.some(v => v >= 9)) {
     return null
   }
   const haiIndexCopy = [...haiIndex];
@@ -267,7 +269,7 @@ export function incrementInfo(
 /** Pythonのitertools.product相当 */
 export function iterProduct<T>(...arrays: T[][]) {
   return arrays.reduce(
-    (acc, curr) => acc.flatMap(a => curr.map(b => [...a, b])),
+    (acc, cur) => acc.flatMap(a => cur.map(b => [...a, b])),
     [[]] as T[][]
   );
 }
@@ -285,12 +287,12 @@ export function calculateSyantenFromCountInfo(infoList: MentsuCountInfo[][]): nu
         mentsu: p.mentsu + c.mentsu, 
         candidate: p.candidate + c.candidate,
         haveToitsu: p.haveToitsu || c.haveToitsu, 
-      }
+      };
     });
     syantenCandidate.push(
       8
       - infoSummary.mentsu * 2
-      + Math.min(
+      - Math.min(
         infoSummary.candidate,
         4 - infoSummary.mentsu,
       )
