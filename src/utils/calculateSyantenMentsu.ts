@@ -60,7 +60,7 @@ function calculateStructureInfo(haiIndex: HaiIndex): MentsuStructureInfo[] {
   ).map(([haiIndex, info]) => info);
 
   // TODO
-  return ;
+  return infoDump;
 }
 
 
