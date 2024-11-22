@@ -1,4 +1,5 @@
 import { Hai, haiToIndex } from "./hai.ts";
+import calculateMachihai from "./calculateMachihai.ts";
 
 function tehaiToArray(tehai: Hai[]): number[] {
   const arr = new Array(34).fill(0);
@@ -10,6 +11,9 @@ function tehaiToArray(tehai: Hai[]): number[] {
 }
 
 export default function calculateShantenMentsu(tehai: Hai[]): number {
+  if (calculateMachihai(tehai).length !== 0) {
+    return 0;
+  }
   const hand = tehaiToArray(tehai);
   if (hand.length !== 34) {
     throw new Error("Invalid hand length. The hand must be a 34-length array.");

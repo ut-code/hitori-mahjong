@@ -11,7 +11,7 @@ export default function calculateShantenToitsu(tehai: Hai[]): number {
 
   let numOfToitsu = 0;
   for (const value of haiCountMap.values()) {
-    if (value === 2) {
+    if (value === 2 || value === 3) {
       numOfToitsu += 1;
     }
   }
