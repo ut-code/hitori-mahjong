@@ -1,14 +1,14 @@
 import { Hai, HaiKind, JihaiValue } from "./hai.ts";
 
 /** 抜き出した面子と面子候補の数、及び対子を含むかの情報 */
-type MentsuCountInfo = {
+export type MentsuCountInfo = {
   mentsu: number
   candidate: number
   haveToitsu: boolean
 }
 
 /** 各数牌の枚数を要素に持つ9要素のarray */
-type HaiIndex = number[];
+export type HaiIndex = number[];
 
 /**
  * 面子手のシャンテン数を計算する
@@ -142,7 +142,13 @@ export function compareInfo(a: MentsuCountInfo, b: MentsuCountInfo): boolean | u
   const index1 = mentsuDiff * 2 - candidateDiff;
   const index2 = mentsuDiff * 4 - candidateDiff;
 
-  return (index1 * index2 < 0) ? undefined : (index1 || index2) ? (index1 + index2) > 0 : haveToitsuDiff > 0;
+  if (index1 * index2 < 0) {
+    return undefined
+  }
+  if (index1 || index2) {
+    return (index1 + index2) > 0
+  }
+  return haveToitsuDiff >= 0;
 }
 
 /**
