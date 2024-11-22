@@ -2,18 +2,18 @@ import { Hai, HaiKind, JihaiValue } from "./hai.ts";
 
 /** 抜き出した面子と面子候補の数、及び対子を含むかの情報 */
 export type MentsuCountInfo = {
-  mentsu: number
-  candidate: number
-  haveToitsu: boolean
-}
+  mentsu: number;
+  candidate: number;
+  haveToitsu: boolean;
+};
 
 /** 各数牌の枚数を要素に持つ9要素のarray */
 export type HaiIndex = number[];
 
 /**
  * 面子手のシャンテン数を計算する
- * @param tehai 
- * @returns 
+ * @param tehai
+ * @returns
  */
 export default function calculateSyantenMentsu(tehai: Hai[]): number {
   const haiKinds: HaiKind[] = ["manzu", "pinzu", "souzu", "jihai"];
@@ -34,8 +34,11 @@ export default function calculateSyantenMentsu(tehai: Hai[]): number {
   return calculateSyantenFromCountInfo(infoCandidate);
 }
 
-export function extractTehaiValueByKind(tehai: Hai[], kind: HaiKind): (number | JihaiValue)[] {
-  return tehai.filter(hai => hai.kind === kind).map(hai => hai.value);
+export function extractTehaiValueByKind(
+  tehai: Hai[],
+  kind: HaiKind,
+): (number | JihaiValue)[] {
+  return tehai.filter((hai) => hai.kind === kind).map((hai) => hai.value);
 }
 
 /**
@@ -43,23 +46,30 @@ export function extractTehaiValueByKind(tehai: Hai[], kind: HaiKind): (number | 
  * @param targetTehaiValue 字牌[枚数]
  * @returns 枚数[各字牌]
  */
-export function countHaiIndexForJihai(targetTehaiValue: JihaiValue[]): HaiIndex {
+export function countHaiIndexForJihai(
+  targetTehaiValue: JihaiValue[],
+): HaiIndex {
   return [...new Set(targetTehaiValue)].map(
-    targetKind => targetTehaiValue.filter(kind => kind === targetKind).length
+    (targetKind) =>
+      targetTehaiValue.filter((kind) => kind === targetKind).length,
   );
 }
 
 /**
  * 手牌から面子/面子候補として取り出せる個数を得る
- * @param haiIndex 
- * @returns 
+ * @param haiIndex
+ * @returns
  */
-export function calculateCountInfoForJihai(haiIndex: HaiIndex): MentsuCountInfo[] {
-  return [{
-    mentsu: haiIndex.filter(num => num >= 3).length,
-    candidate: haiIndex.filter(num => num === 2).length,
-    haveToitsu: Boolean(haiIndex.filter(num => num === 2).length),
-  }];
+export function calculateCountInfoForJihai(
+  haiIndex: HaiIndex,
+): MentsuCountInfo[] {
+  return [
+    {
+      mentsu: haiIndex.filter((num) => num >= 3).length,
+      candidate: haiIndex.filter((num) => num === 2).length,
+      haveToitsu: Boolean(haiIndex.filter((num) => num === 2).length),
+    },
+  ];
 }
 
 /**
@@ -68,31 +78,29 @@ export function calculateCountInfoForJihai(haiIndex: HaiIndex): MentsuCountInfo[
  * @returns 枚数[数牌の数-1]
  */
 export function countHaiIndex(targetTehaiValue: number[]): HaiIndex {
-  return Array(9).fill(0).map((v, i) => i + 1).map(
-    i => targetTehaiValue.filter(v => v === i).length
-  );
+  return Array(9)
+    .fill(0)
+    .map((v, i) => i + 1)
+    .map((i) => targetTehaiValue.filter((v) => v === i).length);
 }
 
 /**
  * 手牌から面子/面子候補として取り出せる個数を得る
- * @param haiIndex 
- * @returns 
+ * @param haiIndex
+ * @returns
  */
 export function calculateCountInfo(haiIndex: HaiIndex): MentsuCountInfo[] {
   // 孤立牌を除く
-  const simplifiedHaiIndex = haiIndex.map(
-    (v, i, a) => (a[i-2] || a[i-1] || (v-1) || a[i+1] || a[i+2]) ? v : 0
+  const simplifiedHaiIndex = haiIndex.map((v, i, a) =>
+    a[i - 2] || a[i - 1] || v - 1 || a[i + 1] || a[i + 2] ? v : 0,
   );
 
   // 面子/面子候補の情報を得る
-  const infoDump = calculateInfo(
-    simplifiedHaiIndex,
-    {
-      mentsu: 0,
-      candidate: 0,
-      haveToitsu: false,
-    },
-  ).map(([haiIndex, info]) => info);
+  const infoDump = calculateInfo(simplifiedHaiIndex, {
+    mentsu: 0,
+    candidate: 0,
+    haveToitsu: false,
+  }).map(([haiIndex, info]) => info);
 
   // 効率の良いものに絞る
   return screenMentsuCount(infoDump);
@@ -100,10 +108,12 @@ export function calculateCountInfo(haiIndex: HaiIndex): MentsuCountInfo[] {
 
 /**
  * 最も効率の良い面子/面子候補の切り出し方を絞り込む
- * @param infoCandidate 
- * @returns 
+ * @param infoCandidate
+ * @returns
  */
-export function screenMentsuCount(infoCandidate: MentsuCountInfo[]): MentsuCountInfo[] {
+export function screenMentsuCount(
+  infoCandidate: MentsuCountInfo[],
+): MentsuCountInfo[] {
   const result: MentsuCountInfo[] = [];
   for (const info of infoCandidate) {
     let insertFlag: boolean | undefined = undefined;
@@ -132,11 +142,14 @@ export function screenMentsuCount(infoCandidate: MentsuCountInfo[]): MentsuCount
  * a > b の場合true
  * a < b の場合false
  * 順序が定義できない場合undefined
- * @param a 
- * @param b 
+ * @param a
+ * @param b
  * @returns
  */
-export function compareInfo(a: MentsuCountInfo, b: MentsuCountInfo): boolean | undefined {
+export function compareInfo(
+  a: MentsuCountInfo,
+  b: MentsuCountInfo,
+): boolean | undefined {
   const mentsuDiff = a.mentsu - b.mentsu;
   const candidateDiff = a.candidate - b.candidate;
   const haveToitsuDiff = Number(a.haveToitsu) - Number(b.haveToitsu);
@@ -148,7 +161,7 @@ export function compareInfo(a: MentsuCountInfo, b: MentsuCountInfo): boolean | u
     return undefined;
   }
   if (index1 || index2) {
-    return (index1 + index2) > 0;
+    return index1 + index2 > 0;
   }
   return haveToitsuDiff >= 0;
 }
@@ -171,15 +184,15 @@ export function compareInfo(a: MentsuCountInfo, b: MentsuCountInfo): boolean | u
  * 5. 使われない
  *
  * このうち、下側から走査することによって1-2, 1-3, 3-2は除外できる
- * 
+ *
  * 多分とんでもなく重い(動作がままならないならTODO: メモ化)
- * @param haiIndex 
- * @param info 
- * @returns 
+ * @param haiIndex
+ * @param info
+ * @returns
  */
 export function calculateInfo(
   haiIndex: HaiIndex | null,
-  info: MentsuCountInfo
+  info: MentsuCountInfo,
 ): [HaiIndex, MentsuCountInfo][] {
   // haiIndex === null
   if (!haiIndex) {
@@ -191,41 +204,41 @@ export function calculateInfo(
   }
   const result: [HaiIndex, MentsuCountInfo][] = [];
   // 手牌の中の最小の数のインデックス(0-8)
-  const minIndex = haiIndex.findIndex(v => v);
+  const minIndex = haiIndex.findIndex((v) => v);
   // 1-1.
   result.push(
     ...calculateInfo(
       extractHai(haiIndex, [minIndex, minIndex + 1, minIndex + 2]),
       incrementInfo(info, true, false),
-    )
+    ),
   );
   // 2.
   result.push(
     ...calculateInfo(
       extractHai(haiIndex, [minIndex, minIndex, minIndex]),
       incrementInfo(info, true, false),
-    )
+    ),
   );
   // 3-1-1.
   result.push(
     ...calculateInfo(
       extractHai(haiIndex, [minIndex, minIndex + 2]),
       incrementInfo(info, false, false),
-    )
+    ),
   );
   // 3-1-2.
   result.push(
     ...calculateInfo(
       extractHai(haiIndex, [minIndex, minIndex + 1]),
       incrementInfo(info, false, false),
-    )
+    ),
   );
   // 4.
   result.push(
     ...calculateInfo(
       extractHai(haiIndex, [minIndex, minIndex]),
       incrementInfo(info, false, true),
-    )
+    ),
   );
   // 5.
   result.push(...calculateInfo(extractHai(haiIndex, [minIndex]), info));
@@ -235,18 +248,21 @@ export function calculateInfo(
 
 /**
  * 一種の数牌の集合から特定の牌を抜き出す。不正な場合null
- * @param haiIndex 
+ * @param haiIndex
  * @param targetIndices インデックス基準(0-8)で指定
- * @returns 
+ * @returns
  */
-export function extractHai(haiIndex: HaiIndex, targetIndices: number[]): HaiIndex | null {
+export function extractHai(
+  haiIndex: HaiIndex,
+  targetIndices: number[],
+): HaiIndex | null {
   // 下側から走査するため0未満かの判定は不要
-  if (targetIndices.some(v => v >= 9)) {
-    return null
+  if (targetIndices.some((v) => v >= 9)) {
+    return null;
   }
   const haiIndexCopy = [...haiIndex];
-  targetIndices.forEach(v => --haiIndexCopy[v]);
-  return haiIndexCopy.some(v => v < 0) ? null : haiIndexCopy;
+  targetIndices.forEach((v) => --haiIndexCopy[v]);
+  return haiIndexCopy.some((v) => v < 0) ? null : haiIndexCopy;
 }
 
 /**
@@ -271,37 +287,36 @@ export function incrementInfo(
 /** Pythonのitertools.product相当 */
 export function iterProduct<T>(...arrays: T[][]) {
   return arrays.reduce(
-    (acc, cur) => acc.flatMap(a => cur.map(b => [...a, b])),
-    [[]] as T[][]
+    (acc, cur) => acc.flatMap((a) => cur.map((b) => [...a, b])),
+    [[]] as T[][],
   );
 }
 
 /**
  * 面子と面子候補の数からシャンテン数を計算する
- * @param infoList 
- * @returns 
+ * @param infoList
+ * @returns
  */
-export function calculateSyantenFromCountInfo(infoList: MentsuCountInfo[][]): number {
+export function calculateSyantenFromCountInfo(
+  infoList: MentsuCountInfo[][],
+): number {
   const syantenCandidate: number[] = [];
   for (const infoSet of iterProduct(...infoList)) {
     const infoSummary = infoSet.reduce((p, c) => {
       return {
-        mentsu: p.mentsu + c.mentsu, 
+        mentsu: p.mentsu + c.mentsu,
         candidate: p.candidate + c.candidate,
-        haveToitsu: p.haveToitsu || c.haveToitsu, 
+        haveToitsu: p.haveToitsu || c.haveToitsu,
       };
     });
     syantenCandidate.push(
-      8
-      - infoSummary.mentsu * 2
-      - Math.min(
-        infoSummary.candidate,
-        4 - infoSummary.mentsu,
-      )
-      - Number(
-        infoSummary.haveToitsu
-        && (infoSummary.mentsu + infoSummary.candidate >= 5)
-      )
+      8 -
+        infoSummary.mentsu * 2 -
+        Math.min(infoSummary.candidate, 4 - infoSummary.mentsu) -
+        Number(
+          infoSummary.haveToitsu &&
+            infoSummary.mentsu + infoSummary.candidate >= 5,
+        ),
     );
   }
   return Math.min(...syantenCandidate);

@@ -174,10 +174,14 @@ const GameInterface = () => {
                     <DiscardArea sutehai={sutehai} />
                   </span>
                   <span className={styles.handStatus}>
-                    <HandStatus
-                      mentsuSyanten={mentsuSyanten}
-                      toitsuSyanten={toitsuSyanten}
-                    />
+                    {isLoading ? (
+                      <Loading />
+                    ) : (
+                      <HandStatus
+                        mentsuSyanten={mentsuSyanten}
+                        toitsuSyanten={toitsuSyanten}
+                      />
+                    )}
                   </span>
                   <span className={styles.waitingTiles}>
                     <WaitingTiles tehai={tehai} />

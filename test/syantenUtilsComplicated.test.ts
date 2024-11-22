@@ -1,5 +1,11 @@
 import { expect, test } from "bun:test";
-import { calculateCountInfo, calculateInfo, screenMentsuCount, HaiIndex, MentsuCountInfo } from "../src/utils/calculateSyantenMentsu";
+import {
+  calculateCountInfo,
+  calculateInfo,
+  screenMentsuCount,
+  HaiIndex,
+  MentsuCountInfo,
+} from "../src/utils/calculateSyantenMentsu";
 
 const index1: HaiIndex = [1, 0, 3, 1, 3, 0, 1, 0, 0];
 const index2: HaiIndex = [0, 0, 3, 1, 3, 0, 1, 0, 0];
@@ -33,17 +39,22 @@ const info5: MentsuCountInfo = {
 };
 
 test("check: calculateCountInfo", () => {
-  expect(JSON.stringify(screenMentsuCount(calculateCountInfo(index1)))).toBe(JSON.stringify([info2, info5]));
+  expect(JSON.stringify(screenMentsuCount(calculateCountInfo(index1)))).toBe(
+    JSON.stringify([info2, info5]),
+  );
 });
 
 test("check: calculateInfo1", () => {
   expect(JSON.stringify(calculateInfo(index4, info1))).toBe(
-    JSON.stringify([[index4, info1]])
+    JSON.stringify([[index4, info1]]),
   );
 });
 
 test("check: calculateInfo2", () => {
   expect(JSON.stringify(calculateInfo(index1, info3))).toBe(
-    JSON.stringify([...calculateInfo(index3, info4), ...calculateInfo(index2, info3)])
+    JSON.stringify([
+      ...calculateInfo(index3, info4),
+      ...calculateInfo(index2, info3),
+    ]),
   );
 });
