@@ -16,6 +16,8 @@ import DrawEnd from "./components/DrawEnd.tsx";
 import TsumoEnd from "./components/TsumoEnd.tsx";
 import FinishGame from "./components/FinishGame.tsx";
 import Loading from "./components/Loading.tsx";
+import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu.ts";
+import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu.ts";
 
 export type GameState = {
   kyoku: number;
@@ -91,8 +93,8 @@ const GameInterface = () => {
     if (gameState.junme <= 18) {
       setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
     }
-    setMentsuSyanten(0); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
-    setToitsuSyanten(3); //ここでメンツ手のシャンテン数を計算する関数を呼び出す
+    setMentsuSyanten(calculateSyantenMentsu(tehai));
+    setToitsuSyanten(calculateSyantenToitsu(tehai));
   }, [tehai, tsumo]);
 
   const tedashi = (index: number) => {
@@ -172,10 +174,14 @@ const GameInterface = () => {
                     <DiscardArea sutehai={sutehai} />
                   </span>
                   <span className={styles.handStatus}>
-                    <HandStatus
-                      mentsuSyanten={mentsuSyanten}
-                      toitsuSyanten={toitsuSyanten}
-                    />
+                    {isLoading ? (
+                      <Loading />
+                    ) : (
+                      <HandStatus
+                        mentsuSyanten={mentsuSyanten}
+                        toitsuSyanten={toitsuSyanten}
+                      />
+                    )}
                   </span>
                   <span className={styles.waitingTiles}>
                     <WaitingTiles tehai={tehai} />

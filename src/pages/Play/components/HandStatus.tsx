@@ -11,11 +11,17 @@ function HandStatus(props: HandStatusProps) {
     <div className={styles.handStatus}>
       <div className={styles.statusText}>向聴数</div>
       <div className={styles.details}>
-        {/* メンツ手: {props.mentsuSyanten} */}
-        メンツ手: 未実装
+        {props.mentsuSyanten === 0 ? (
+          <>メンツ手: テンパイ</>
+        ) : (
+          <>メンツ手: {props.mentsuSyanten}シャンテン</>
+        )}
         <br />
-        {/* 七対子: {props.toitsuSyanten} */}
-        七対子: 未実装
+        {props.toitsuSyanten === 0 ? (
+          <>七対子: テンパイ</>
+        ) : (
+          <>七対子: {props.toitsuSyanten}シャンテン</>
+        )}
       </div>
     </div>
   );
