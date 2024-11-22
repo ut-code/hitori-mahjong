@@ -5,5 +5,5 @@ export default function calculateShantenToitsu(tehai: Hai[]): number {
   const haiNumber = [...tehaiSet].map(hai => tehai.filter(
     h => (h.kind === hai.kind) && (h.value === hai.value)).length
   );
-  return 6 - haiNumber.filter(n => n >= 2).length - Math.max(0, 7 - [...tehaiSet].length);
+  return 6 - haiNumber.filter(n => n >= 2).length + Math.max(0, 7 - [...tehaiSet].length);
 }
