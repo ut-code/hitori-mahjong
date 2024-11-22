@@ -39,5 +39,5 @@ const iisyanten: Hai[] = [
 ];
 
 test("judgeAgari iisyantenToitsu", () => {
-  expect(calculateSyantenToitsu(iisyanten)).toBe(0);
+  expect(calculateSyantenToitsu(iisyanten)).toBe(1);
 });
