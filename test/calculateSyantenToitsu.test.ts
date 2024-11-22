@@ -18,7 +18,7 @@ const tenpai: Hai[] = [
   constructHai("jihai", "tyun"),
 ];
 
-test("judgeAgari tenpaiToitsu", () => {
+test("calculateSyanten tenpaiToitsu", () => {
   expect(calculateSyantenToitsu(tenpai)).toBe(0);
 });
 
@@ -38,6 +38,6 @@ const iisyanten: Hai[] = [
   constructHai("souzu", 3),
 ];
 
-test("judgeAgari iisyantenToitsu", () => {
+test("calculateSyanten iisyantenToitsu", () => {
   expect(calculateSyantenToitsu(iisyanten)).toBe(1);
 });
