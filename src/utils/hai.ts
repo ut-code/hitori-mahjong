@@ -34,11 +34,15 @@ export function indexToHai(index: number): Hai {
   if (index <= 0 || index > 34) {
     throw new Error("invalid index");
   }
-  const hai = constructHai(
-    kindOrder[Math.floor(index / 9)],
-    Math.floor(index / 9) === 4 ? jihaiOrder[index % 9] : index % 9,
-  );
-  return hai;
+
+  if (index > 27) {
+    return constructHai("jihai", jihaiOrder[index - 28]);
+  }
+
+  const kind = kindOrder[Math.floor((index - 1) / 9)];
+  const value = ((index - 1) % 9) + 1;
+
+  return constructHai(kind, value);
 }
 
 export type JihaiValue =
