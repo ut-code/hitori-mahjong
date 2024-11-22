@@ -141,14 +141,14 @@ export function compareInfo(a: MentsuCountInfo, b: MentsuCountInfo): boolean | u
   const candidateDiff = a.candidate - b.candidate;
   const haveToitsuDiff = Number(a.haveToitsu) - Number(b.haveToitsu);
 
-  const index1 = mentsuDiff * 2 - candidateDiff;
-  const index2 = mentsuDiff * 4 - candidateDiff;
+  const index1 = mentsuDiff * 2 + candidateDiff;
+  const index2 = mentsuDiff * 4 + candidateDiff;
 
   if (index1 * index2 < 0) {
-    return undefined
+    return undefined;
   }
   if (index1 || index2) {
-    return (index1 + index2) > 0
+    return (index1 + index2) > 0;
   }
   return haveToitsuDiff >= 0;
 }
@@ -296,7 +296,10 @@ export function calculateSyantenFromCountInfo(infoList: MentsuCountInfo[][]): nu
         infoSummary.candidate,
         4 - infoSummary.mentsu,
       )
-      - Number(infoSummary.haveToitsu)
+      - Number(
+        infoSummary.haveToitsu
+        && (infoSummary.mentsu + infoSummary.candidate >= 5)
+      )
     );
   }
   return Math.min(...syantenCandidate);
