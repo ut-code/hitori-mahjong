@@ -9,21 +9,25 @@ import { useNavigate } from "react-router-dom";
 export default function Start() {
   const [inputText, setInputText] = useState("");
   const { setPlayerInfo } = useContext(PlayerInfoContext);
-  const [isNotValidUsername, setIsNotValidUserName] = useState(false);
+  const [invalidReason, setInvalidReason] = useState<null | string>(null);
   const navigate = useNavigate();
 
   const handleUserNameSubmit = () => {
     const trimmedInput = inputText.trim();
 
-    if (trimmedInput !== "") {
+    if (trimmedInput !== "" && trimmedInput.length > 20) {
       setPlayerInfo((prevInfo) => ({
         ...prevInfo,
         name: trimmedInput,
-      }));
+      }))
       sessionStorage["name"] = trimmedInput;
       navigate("/play");
     } else {
-      setIsNotValidUserName(true);
+      if (trimmedInput === "") {
+        setInvalidReason("ユーザー名を入力してください");
+      } else {
+        setInvalidReason("名前は 20 文字以下である必要があります")
+      }
     }
   };
 
@@ -43,6 +47,11 @@ export default function Start() {
         <TextField
           label="ユーザーネーム"
           variant="filled"
+          required={true}
+          slotProps={{
+            htmlInput:{
+            maxLength: 20,
+          }}}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="ユーザー名を入力"
@@ -75,8 +84,8 @@ export default function Start() {
           </button>
         </div>
 
-        {isNotValidUsername && (
-          <Alert severity="error">ユーザー名を入力してください</Alert>
+        {invalidReason && (
+          <Alert severity="error">{invalidReason}</Alert>
         )}
       </div>
     </>
