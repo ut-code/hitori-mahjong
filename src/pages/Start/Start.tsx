@@ -15,20 +15,20 @@ export default function Start() {
   const handleUserNameSubmit = () => {
     const trimmedInput = inputText.trim();
 
-    if (trimmedInput !== "" && trimmedInput.length > 20) {
-      setPlayerInfo((prevInfo) => ({
-        ...prevInfo,
-        name: trimmedInput,
-      }))
-      sessionStorage["name"] = trimmedInput;
-      navigate("/play");
-    } else {
-      if (trimmedInput === "") {
-        setInvalidReason("ユーザー名を入力してください");
-      } else {
-        setInvalidReason("名前は 20 文字以下である必要があります")
-      }
+    if (trimmedInput === "") {
+      setInvalidReason("ユーザー名を入力してください");
+      return;
     }
+    if (trimmedInput.length > 20) {
+      setInvalidReason("名前は 20 文字以下である必要があります");
+      return;
+    }
+    setPlayerInfo((prevInfo) => ({
+      ...prevInfo,
+      name: trimmedInput,
+    }));
+    sessionStorage["name"] = trimmedInput;
+    navigate("/play");
   };
 
   return (
@@ -49,9 +49,10 @@ export default function Start() {
           variant="filled"
           required={true}
           slotProps={{
-            htmlInput:{
-            maxLength: 20,
-          }}}
+            htmlInput: {
+              maxLength: 20,
+            },
+          }}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           placeholder="ユーザー名を入力"
@@ -84,9 +85,7 @@ export default function Start() {
           </button>
         </div>
 
-        {invalidReason && (
-          <Alert severity="error">{invalidReason}</Alert>
-        )}
+        {invalidReason && <Alert severity="error">{invalidReason}</Alert>}
       </div>
     </>
   );
