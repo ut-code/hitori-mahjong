@@ -33,14 +33,12 @@ export default function Start() {
 
 	return (
 		<>
-			<a href="https://kf75.utcode.net/" className={styles.home}>
+			{/* 			<a href="https://kf75.utcode.net/" className={styles.home}>
 				＜駒場祭ホームに戻る
-			</a>
+			</a> */}
 			<div className={styles.titleContainer}>
-				<div className={styles.mainTitle}>ひとり麻雀</div>
-				<div className={styles.subTitle}>
-					自分のペースで麻雀の基礎を身につけよう
-				</div>
+				<div className={styles.mainTitle}>一人麻雀</div>
+				<div className={styles.subTitle}>～麻雀の基礎は平面にある～</div>
 			</div>
 
 			<div className={styles.formContainer}>
