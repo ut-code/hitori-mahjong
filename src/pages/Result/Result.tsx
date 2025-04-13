@@ -7,8 +7,8 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { FaCrown } from "react-icons/fa";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { darken } from "@mui/material/styles";
 import RankingTable from "./RankingTable";
+import * as styles from "./style";
 
 export default function Result() {
 	const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
@@ -63,98 +63,6 @@ export default function Result() {
 		};
 	}, []);
 
-	const top1Color = "#DBC27E";
-	const top2Color = "#CDCDCD";
-	const top3Color = "#DABEB3";
-
-	const containerStyle: { [key: string]: string } = {
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		padding: "20px",
-		fontFamily: "'Arial', sans-serif",
-		minWidth: "400px",
-		maxHeight: "800px",
-		gap: "16px",
-		color: "#2B2B2B",
-		backgroundColor: "white",
-		borderRadius: "10px",
-	};
-
-	const headerStyle: { [key: string]: string } = {
-		display: "flex",
-		justifyContent: "space-between",
-		alignItems: "center",
-		width: "100%",
-		position: "relative",
-		paddingBottom: "24px",
-	};
-
-	const headerTitleStyle: { [key: string]: string } = {
-		position: "absolute",
-		left: "50%",
-		transform: "translateX(-50%)",
-	};
-
-	const topRankingStyle: { [key: string]: string } = {
-		display: "flex",
-		justifyContent: "center",
-		gap: "16px",
-		width: "100%",
-		alignItems: "flex-end",
-	};
-
-	const topRankItemStyle = (
-		backgroundColor: string,
-	): { [key: string]: string } => ({
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "flex-end",
-		paddingBottom: "8px",
-		backgroundColor: "white",
-		borderRadius: "10px",
-		fontWeight: "bold",
-		color: "#2B2B2B",
-		boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-		borderTop: `5px solid ${backgroundColor}`,
-		position: "relative",
-		width: "200px",
-		height: "110px",
-	});
-
-	const topRankNumberStyle = (
-		backgroundColor: string,
-	): { [key: string]: string } => ({
-		fontSize: "1.6rem",
-		position: "absolute",
-		top: "-25px",
-		width: "40px",
-		height: "40px",
-		color: "white",
-		background: `linear-gradient(to bottom right, ${backgroundColor}, ${darken(backgroundColor, 0.2)})`,
-		borderRadius: "10px",
-	});
-
-	const crownIconStyle = (
-		backgroundColor: string,
-	): { [key: string]: string } => ({
-		position: "absolute",
-		top: "-48px",
-		left: "50%",
-		transform: "translateX(-50%)",
-		fontSize: "1.3rem",
-		color: backgroundColor,
-	});
-
-	const topRankScoreStyle: { [key: string]: string } = {
-		fontSize: "2rem",
-	};
-
-	const topRankUsernameStyle: { [key: string]: string } = {
-		fontSize: "1rem",
-	};
-
 	const top1Player: PlayerInfo =
 		scores.length > 1 ? scores[0] : exampleUsers[0];
 	const top2Player: PlayerInfo =
@@ -163,8 +71,8 @@ export default function Result() {
 		scores.length > 3 ? scores[2] : exampleUsers[0];
 
 	return (
-		<div style={containerStyle}>
-			<div style={headerStyle}>
+		<div style={styles.containerStyle}>
+			<div style={styles.headerStyle}>
 				<IconButton
 					onClick={() => {
 						navigate("/");
@@ -173,39 +81,44 @@ export default function Result() {
 				>
 					<HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />
 				</IconButton>
-				<h2 style={headerTitleStyle}>ランキング</h2>
+				<h2 style={styles.headerTitleStyle}>ランキング</h2>
 			</div>
 
 			{scores.length !== 0 && (
 				<>
-					<div style={topRankingStyle}>
-						<div style={topRankItemStyle(top2Color)}>
-							<div style={topRankNumberStyle(top2Color)}>
+					<div style={styles.topRankingStyle}>
+						<div style={styles.topRankItemStyle(styles.top2Color)}>
+							<div style={styles.topRankNumberStyle(styles.top2Color)}>
 								<i>2</i>
 							</div>
-							<div style={topRankUsernameStyle}>
+							<div style={styles.topRankUsernameStyle}>
 								<span>{top2Player.name}</span>
 							</div>
-							<div style={topRankScoreStyle}>
+							<div style={styles.topRankScoreStyle}>
 								<i>{top2Player.score}</i>
 							</div>
 						</div>
-						<div style={{ ...topRankItemStyle(top1Color), height: "130px" }}>
-							<FaCrown style={crownIconStyle(top1Color)} />
-							<div style={topRankNumberStyle(top1Color)}>
+						<div
+							style={{
+								...styles.topRankItemStyle(styles.top1Color),
+								height: "130px",
+							}}
+						>
+							<FaCrown style={styles.crownIconStyle(styles.top1Color)} />
+							<div style={styles.topRankNumberStyle(styles.top1Color)}>
 								<i>1</i>
 							</div>
-							<div style={topRankUsernameStyle}>{top1Player.name}</div>
-							<div style={topRankScoreStyle}>
+							<div style={styles.topRankUsernameStyle}>{top1Player.name}</div>
+							<div style={styles.topRankScoreStyle}>
 								<i>{top1Player.score}</i>
 							</div>
 						</div>
-						<div style={topRankItemStyle(top3Color)}>
-							<div style={topRankNumberStyle(top3Color)}>
+						<div style={styles.topRankItemStyle(styles.top3Color)}>
+							<div style={styles.topRankNumberStyle(styles.top3Color)}>
 								<i>3</i>
 							</div>
-							<div style={topRankUsernameStyle}>{top3Player.name}</div>
-							<div style={topRankScoreStyle}>
+							<div style={styles.topRankUsernameStyle}>{top3Player.name}</div>
+							<div style={styles.topRankScoreStyle}>
 								<i>{top3Player.score}</i>
 							</div>
 						</div>
