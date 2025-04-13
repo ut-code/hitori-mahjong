@@ -18,6 +18,7 @@ export default function Result() {
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
 	useEffect(() => {
+		const controller = new AbortController();
 		const fetchResult = async () => {
 			try {
 				const res = await fetch(`${apiUrl}/result`, {
@@ -57,6 +58,9 @@ export default function Result() {
 		};
 
 		fetchResult();
+		return () => {
+			controller.abort();
+		};
 	}, []);
 
 	const top1Color = "#DBC27E";
