@@ -1,28 +1,28 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 30px;
 }
 
 .sentence {
-  font-size: 3em;
+	font-size: 3em;
 }
 
 .rankOne {
-  color: #b8860b;
-  font-weight: bold;
-  font-size: 1.3em;
+	color: #b8860b;
+	font-weight: bold;
+	font-size: 1.3em;
 }
 
 .rankTwo {
-  color: #a0a0a0;
-  font-weight: bold;
-  font-size: 1.3em;
+	color: #a0a0a0;
+	font-weight: bold;
+	font-size: 1.3em;
 }
 
 .rankThree {
-  color: #8b4513;
-  font-weight: bold;
-  font-size: 1.3em;
+	color: #8b4513;
+	font-weight: bold;
+	font-size: 1.3em;
 }
