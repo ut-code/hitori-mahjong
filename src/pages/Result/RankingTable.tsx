@@ -5,19 +5,13 @@ import {
 	type MRT_ColumnDef,
 } from "material-react-table";
 import { PlayerInfo } from "../../App";
-import React from "react";
 
 type RankingTableProps = {
 	scores: PlayerInfo[];
 	myRank: number | null;
-	isTop: boolean;
 };
 
-export default function RankingTable({
-	scores,
-	myRank,
-	isTop,
-}: RankingTableProps) {
+export default function RankingTable({ scores, myRank }: RankingTableProps) {
 	const footerStyle: { [key: string]: string } = {
 		display: "flex",
 		justifyContent: "flex-start",
@@ -33,7 +27,7 @@ export default function RankingTable({
 	};
 	const bottomToolbar = (
 		<div style={footerStyle}>
-			{myRank !== null && myRank <= 10 ? ( //3位以内だとmyRankはnull
+			{myRank !== null && myRank <= 10 ? (
 				<>
 					<span style={footerEmojiStyle}>🎉</span>
 					<span>非常に優秀な成績です！この調子で頑張りましょう！</span>
@@ -47,7 +41,7 @@ export default function RankingTable({
 						</>
 					) : (
 						<>
-							{myRank === null && isTop === true && (
+							{myRank !== null && myRank === 1 && (
 								<>
 									<span style={footerEmojiStyle}>🀄</span>
 									<span>もうあなたが麻雀です</span>

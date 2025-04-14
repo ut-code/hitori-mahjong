@@ -1,11 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { PlayerInfoContext } from "../../App";
-import { PlayerInfo } from "../../App";
+import { PlayerInfoContext, PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
 import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { FaCrown } from "react-icons/fa";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import RankingTable from "./RankingTable";
 import * as styles from "./style";
@@ -13,8 +11,7 @@ import * as styles from "./style";
 export default function Result() {
 	const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
 	const [scores, setScores] = useState<PlayerInfo[]>([]);
-	const [myRank, setMyRank] = useState<number | null>(null);
-	const [isTop, setIsTop] = useState<boolean>(false);
+	const [myRank, setMyRank] = useState<number | null>(null); // ルートから直接飛んだ場合は null
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
 	useEffect(() => {
@@ -31,7 +28,7 @@ export default function Result() {
 					throw new Error(`HTTP error! status: ${res.status}`);
 				}
 
-				const data = await res.json();
+				const data = await res.json(); // TODO: Zod でバリデーションかける
 
 				const sortedScores: PlayerInfo[] = data
 					.sort((a: PlayerInfo, b: PlayerInfo) => b.score - a.score)
@@ -40,19 +37,19 @@ export default function Result() {
 						rank: index + 1,
 					}));
 				setScores(sortedScores);
+				if (sortedScores.length < 3) {
+					setScores([...scores, ...exampleUsers]);
+				}
 
 				const myScore = sortedScores.find(
 					(player) => player.name === playerInfo.name,
 				);
-				if (myScore?.rank != null && myScore.rank > 3) {
-					//3位以内をsetMyRankするとエラーが返ってくる
+
+				if (myScore?.rank != null) {
 					setMyRank(myScore.rank);
-				} else if (myScore?.rank != null && myScore.rank <= 3) {
-					setIsTop(true);
 				}
 			} catch (e) {
 				console.error("Failed to fetch results:", e);
-				// エラーが発生した場合はデフォルトの例を表示
 				setScores(exampleUsers);
 			}
 		};
@@ -66,9 +63,9 @@ export default function Result() {
 	const top1Player: PlayerInfo =
 		scores.length > 1 ? scores[0] : exampleUsers[0];
 	const top2Player: PlayerInfo =
-		scores.length > 2 ? scores[1] : exampleUsers[0];
+		scores.length > 2 ? scores[1] : exampleUsers[1];
 	const top3Player: PlayerInfo =
-		scores.length > 3 ? scores[2] : exampleUsers[0];
+		scores.length > 3 ? scores[2] : exampleUsers[2];
 
 	return (
 		<div style={styles.containerStyle}>
@@ -127,7 +124,6 @@ export default function Result() {
 					<RankingTable
 						scores={scores.length > 3 ? scores.slice(3) : []}
 						myRank={myRank}
-						isTop={isTop}
 					/>
 				</>
 			)}
