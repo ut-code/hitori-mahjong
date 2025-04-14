@@ -27,28 +27,22 @@ export default function RankingTable({ scores, myRank }: RankingTableProps) {
 	};
 	const bottomToolbar = (
 		<div style={footerStyle}>
-			{myRank !== null && myRank <= 10 ? (
+			{myRank !== null && myRank === 1 && (
+				<>
+					<span style={footerEmojiStyle}>🀄</span>
+					<span>もうあなたが麻雀です</span>
+				</>
+			)}
+			{myRank !== null && myRank > 1 && myRank <= 10 && (
 				<>
 					<span style={footerEmojiStyle}>🎉</span>
 					<span>非常に優秀な成績です！この調子で頑張りましょう！</span>
 				</>
-			) : (
+			)}
+			{myRank !== null && myRank > 10 && (
 				<>
-					{myRank !== null ? (
-						<>
-							<span style={footerEmojiStyle}>🀄</span>
-							<span>これから勉強していきましょう！</span>
-						</>
-					) : (
-						<>
-							{myRank !== null && myRank === 1 && (
-								<>
-									<span style={footerEmojiStyle}>🀄</span>
-									<span>もうあなたが麻雀です</span>
-								</>
-							)}
-						</>
-					)}
+					<span style={footerEmojiStyle}>🀄</span>
+					<span>これから勉強していきましょう！</span>
 				</>
 			)}
 		</div>
