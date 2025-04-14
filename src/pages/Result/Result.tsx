@@ -11,7 +11,7 @@ import * as styles from "./style";
 export default function Result() {
 	const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
 	const [scores, setScores] = useState<PlayerInfo[]>([]);
-	const [myRank, setMyRank] = useState<number | null>(null); // ルートから直接飛んだ場合は null
+	const [myRank, setMyRank] = useState<number | null>(null); // ルートから直接飛んだ場合は null のまま
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
 	useEffect(() => {
