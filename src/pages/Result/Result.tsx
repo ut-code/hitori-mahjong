@@ -7,6 +7,7 @@ import { FaCrown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import RankingTable from "./RankingTable";
 import * as styles from "./style";
+import { z } from "zod";
 
 export default function Result() {
 	const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
@@ -14,6 +15,15 @@ export default function Result() {
 	const [myRank, setMyRank] = useState<number | null>(null); // ルートから直接飛んだ場合は null のまま
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
+
+	const UserSchema = z.object({
+		id: z.number(),
+		name: z.string(),
+		score: z.number(),
+	});
+
+	const UserArray = UserSchema.array();
+
 	useEffect(() => {
 		const controller = new AbortController();
 		const fetchResult = async () => {
@@ -28,7 +38,13 @@ export default function Result() {
 					throw new Error(`HTTP error! status: ${res.status}`);
 				}
 
-				const data = await res.json(); // TODO: Zod でバリデーションかける
+				const data = await res.json();
+
+				const result = UserArray.safeParse(data);
+
+				if (!result.success) {
+					console.error("Error: ", result.error.issues);
+				}
 
 				const sortedScores: PlayerInfo[] = data
 					.sort((a: PlayerInfo, b: PlayerInfo) => b.score - a.score)
