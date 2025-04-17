@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { PlayerInfoContext } from "../../App";
 import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
-import React from "react";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 
@@ -74,8 +73,8 @@ export default function Start() {
 								rank: null,
 								name: "",
 								score: 25000,
-							}),
-								navigate("/result");
+							});
+							navigate("/result");
 						}}
 						className={styles.grayButton}
 					>
