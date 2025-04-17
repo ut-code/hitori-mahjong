@@ -12,7 +12,7 @@ import { z } from "zod";
 export default function Result() {
 	const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
 	const [scores, setScores] = useState<PlayerInfo[]>([]);
-	const [myRank, setMyRank] = useState<number | null>(null); // ルートから直接飛んだ場合は null のまま
+	const [myRank, setMyRank] = useState<number | null>(null);
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -52,16 +52,20 @@ export default function Result() {
 						...player,
 						rank: index + 1,
 					}));
-				setScores(sortedScores);
-				if (sortedScores.length < 3) {
-					setScores([...scores, ...exampleUsers]);
+
+				if (sortedScores.length < 4) {
+					setScores([...sortedScores, ...exampleUsers]);
+				} else {
+					setScores(sortedScores);
 				}
 
 				const myScore = sortedScores.find(
 					(player) => player.name === playerInfo.name,
 				);
 
-				if (myScore?.rank != null) {
+				if (typeof myScore === "undefined") {
+					setMyRank(null); // ルートから直接とんだ場合
+				} else {
 					setMyRank(myScore.rank);
 				}
 			} catch (e) {
