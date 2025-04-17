@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./styles/GameInterface.module.css";
-import Header from "./components/Header.tsx";
-import DiscardArea from "./components/DiscardArea.tsx";
-import HandStatus from "./components/HandStatus.tsx";
-import WaitingTiles from "./components/WaitingTiles.tsx";
-import HandTiles from "./components/HandTiles.tsx";
+import Header from "./components/Header";
+import DiscardArea from "./components/DiscardArea";
+import HandStatus from "./components/HandStatus";
+import WaitingTiles from "./components/WaitingTiles";
+import HandTiles from "./components/HandTiles";
 import { useState, useEffect, useContext } from "react";
 import { sortTehai } from "../../utils/hai";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
@@ -12,12 +12,12 @@ import { PlayerInfoContext } from "../../App";
 import { Hai } from "../../utils/hai";
 import { useNavigate } from "react-router-dom";
 import judgeAgari from "../../utils/judgeAgari";
-import DrawEnd from "./components/DrawEnd.tsx";
-import TsumoEnd from "./components/TsumoEnd.tsx";
-import FinishGame from "./components/FinishGame.tsx";
-import Loading from "./components/Loading.tsx";
-import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu.ts";
-import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu.ts";
+import DrawEnd from "./components/DrawEnd";
+import TsumoEnd from "./components/TsumoEnd";
+import FinishGame from "./components/FinishGame";
+import Loading from "./components/Loading";
+import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
+import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
 
 export type GameState = {
 	kyoku: number;
