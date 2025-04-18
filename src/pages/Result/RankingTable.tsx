@@ -12,6 +12,7 @@ type RankingTableProps = {
 };
 
 export default function RankingTable({ scores, myRank }: RankingTableProps) {
+	console.log("myRank", myRank);
 	const footerStyle: { [key: string]: string } = {
 		display: "flex",
 		justifyContent: "flex-start",
@@ -83,7 +84,7 @@ export default function RankingTable({ scores, myRank }: RankingTableProps) {
 		getRowId: (row) => `rank-${row.rank ?? ""}`,
 		initialState: {
 			rowPinning: {
-				top: myRank === null || myRank > 3 ? [`rank-${myRank}`] : [],
+				top: myRank !== null && myRank > 3 ? [`rank-${myRank}`] : [],
 			},
 			columnVisibility: {
 				"mrt-row-pin": false,
