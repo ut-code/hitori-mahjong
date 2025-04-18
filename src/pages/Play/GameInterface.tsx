@@ -54,7 +54,6 @@ const GameInterface = (props: GameInterfaceProps) => {
 			}
 			const data = await response.json();
 
-			// 最初の13枚をtehaiに、その次をtsumoに、残りをhaiyamaにセット
 			setTehai(sortTehai(data.slice(0, 13)));
 			setTsumo(data[13]);
 			setHaiyama(data.slice(14));
@@ -62,6 +61,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 		} catch (error) {
 			setIsLoading(true);
 			console.error("failed in fetching initial haiyama:", error);
+			// TODO: ダイアログを表示して、時間がたってからもう一度プレイしてもらうようにする
 		}
 	};
 

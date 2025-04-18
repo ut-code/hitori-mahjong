@@ -73,7 +73,7 @@ export default function Result(props: ResultProps) {
 				}
 			} catch (e) {
 				console.error("Failed to fetch results:", e);
-				setScores(exampleUsers);
+				// DB が接続できていないことをユーザーに伝えたい
 			}
 		};
 
