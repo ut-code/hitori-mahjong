@@ -8,6 +8,14 @@ import { useNavigate } from "react-router-dom";
 import RankingTable from "./RankingTable";
 import * as styles from "./style";
 import { z } from "zod";
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+} from "@mui/material";
 
 type ResultProps = {
 	playerInfo: PlayerInfo;
@@ -17,6 +25,7 @@ type ResultProps = {
 export default function Result(props: ResultProps) {
 	const [scores, setScores] = useState<PlayerInfo[]>([]);
 	const [myRank, setMyRank] = useState<number | null>(null);
+	const [open, setOpen] = useState(false);
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -73,7 +82,8 @@ export default function Result(props: ResultProps) {
 				}
 			} catch (e) {
 				console.error("Failed to fetch results:", e);
-				// DB が接続できていないことをユーザーに伝えたい
+				// TODO: DB に接続できていないことをユーザーに伝えたい
+				setOpen(true);
 			}
 		};
 
@@ -92,6 +102,18 @@ export default function Result(props: ResultProps) {
 
 	return (
 		<div style={styles.containerStyle}>
+			<Dialog open={open} onClose={() => setOpen(false)}>
+				<DialogTitle>{"データベースに接続できませんでした"}</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						他の人のスコアも見たい場合は、ut.code();
+						のメンバーに問い合わせてください
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={() => navigate("/")}>トップに戻る</Button>
+				</DialogActions>
+			</Dialog>
 			<div style={styles.headerStyle}>
 				<IconButton
 					onClick={() => {

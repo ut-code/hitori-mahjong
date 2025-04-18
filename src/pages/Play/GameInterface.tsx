@@ -17,6 +17,14 @@ import Loading from "./components/Loading";
 import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
 import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
 import { PlayerInfo } from "../../App";
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+} from "@mui/material";
 
 export type GameState = {
 	kyoku: number;
@@ -40,6 +48,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 	const [toitsuSyanten, setToitsuSyanten] = useState(2); //適当な初期値を設定
 	const [sutehai, setSutehai] = useState<Hai[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [open, setOpen] = useState(false);
 	const apiUrl = import.meta.env.VITE_API_URL;
 
 	const fetchInitialHaiyama = async () => {
@@ -62,6 +71,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 			setIsLoading(true);
 			console.error("failed in fetching initial haiyama:", error);
 			// TODO: ダイアログを表示して、時間がたってからもう一度プレイしてもらうようにする
+			setOpen(true);
 		}
 	};
 
@@ -159,6 +169,17 @@ const GameInterface = (props: GameInterfaceProps) => {
 
 	return (
 		<div className={styles.container}>
+			<Dialog open={open} onClose={() => setOpen(false)}>
+				<DialogTitle>{"サーバーに接続できませんでした"}</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						スリープしているだけかもしれないので、また時間を空けてお試しください
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={() => navigate("/")}>トップに戻る</Button>
+				</DialogActions>
+			</Dialog>
 			{gameState.kyoku <= 4 ? (
 				gameState.junme === 19 ? (
 					<DrawEnd drawEnd={drawEnd} />
