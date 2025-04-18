@@ -7,7 +7,6 @@ import WaitingTiles from "./components/WaitingTiles";
 import HandTiles from "./components/HandTiles";
 import { useState, useEffect } from "react";
 import { sortTehai } from "../../utils/hai";
-import { exampleHaiyama } from "../../utils/exampleHaiyama";
 import { Hai } from "../../utils/hai";
 import { useNavigate } from "react-router-dom";
 import judgeAgari from "../../utils/judgeAgari";
@@ -62,12 +61,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 			setIsLoading(false);
 		} catch (error) {
 			setIsLoading(true);
-			console.error("Failed to fetch initial haiyama:", error);
-			setTehai(sortTehai(exampleHaiyama.slice(0, 13)));
-			setTsumo(exampleHaiyama[13]);
-			setHaiyama(exampleHaiyama.slice(14));
-			//setIsLoading(false);
-			throw new Error("Failed to fetch initial haiyama");
+			console.error("failed in fetching initial haiyama:", error);
 		}
 	};
 
@@ -77,15 +71,19 @@ const GameInterface = (props: GameInterfaceProps) => {
 	useEffect(() => {
 		if (gameState.kyoku === 5) {
 			const sendResult = () => {
-				fetch(`${apiUrl}/scores`, {
-					method: "post",
-					headers: { "Content-Type": "application/json" },
-					mode: "cors",
-					body: JSON.stringify({
-						name: sessionStorage["name"],
-						score: props.playerInfo.score,
-					}),
-				});
+				try {
+					fetch(`${apiUrl}/scores`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						mode: "cors",
+						body: JSON.stringify({
+							name: sessionStorage["name"],
+							score: props.playerInfo.score,
+						}),
+					});
+				} catch (error) {
+					console.error("failed in creating score", error);
+				}
 			};
 			sendResult();
 		}
