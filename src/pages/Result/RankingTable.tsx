@@ -83,7 +83,7 @@ export default function RankingTable({ scores, myRank }: RankingTableProps) {
 		getRowId: (row) => `rank-${row.rank ?? ""}`,
 		initialState: {
 			rowPinning: {
-				top: myRank ? [`rank-${myRank}`] : [],
+				top: myRank === null || myRank > 3 ? [`rank-${myRank}`] : [],
 			},
 			columnVisibility: {
 				"mrt-row-pin": false,
