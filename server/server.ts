@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import createHaiyama from "./createHaiyama.js";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import cors from "cors";
 
 const app = express();
@@ -17,6 +17,7 @@ app.get("/tiles", (req: Request, res: Response) => {
 });
 
 app.post("/scores", async (req: Request, res: Response) => {
+  // TODO: validation
   const { name, score } = req.body;
 
   try {
@@ -32,10 +33,10 @@ app.post("/scores", async (req: Request, res: Response) => {
         score,
       },
     });
-    res.sendStatus(201); // 201 Created
+    res.sendStatus(201); 
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
+    if ( error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P1001") {
+      res.status(500).json({ error: "can't reach db server"});
     }
     res.status(500).json({ error: "Failed to create user" });
   }
@@ -46,15 +47,15 @@ app.get("/scores", async (req: Request, res: Response) => {
     const data = await prisma.user.findMany();
     res.json(data);
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
+    if ( error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P1001") {
+      res.status(500).json({ error: "can't reach db server"});
     }
     res.status(500).json({ error: "Failed to fetch results" });
   }
 });
 
 app.get("/health", (req, res) => {
-  res.status(200).send("OK");
+  res.send("OK");
 });
 
 app.listen(3000, () => {
