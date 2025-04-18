@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "module": "ESNext", // ESNextに設定（BunはESMを推奨）
-    "target": "ESNext", // 最新のESNextをターゲットに設定
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "target": "ESNext", 
     "outDir": "./dist",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "lib": ["es2020", "dom"],
-    "strict": true, // 型の厳格なチェックを有効に
-    "skipLibCheck": true, // ライブラリの型チェックをスキップ（ビルド高速化）
-    "forceConsistentCasingInFileNames": true // ファイル名の大文字小文字の一貫性を強制
+    "strict": true, 
+    "skipLibCheck": true, 
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["server/server.ts", "server/createYamahai.ts"]
+  "include": ["server/server.ts", "server/createYamahai.ts", "src", "src/vite-env.d.ts"]
 }
