@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { PlayerInfoContext, PlayerInfo } from "../../App";
+import { useEffect, useState } from "react";
+import { PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
 import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -9,8 +9,12 @@ import RankingTable from "./RankingTable";
 import * as styles from "./style";
 import { z } from "zod";
 
-export default function Result() {
-	const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
+type ResultProps = {
+	playerInfo: PlayerInfo;
+	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
+};
+
+export default function Result(props: ResultProps) {
 	const [scores, setScores] = useState<PlayerInfo[]>([]);
 	const [myRank, setMyRank] = useState<number | null>(null);
 	const navigate = useNavigate();
@@ -60,7 +64,7 @@ export default function Result() {
 				}
 
 				const myScore = sortedScores.find(
-					(player) => player.name === playerInfo.name,
+					(player) => player.name === props.playerInfo.name,
 				);
 
 				if (typeof myScore === "undefined") {
@@ -93,7 +97,7 @@ export default function Result() {
 				<IconButton
 					onClick={() => {
 						navigate("/");
-						setPlayerInfo(() => ({ rank: null, name: "", score: 25000 }));
+						props.setPlayerInfo(() => ({ rank: null, name: "", score: 25000 }));
 					}}
 				>
 					<HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />

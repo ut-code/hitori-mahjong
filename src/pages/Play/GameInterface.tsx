@@ -5,10 +5,9 @@ import DiscardArea from "./components/DiscardArea";
 import HandStatus from "./components/HandStatus";
 import WaitingTiles from "./components/WaitingTiles";
 import HandTiles from "./components/HandTiles";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { sortTehai } from "../../utils/hai";
 import { exampleHaiyama } from "../../utils/exampleHaiyama";
-import { PlayerInfoContext } from "../../App";
 import { Hai } from "../../utils/hai";
 import { useNavigate } from "react-router-dom";
 import judgeAgari from "../../utils/judgeAgari";
@@ -18,15 +17,19 @@ import FinishGame from "./components/FinishGame";
 import Loading from "./components/Loading";
 import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
 import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
+import { PlayerInfo } from "../../App";
 
 export type GameState = {
 	kyoku: number;
 	junme: number;
 };
 
-const GameInterface = () => {
+type GameInterfaceProps = {
+	playerInfo: PlayerInfo;
+	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
+};
+const GameInterface = (props: GameInterfaceProps) => {
 	const navigate = useNavigate();
-	const { playerInfo, setPlayerInfo } = useContext(PlayerInfoContext);
 	const [haiyama, setHaiyama] = useState<Hai[]>([]);
 	const [tehai, setTehai] = useState<Hai[]>([]);
 	const [tsumo, setTsumo] = useState<Hai>({ kind: "manzu", value: 1 }); //適当な値を設定している
@@ -81,7 +84,7 @@ const GameInterface = () => {
 					mode: "cors",
 					body: JSON.stringify({
 						name: sessionStorage["name"],
-						score: playerInfo.score,
+						score: props.playerInfo.score,
 					}),
 				});
 			};
@@ -134,7 +137,7 @@ const GameInterface = () => {
 				: toitsuSyanten === 1 || mentsuSyanten === 1
 					? 500
 					: 0; //聴牌してたら1000点、イーシャンテンなら500点
-		setPlayerInfo((prevInfo) => ({
+		props.setPlayerInfo((prevInfo) => ({
 			...prevInfo,
 			score: prevInfo.score + bonusPoint,
 		}));
@@ -147,9 +150,9 @@ const GameInterface = () => {
 			kyoku: gameState.kyoku + 1,
 		});
 		fetchInitialHaiyama();
-		setPlayerInfo({
-			...playerInfo,
-			score: playerInfo.score + 8000,
+		props.setPlayerInfo({
+			...props.playerInfo,
+			score: props.playerInfo.score + 8000,
 		});
 	};
 
@@ -164,7 +167,12 @@ const GameInterface = () => {
 					<DrawEnd drawEnd={drawEnd} />
 				) : (
 					<div className={styles.container}>
-						<Header kyoku={gameState.kyoku} junme={gameState.junme} />
+						<Header
+							kyoku={gameState.kyoku}
+							junme={gameState.junme}
+							playerInfo={props.playerInfo}
+							setPlayerInfo={props.setPlayerInfo}
+						/>
 						<div className={styles.gridContainer}>
 							{isAgari ? (
 								<TsumoEnd tsumoEnd={tsumoEnd} />

@@ -1,13 +1,16 @@
-import { useContext, useState } from "react";
-import { PlayerInfoContext } from "../../App";
+import { useState } from "react";
+import { PlayerInfo } from "../../App";
 import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 
-export default function Start() {
+type StartProps = {
+	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
+};
+
+export default function Start(props: StartProps) {
 	const [inputText, setInputText] = useState("");
-	const { setPlayerInfo } = useContext(PlayerInfoContext);
 	const [invalidReason, setInvalidReason] = useState<null | string>(null);
 	const navigate = useNavigate();
 
@@ -22,7 +25,7 @@ export default function Start() {
 			setInvalidReason("名前は 20 文字以下である必要があります");
 			return;
 		}
-		setPlayerInfo((prevInfo) => ({
+		props.setPlayerInfo((prevInfo) => ({
 			...prevInfo,
 			name: trimmedInput,
 		}));
@@ -69,7 +72,7 @@ export default function Start() {
 					</button>
 					<button
 						onClick={() => {
-							setPlayerInfo({
+							props.setPlayerInfo({
 								rank: null,
 								name: "",
 								score: 25000,
