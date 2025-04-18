@@ -64,7 +64,7 @@ app.get("/scores", async (req: Request, res: Response) => {
       res.status(500).json({ error: "can't reach db server"});
       return;
     }
-    res.status(500).json({ error: "failed in fetching scores" });
+    res.status(500).json({ error: "failed in getting scores" });
   }
 });
 
