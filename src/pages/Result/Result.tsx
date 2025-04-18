@@ -32,9 +32,8 @@ export default function Result(props: ResultProps) {
 		const controller = new AbortController();
 		const fetchResult = async () => {
 			try {
-				const res = await fetch(`${apiUrl}/result`, {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
+				const res = await fetch(`${apiUrl}/scores`, {
+					method: "GET",
 					mode: "cors",
 				});
 

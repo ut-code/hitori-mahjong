@@ -46,9 +46,8 @@ const GameInterface = (props: GameInterfaceProps) => {
 	const fetchInitialHaiyama = async () => {
 		try {
 			setIsLoading(true);
-			const response = await fetch(`${apiUrl}/start`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
+			const response = await fetch(`${apiUrl}/tiles`, {
+				method: "GET",
 				mode: "cors",
 			});
 			if (!response.ok) {
@@ -78,7 +77,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 	useEffect(() => {
 		if (gameState.kyoku === 5) {
 			const sendResult = () => {
-				fetch(`${apiUrl}/end`, {
+				fetch(`${apiUrl}/scores`, {
 					method: "post",
 					headers: { "Content-Type": "application/json" },
 					mode: "cors",

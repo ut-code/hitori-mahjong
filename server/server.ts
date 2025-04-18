@@ -11,12 +11,12 @@ app.use(cors({
   origin: process.env.FRONTEND_URL
 }));
 
-app.post("/start", (req: Request, res: Response) => {
+app.get("/tiles", (req: Request, res: Response) => {
   const haiyama = createHaiyama();
   res.json(haiyama);
 });
 
-app.post("/end", async (req: Request, res: Response) => {
+app.post("/scores", async (req: Request, res: Response) => {
   const { name, score } = req.body;
 
   try {
@@ -41,7 +41,7 @@ app.post("/end", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/result", async (req: Request, res: Response) => {
+app.get("/scores", async (req: Request, res: Response) => {
   try {
     const data = await prisma.user.findMany();
     res.json(data);

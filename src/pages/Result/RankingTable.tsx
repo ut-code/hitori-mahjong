@@ -12,7 +12,6 @@ type RankingTableProps = {
 };
 
 export default function RankingTable({ scores, myRank }: RankingTableProps) {
-	console.log("myRank", myRank);
 	const footerStyle: { [key: string]: string } = {
 		display: "flex",
 		justifyContent: "flex-start",
