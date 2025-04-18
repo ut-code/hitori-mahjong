@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import createHaiyama from "./createHaiyama.js";
 import { PrismaClient, Prisma } from "@prisma/client";
 import cors from "cors";
+import { z } from "zod";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -17,7 +18,18 @@ app.get("/tiles", (req: Request, res: Response) => {
 });
 
 app.post("/scores", async (req: Request, res: Response) => {
-  // TODO: validation
+  const bodySchema = z.object({
+    name: z.string().trim().nonempty(),
+    score: z.number().gte(25000).lte(57000),
+  })
+  
+  const result = bodySchema.safeParse(req.body);
+
+  if (!result.success) {
+    res.status(400).json({error: "invalid request body"});
+    return;
+  }
+
   const { name, score } = req.body;
 
   try {
@@ -37,8 +49,9 @@ app.post("/scores", async (req: Request, res: Response) => {
   } catch (error) {
     if ( error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P1001") {
       res.status(500).json({ error: "can't reach db server"});
+      return;
     }
-    res.status(500).json({ error: "Failed to create user" });
+    res.status(500).json({ error: "failed in creating score" });
   }
 });
 
@@ -49,8 +62,9 @@ app.get("/scores", async (req: Request, res: Response) => {
   } catch (error) {
     if ( error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P1001") {
       res.status(500).json({ error: "can't reach db server"});
+      return;
     }
-    res.status(500).json({ error: "Failed to fetch results" });
+    res.status(500).json({ error: "failed in fetching scores" });
   }
 });
 
