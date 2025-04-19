@@ -1,14 +1,18 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import BasicRules from "./BasicRules";
 import LocalRules from "./LocalRules";
+import { useState, CSSProperties } from "react";
+import { Button } from "@mui/material";
+
+type ContentsType = "basic" | "local";
 
 export default function Tutorial() {
+	const [currentContent, setCurrentContent] = useState<ContentsType>("basic");
 	const navigate = useNavigate();
 
-	const containerStyle: { [key: string]: string } = {
+	const containerStyle: CSSProperties = {
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
@@ -20,7 +24,7 @@ export default function Tutorial() {
 		borderRadius: "10px",
 	};
 
-	const headerStyle: { [key: string]: string } = {
+	const headerStyle: CSSProperties = {
 		display: "flex",
 		justifyContent: "space-between",
 		alignItems: "center",
@@ -28,16 +32,35 @@ export default function Tutorial() {
 		position: "relative",
 	};
 
-	const headerTitleStyle: { [key: string]: string } = {
+	const headerTitleStyle: CSSProperties = {
 		position: "absolute",
 		left: "50%",
 		transform: "translateX(-50%)",
 	};
 
-	const rulesStyle: { [key: string]: string } = {
-		textAlign: "left",
-		padding: "0 16px",
+	const bodyStyle: CSSProperties = {
+		display: "grid",
+		gridTemplateColumns: "230px 1fr",
+		width: "100%",
+		gap: "20px",
 	};
+
+	const drawerStyle: CSSProperties = {
+		gridColumn: "1/2",
+		width: "200px",
+		display: "flex",
+		flexDirection: "column",
+		gap: "20px",
+		borderRight: "1px solid #ccc",
+		paddingRight: "20px",
+	};
+
+	const contentsStyle: CSSProperties = {
+		gridColumn: "2/3",
+		textAlign: "left"
+	};
+
+	const contents: ContentsType[] = ["basic", "local"];
 
 	return (
 		<div style={containerStyle}>
@@ -51,9 +74,24 @@ export default function Tutorial() {
 				</IconButton>
 				<h2 style={headerTitleStyle}>遊び方</h2>
 			</div>
-			<div style={rulesStyle}>
-				<BasicRules />
-				<LocalRules />
+
+			<div style={bodyStyle}>
+				<div style={drawerStyle}>
+					{contents.map((content) => (
+						<Button
+							key={content}
+							variant={currentContent === content ? "contained" : "outlined"}
+							onClick={() => setCurrentContent(content)}
+						>
+							{content === "basic" ? "基本ルール" : "ローカルルール"}
+						</Button>
+					))}
+				</div>
+
+				<div style={contentsStyle}>
+					{currentContent === "basic" && <BasicRules />}
+					{currentContent === "local" && <LocalRules />}
+				</div>
 			</div>
 		</div>
 	);
