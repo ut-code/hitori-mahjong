@@ -26,6 +26,8 @@ export default function Tutorial() {
 		left: "100px",
 		top: "30px",
 		width: "1200px",
+		maxHeight: "calc(100vh - 100px)",
+		overflowY: "auto",
 	};
 
 	const headerStyle: CSSProperties = {
