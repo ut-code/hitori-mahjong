@@ -49,14 +49,18 @@ const GameInterface = (props: GameInterfaceProps) => {
 	const [sutehai, setSutehai] = useState<Hai[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [open, setOpen] = useState(false);
+	const [isAborted, setIsAborted] = useState(false);
 	const apiUrl = import.meta.env.VITE_API_URL;
 
 	const fetchInitialHaiyama = async () => {
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 5000);
 		try {
 			setIsLoading(true);
 			const response = await fetch(`${apiUrl}/tiles`, {
 				method: "GET",
 				mode: "cors",
+				signal: controller.signal,
 			});
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -70,8 +74,13 @@ const GameInterface = (props: GameInterfaceProps) => {
 		} catch (error) {
 			setIsLoading(true);
 			console.error("failed in fetching initial haiyama:", error);
-			// TODO: ダイアログを表示して、時間がたってからもう一度プレイしてもらうようにする
+			if (error instanceof DOMException && error.name === "AbortError") {
+				//タイムアウトしたときの処理を追加
+				setIsAborted(true);
+			}
 			setOpen(true);
+		} finally {
+			clearInterval(timeout);
 		}
 	};
 
@@ -170,10 +179,22 @@ const GameInterface = (props: GameInterfaceProps) => {
 	return (
 		<div className={styles.container}>
 			<Dialog open={open} onClose={() => setOpen(false)}>
-				<DialogTitle>{"サーバーに接続できませんでした"}</DialogTitle>
+				<DialogTitle>
+					{isAborted ? (
+						<p>タイムアウトしました</p>
+					) : (
+						<p>サーバーに接続できませんでした</p>
+					)}
+				</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						スリープしているだけかもしれないので、また時間を空けてお試しください
+						{isAborted ? (
+							<p>
+								スリープしている可能性があるので、また時間を空けてお試しください
+							</p>
+						) : (
+							<p>ut.code(); のメンバーに問い合わせてください</p>
+						)}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
