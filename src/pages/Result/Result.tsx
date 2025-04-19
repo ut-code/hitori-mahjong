@@ -44,6 +44,7 @@ export default function Result(props: ResultProps) {
 				const res = await fetch(`${apiUrl}/scores`, {
 					method: "GET",
 					mode: "cors",
+					signal: controller.signal,
 				});
 
 				if (!res.ok) {
