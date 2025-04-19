@@ -22,6 +22,10 @@ export default function Tutorial() {
 		color: "#2B2B2B",
 		backgroundColor: "white",
 		borderRadius: "10px",
+		position: "fixed",
+		left: "100px",
+		top: "30px",
+		width: "1200px",
 	};
 
 	const headerStyle: CSSProperties = {
@@ -57,7 +61,7 @@ export default function Tutorial() {
 
 	const contentsStyle: CSSProperties = {
 		gridColumn: "2/3",
-		textAlign: "left"
+		textAlign: "left",
 	};
 
 	const contents: ContentsType[] = ["basic", "local"];
