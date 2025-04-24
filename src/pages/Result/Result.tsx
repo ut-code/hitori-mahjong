@@ -38,8 +38,9 @@ export default function Result(props: ResultProps) {
 	const UserArray = UserSchema.array();
 
 	useEffect(() => {
-		const controller = new AbortController();
 		const fetchResult = async () => {
+			const controller = new AbortController();
+			const timeout = setTimeout(() => controller.abort(), 5000);
 			try {
 				const res = await fetch(`${apiUrl}/scores`, {
 					method: "GET",
@@ -82,18 +83,13 @@ export default function Result(props: ResultProps) {
 				}
 			} catch (e) {
 				console.error("failed in getting results:", e);
-				if (controller.signal.aborted) {
-					setOpen(false);
-				} else {
-					setOpen(true);
-				}
+				setOpen(true);
+			} finally {
+				clearTimeout(timeout);
 			}
 		};
 
 		fetchResult();
-		return () => {
-			controller.abort();
-		};
 	}, []);
 
 	const top1Player: PlayerInfo =
