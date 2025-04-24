@@ -75,16 +75,18 @@ export default function Result(props: ResultProps) {
 				const myScore = sortedScores.find(
 					(player) => player.name === props.playerInfo.name,
 				);
-
 				if (typeof myScore === "undefined") {
 					setMyRank(null); // ルートから直接とんだ場合
 				} else {
 					setMyRank(myScore.rank);
 				}
 			} catch (e) {
-				console.error("Failed to fetch results:", e);
-				// TODO: DB に接続できていないことをユーザーに伝えたい
-				setOpen(true);
+				console.error("failed in getting results:", e);
+				if (controller.signal.aborted) {
+					setOpen(false);
+				} else {
+					setOpen(true);
+				}
 			}
 		};
 
