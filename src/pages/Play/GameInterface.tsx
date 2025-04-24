@@ -80,7 +80,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 			}
 			setOpen(true);
 		} finally {
-			clearInterval(timeout);
+			clearTimeout(timeout);
 		}
 	};
 
