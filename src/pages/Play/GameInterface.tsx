@@ -146,6 +146,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 			junme: 1,
 			kyoku: gameState.kyoku + 1,
 		});
+		setTehai([]);
 		fetchInitialHaiyama();
 		const bonusPoint =
 			toitsuSyanten === 0 || mentsuSyanten === 0
@@ -161,6 +162,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 
 	const tsumoEnd = () => {
 		setSutehai([]);
+		setTehai([]);
 		setGameState({
 			junme: 1,
 			kyoku: gameState.kyoku + 1,

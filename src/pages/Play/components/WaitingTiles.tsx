@@ -1,7 +1,6 @@
-import React from "react";
 import styles from "../styles/WaitingTiles.module.css";
-import { Hai } from "../../../utils/hai.ts";
-import calculateMachihai from "../../../utils/calculateMachihai.ts";
+import { Hai } from "../../../utils/hai";
+import calculateMachihai from "../../../utils/calculateMachihai";
 
 interface WaitingTilesProps {
 	tehai: Hai[];
