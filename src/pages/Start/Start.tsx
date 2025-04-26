@@ -29,7 +29,7 @@ export default function Start(props: StartProps) {
 			...prevInfo,
 			name: trimmedInput,
 		}));
-		sessionStorage["name"] = trimmedInput;
+
 		navigate("/play");
 	};
 
