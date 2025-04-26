@@ -113,8 +113,7 @@ export default function Result(props: ResultProps) {
 				<DialogTitle>{"データベースに接続できませんでした"}</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						他の人のスコアも見たい場合は、ut.code();
-						のメンバーに問い合わせてください
+						ut.code(); のメンバーに問い合わせてください
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>

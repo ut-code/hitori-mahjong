@@ -190,7 +190,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 					<DialogContentText>
 						{isAborted ? (
 							<p>
-								スリープしている可能性があるので、また時間を空けてお試しください
+								スリープしている可能性があるので、50秒ほど時間を空けてお試しください
 							</p>
 						) : (
 							<p>ut.code(); のメンバーに問い合わせてください</p>
