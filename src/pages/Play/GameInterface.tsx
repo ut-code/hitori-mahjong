@@ -13,10 +13,11 @@ import judgeAgari from "../../utils/judgeAgari";
 import DrawEnd from "./components/DrawEnd";
 import TsumoEnd from "./components/TsumoEnd";
 import FinishGame from "./components/FinishGame";
-import Loading from "./components/Loading";
 import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
 import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
 import { PlayerInfo } from "../../App";
+import HandTileSkelton from "./components/HandTileSkeleton";
+import HandStatusSkelton from "./components/HandStatusSkeleton";
 import {
 	Button,
 	Dialog,
@@ -224,7 +225,9 @@ const GameInterface = (props: GameInterfaceProps) => {
 									</span>
 									<span className={styles.handStatus}>
 										{isLoading ? (
-											<Loading />
+											<>
+												<HandStatusSkelton />
+											</>
 										) : (
 											<HandStatus
 												mentsuSyanten={mentsuSyanten}
@@ -239,7 +242,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 							)}
 						</div>
 						{isLoading ? (
-							<Loading />
+							<HandTileSkelton />
 						) : (
 							<HandTiles
 								tehai={tehai}
