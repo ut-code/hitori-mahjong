@@ -58,6 +58,7 @@ export default function Result(props: ResultProps) {
 
 				if (!result.success) {
 					console.error("Error: ", result.error.issues);
+					return;
 				}
 
 				const sortedScores: PlayerInfo[] = data
