@@ -52,13 +52,20 @@ export default function Result(props: ResultProps) {
 					throw new Error(`HTTP error! status: ${res.status}`);
 				}
 
-				const data = await res.json();
+				const data: PlayerInfo[] = await res.json();
 
 				const result = UserArray.safeParse(data);
 
 				if (!result.success) {
 					console.error("Error: ", result.error.issues);
 					return;
+				}
+
+				if (
+					props.playerInfo.rank !== null &&
+					!data.some((player) => player.name === props.playerInfo.name)
+				) {
+					data.push(props.playerInfo);
 				}
 
 				const sortedScores: PlayerInfo[] = data
