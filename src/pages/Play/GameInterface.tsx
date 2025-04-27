@@ -18,6 +18,8 @@ import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
 import { PlayerInfo } from "../../App";
 import HandTileSkelton from "./components/HandTileSkeleton";
 import HandStatusSkelton from "./components/HandStatusSkeleton";
+import ValidTiles from "./components/ValidTiles";
+import DisplaySwitch from "./components/DisplaySwitch";
 import {
 	Button,
 	Dialog,
@@ -51,6 +53,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [isAborted, setIsAborted] = useState(false);
+	const [display, setDisplay] = useState<"sutehai" | "validTiles">("sutehai");
 	const apiUrl = import.meta.env.VITE_API_URL;
 
 	const fetchInitialHaiyama = async () => {
@@ -220,9 +223,23 @@ const GameInterface = (props: GameInterfaceProps) => {
 								<TsumoEnd tsumoEnd={tsumoEnd} />
 							) : (
 								<>
-									<span className={styles.discardArea}>
-										<DiscardArea sutehai={sutehai} />
-									</span>
+									{display === "sutehai" ? (
+										<span className={styles.discardArea}>
+											<DisplaySwitch
+												display={display}
+												setDisplay={setDisplay}
+											/>
+											<DiscardArea sutehai={sutehai} />
+										</span>
+									) : (
+										<span className={styles.discardArea}>
+											<DisplaySwitch
+												display={display}
+												setDisplay={setDisplay}
+											/>
+											<ValidTiles tehai={tehai} tsumo={tsumo} />
+										</span>
+									)}
 									<span className={styles.handStatus}>
 										{isLoading ? (
 											<>

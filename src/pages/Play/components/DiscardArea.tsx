@@ -1,6 +1,5 @@
-import React from "react";
 import styles from "../styles/DiscardArea.module.css";
-import { Hai } from "../../../utils/hai.ts";
+import { Hai } from "../../../utils/hai";
 
 interface DiscardAreaProps {
 	sutehai: Hai[];
@@ -9,7 +8,6 @@ interface DiscardAreaProps {
 function DiscardArea(props: DiscardAreaProps) {
 	return (
 		<div className={styles.discardArea}>
-			<div className={styles.title}>捨牌</div>
 			<div className={styles.tiles}>
 				{props.sutehai.map((hai, index) => (
 					<li key={index}>
