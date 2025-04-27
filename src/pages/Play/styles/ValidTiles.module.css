@@ -1,0 +1,9 @@
+.tiles {
+	display: flex;
+	list-style-type: none;
+}
+
+.status {
+	font-size: 20px;
+	font-weight: 500;
+}
