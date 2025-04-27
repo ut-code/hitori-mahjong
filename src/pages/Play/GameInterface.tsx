@@ -20,6 +20,7 @@ import HandTileSkelton from "./components/HandTileSkeleton";
 import HandStatusSkelton from "./components/HandStatusSkeleton";
 import ValidTiles from "./components/ValidTiles";
 import DisplaySwitch from "./components/DisplaySwitch";
+import WaitingTilesSkeleton from "./components/WaitingTilesSkeleton";
 import {
 	Button,
 	Dialog,
@@ -252,9 +253,17 @@ const GameInterface = (props: GameInterfaceProps) => {
 											/>
 										)}
 									</span>
-									<span className={styles.waitingTiles}>
-										<WaitingTiles tehai={tehai} />
-									</span>
+									{isLoading ? (
+										<>
+											<span className={styles.waitingTiles}>
+												<WaitingTilesSkeleton />
+											</span>
+										</>
+									) : (
+										<span className={styles.waitingTiles}>
+											<WaitingTiles tehai={tehai} />
+										</span>
+									)}
 								</>
 							)}
 						</div>
