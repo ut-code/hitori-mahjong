@@ -12,7 +12,7 @@ export default function ValidTiles(props: ValidTilesProps) {
 	const shortenedInfo = extractValidTile(validTileInfo);
 	const keys = [...shortenedInfo.keys()];
 	return (
-		<>
+		<div className={styles.container}>
 			{keys.map((key) => (
 				<>
 					<p className={styles.status}>{key} </p>
@@ -30,7 +30,7 @@ export default function ValidTiles(props: ValidTilesProps) {
 					</ul>
 				</>
 			))}
-		</>
+		</div>
 	);
 }
 

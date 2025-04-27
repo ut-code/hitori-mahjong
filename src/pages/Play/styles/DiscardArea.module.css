@@ -1,6 +1,6 @@
 .discardArea {
-	width: auto;
-	height: 100%;
+	width: 560px;
+	height: 300px;
 	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -11,8 +11,9 @@
 	grid-template-columns: repeat(6, 50px);
 	grid-auto-rows: 70px;
 	list-style: none;
-	margin: 0;
-	gap: 0;
+	gap: 0px;
+	height: 150px;
+	margin-top: 30px;
 }
 
 .tiles li {

@@ -4,9 +4,9 @@
 }
 
 .tilesContainer {
+	margin: auto;
 	display: flex;
 	gap: 10px;
 	flex-direction: row;
-	justify-content: center;
 	align-items: center;
 }

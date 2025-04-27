@@ -12,7 +12,7 @@ function WaitingTiles(props: WaitingTilesProps) {
 		<div className={styles.waitingTiles}>
 			<div className={styles.title}>待ち</div>
 			{machihai.length === 0 ? (
-				<p>なし</p>
+				<p className={styles.nothing}>なし</p>
 			) : (
 				<div className={styles.tiles}>
 					{machihai.map((hai, index) => (
