@@ -16,16 +16,16 @@ export default function Tutorial() {
 		display: "flex",
 		flexDirection: "column",
 		alignItems: "center",
-		padding: "20px",
 		fontFamily: "'Arial', sans-serif",
 		gap: "16px",
 		color: "#2B2B2B",
 		backgroundColor: "white",
-		borderRadius: "10px",
+		borderRadius: "1%",
 		position: "fixed",
-		left: "100px",
-		top: "30px",
-		width: "1200px",
+		left: "10%",
+		top: "10%",
+		width: "80%",
+		height: "80%",
 		maxHeight: "calc(100vh - 100px)",
 		overflowY: "auto",
 	};
@@ -48,17 +48,18 @@ export default function Tutorial() {
 		display: "grid",
 		gridTemplateColumns: "230px 1fr",
 		width: "100%",
-		gap: "20px",
+		height: "100%",
+		gap: "3%",
 	};
 
 	const drawerStyle: CSSProperties = {
 		gridColumn: "1/2",
-		width: "200px",
 		display: "flex",
 		flexDirection: "column",
-		gap: "20px",
-		borderRight: "1px solid #ccc",
-		paddingRight: "20px",
+		borderRight: "2px solid #ccc",
+		paddingLeft: "5%",
+		paddingRight: "5%",
+		height: "100%",
 	};
 
 	const contentsStyle: CSSProperties = {
@@ -86,6 +87,9 @@ export default function Tutorial() {
 					{contents.map((content) => (
 						<Button
 							key={content}
+							sx={{
+								marginBottom: "10%",
+							}}
 							variant={currentContent === content ? "contained" : "outlined"}
 							onClick={() => setCurrentContent(content)}
 						>
