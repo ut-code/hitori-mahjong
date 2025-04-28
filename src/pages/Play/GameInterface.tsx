@@ -187,21 +187,15 @@ const GameInterface = (props: GameInterfaceProps) => {
 		<div className={styles.container}>
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<DialogTitle>
-					{isAborted ? (
-						<p>タイムアウトしました</p>
-					) : (
-						<p>サーバーに接続できませんでした</p>
-					)}
+					{isAborted
+						? "タイムアウトしました"
+						: "サーバーに接続できませんでした"}
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						{isAborted ? (
-							<p>
-								スリープしている可能性があるので、50秒ほど時間を空けてお試しください
-							</p>
-						) : (
-							<p>ut.code(); のメンバーに問い合わせてください</p>
-						)}
+						{isAborted
+							? "サーバーがスリープしている可能性があるので、50秒ほど時間を空けてお試しください"
+							: "ut.code(); のメンバーに問い合わせてください"}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>

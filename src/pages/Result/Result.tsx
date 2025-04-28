@@ -26,6 +26,7 @@ export default function Result(props: ResultProps) {
 	const [scores, setScores] = useState<PlayerInfo[]>([]);
 	const [myRank, setMyRank] = useState<number | null>(null);
 	const [open, setOpen] = useState(false);
+	const [isAborted, setIsAborted] = useState(false);
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -90,6 +91,9 @@ export default function Result(props: ResultProps) {
 					setMyRank(myScore.rank);
 				}
 			} catch (e) {
+				if (e instanceof DOMException && e.name === "AbortError") {
+					setIsAborted(true);
+				}
 				console.error("failed in getting results:", e);
 				setOpen(true);
 			} finally {
@@ -110,10 +114,16 @@ export default function Result(props: ResultProps) {
 	return (
 		<div style={styles.containerStyle}>
 			<Dialog open={open} onClose={() => setOpen(false)}>
-				<DialogTitle>{"データベースに接続できませんでした"}</DialogTitle>
+				<DialogTitle>
+					{isAborted
+						? "タイムアウトしました"
+						: "データベースに接続できませんでした"}{" "}
+				</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						ut.code(); のメンバーに問い合わせてください
+						{isAborted
+							? "サーバーがスリープしている可能性があるので、50秒ほど時間を空けてお試しください"
+							: "ut.code(); のメンバーに問い合わせてください"}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
