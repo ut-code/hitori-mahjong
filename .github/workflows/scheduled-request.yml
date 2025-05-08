@@ -1,8 +1,9 @@
 name: Keep Render Server Alive
 
 on:
-  schedule:
-    - cron: "*/10 * * * *"
+  # why was actions disallowed? disabling this cron in case.
+  # schedule:
+  # - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:
