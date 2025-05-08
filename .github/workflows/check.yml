@@ -1,6 +1,8 @@
 name: Check
 on:
-  - push
+  push:
+    branches:
+      - main
 jobs:
   biome:
     runs-on: ubuntu-latest
