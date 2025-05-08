@@ -13,6 +13,12 @@ export type PlayerInfo = {
 	score: number;
 };
 
+// this wakes up the server when someone visits the website
+(async () => {
+	const apiUrl = import.meta.env.VITE_API_URL;
+	await fetch(`${apiUrl}/health`);
+})();
+
 function App() {
 	const [playerInfo, setPlayerInfo] = useState<PlayerInfo>({
 		rank: null,
