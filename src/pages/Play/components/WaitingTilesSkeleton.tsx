@@ -1,12 +1,14 @@
-import { Height } from "@mui/icons-material";
 import { Skeleton } from "@mui/material";
+import styles from "../styles/WaitingTiles.module.css";
 
 export default function WaitingTilesSkeleton() {
 	return (
-		<>
-			<Skeleton variant="rectangular" />
-			<br />
-			<Skeleton variant="rectangular" sx={{ height: "40px" }} />
-		</>
+		<div className={styles.waitingTiles}>
+			<Skeleton
+				variant="rectangular"
+				sx={{ padding: "0px", width: "5em", height: "3em" }}
+			/>
+			<Skeleton variant="rectangular" sx={{ height: "70px" }} />
+		</div>
 	);
 }
