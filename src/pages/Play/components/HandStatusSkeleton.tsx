@@ -10,7 +10,6 @@ export default function HandStatusSkelton() {
 				borderRadius: "4px",
 				backgroundColor: "white",
 				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-				border: "solid",
 				width: "30em",
 				height: "7em",
 			}}

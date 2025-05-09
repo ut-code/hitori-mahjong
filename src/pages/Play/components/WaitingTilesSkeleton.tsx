@@ -9,7 +9,6 @@ export default function WaitingTilesSkeleton() {
 				flexDirection: "column",
 				borderRadius: "4px",
 				backgroundColor: "white",
-				border: "solid",
 				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
 				width: "30em",
 				height: "7em",
