@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import styles from "../styles/DisplaySwitch.module.css";
 
 type DisplaySwitchProps = {
 	display: "sutehai" | "validTiles";
@@ -7,9 +6,15 @@ type DisplaySwitchProps = {
 };
 export default function DisplaySwitch(props: DisplaySwitchProps) {
 	return (
-		<>
+		<div style={{ height: "2.8rem" }}>
 			{props.display === "sutehai" ? (
-				<div className={styles.buttonContainer}>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						gap: "40px",
+					}}
+				>
 					<Button
 						variant="contained"
 						onClick={() => props.setDisplay("sutehai")}
@@ -24,7 +29,13 @@ export default function DisplaySwitch(props: DisplaySwitchProps) {
 					</Button>
 				</div>
 			) : (
-				<div className={styles.buttonContainer}>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						gap: "40px",
+					}}
+				>
 					<Button
 						variant="outlined"
 						onClick={() => props.setDisplay("sutehai")}
@@ -39,6 +50,6 @@ export default function DisplaySwitch(props: DisplaySwitchProps) {
 					</Button>
 				</div>
 			)}
-		</>
+		</div>
 	);
 }

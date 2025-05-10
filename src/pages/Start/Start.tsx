@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PlayerInfo } from "../../App";
+import type { PlayerInfo } from "../../App";
 import { TextField } from "@mui/material";
 import styles from "../../styles/Start.module.css";
 import Alert from "@mui/material/Alert";

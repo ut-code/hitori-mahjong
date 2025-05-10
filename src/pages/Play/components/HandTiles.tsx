@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "../styles/HandTiles.module.css";
-import { Hai } from "../../../utils/hai";
+import type { Hai } from "../../../utils/hai";
 
 type HandTilesProps = {
 	tehai: Hai[];
@@ -11,8 +9,21 @@ type HandTilesProps = {
 function HandTiles(props: HandTilesProps) {
 	return (
 		<>
-			<div className={styles.tilesContainer}>
-				<ul className={styles.tiles}>
+			<div
+				style={{
+					margin: "auto",
+					display: "flex",
+					gap: "1rem",
+					flexDirection: "row",
+					alignItems: "center",
+				}}
+			>
+				<ul
+					style={{
+						display: "flex",
+						listStyleType: "none",
+					}}
+				>
 					{props.tehai.map((hai, index) => (
 						<li key={index}>
 							<img
