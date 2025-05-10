@@ -27,11 +27,11 @@ export default function DrawEnd(props: DrawEndProps) {
 				variant="contained"
 				onClick={props.drawEnd}
 				sx={{
-         marginTop: "3rem",
+					marginTop: "3rem",
 					width: "10rem",
 					height: "5rem",
 					fontSize: "2rem",
-					borderRadius: "1rem"
+					borderRadius: "1rem",
 				}}
 			>
 				確認
