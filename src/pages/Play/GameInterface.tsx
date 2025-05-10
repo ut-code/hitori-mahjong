@@ -55,7 +55,6 @@ const GameInterface = (props: GameInterfaceProps) => {
 	const [isAborted, setIsAborted] = useState(false);
 	const [display, setDisplay] = useState<"sutehai" | "validTiles">("sutehai");
 	const apiUrl = import.meta.env.VITE_API_URL;
-	console.log(isAgari, gameState.kyoku, gameState.junme);
 
 	useEffect(() => {
 		const fetchInitialHaiyama = async () => {

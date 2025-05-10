@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PlayerInfo } from "../../App";
+import type { PlayerInfo } from "../../App";
 import { exampleUsers } from "../../utils/exampleUsers";
 import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -19,7 +19,6 @@ import {
 
 type ResultProps = {
 	playerInfo: PlayerInfo;
-	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
 };
 
 export default function Result(props: ResultProps) {
@@ -30,15 +29,14 @@ export default function Result(props: ResultProps) {
 	const navigate = useNavigate();
 	const apiUrl = import.meta.env.VITE_API_URL;
 
-	const UserSchema = z.object({
-		id: z.number(),
-		name: z.string(),
-		score: z.number(),
-	});
-
-	const UserArray = UserSchema.array();
-
 	useEffect(() => {
+		const UserSchema = z.object({
+			id: z.number(),
+			name: z.string(),
+			score: z.number(),
+		});
+
+		const UserArray = UserSchema.array();
 		const fetchResult = async () => {
 			const controller = new AbortController();
 			const timeout = setTimeout(() => controller.abort(), 5000);
@@ -102,7 +100,7 @@ export default function Result(props: ResultProps) {
 		};
 
 		fetchResult();
-	}, []);
+	}, [props.playerInfo]);
 
 	const top1Player: PlayerInfo =
 		scores.length > 1 ? scores[0] : exampleUsers[0];
@@ -134,7 +132,6 @@ export default function Result(props: ResultProps) {
 				<IconButton
 					onClick={() => {
 						navigate("/");
-						props.setPlayerInfo(() => ({ rank: null, name: "", score: 25000 }));
 					}}
 				>
 					<HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />

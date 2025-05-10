@@ -33,12 +33,7 @@ function App() {
 						/>
 					}
 				/>
-				<Route
-					path="/result"
-					element={
-						<Result playerInfo={playerInfo} setPlayerInfo={setPlayerInfo} />
-					}
-				/>
+				<Route path="/result" element={<Result playerInfo={playerInfo} />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</Router>
