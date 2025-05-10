@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./styles/GameInterface.module.css";
 import Header from "./components/Header";
 import DiscardArea from "./components/DiscardArea";
 import HandStatus from "./components/HandStatus";
@@ -184,7 +183,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 	};
 
 	return (
-		<div className={styles.container}>
+		<div>
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<DialogTitle>
 					{isAborted
@@ -206,20 +205,48 @@ const GameInterface = (props: GameInterfaceProps) => {
 				gameState.junme === 19 ? (
 					<DrawEnd drawEnd={drawEnd} />
 				) : (
-					<div className={styles.container}>
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							alignItems: "center",
+							padding: "1rem",
+							fontFamily: "Arial, sans-serif",
+							minWidth: "80vw",
+							minHeight: "80vh",
+							gap: "1rem",
+							backgroundColor: "white",
+							borderRadius: "1rem",
+							margin: "0 auto",
+						}}
+					>
 						<Header
 							kyoku={gameState.kyoku}
 							junme={gameState.junme}
 							playerInfo={props.playerInfo}
 							setPlayerInfo={props.setPlayerInfo}
 						/>
-						<div className={styles.gridContainer}>
+						<div
+							style={{
+								display: "grid",
+								gridTemplateColumns: "50% 50%",
+								gridTemplateRows: "50% 50%",
+								width: "70rem",
+								height: "25rem",
+								gap: "0.1rem",
+							}}
+						>
 							{isAgari ? (
 								<TsumoEnd tsumoEnd={tsumoEnd} />
 							) : (
 								<>
 									{display === "sutehai" ? (
-										<span className={styles.discardArea}>
+										<span
+											style={{
+												gridColumn: "1",
+												gridRow: "1 / 3",
+											}}
+										>
 											<DisplaySwitch
 												display={display}
 												setDisplay={setDisplay}
@@ -227,7 +254,12 @@ const GameInterface = (props: GameInterfaceProps) => {
 											<DiscardArea sutehai={sutehai} />
 										</span>
 									) : (
-										<span className={styles.discardArea}>
+										<span
+											style={{
+												gridColumn: "1",
+												gridRow: "1 / 3",
+											}}
+										>
 											<DisplaySwitch
 												display={display}
 												setDisplay={setDisplay}
@@ -235,7 +267,12 @@ const GameInterface = (props: GameInterfaceProps) => {
 											<ValidTiles tehai={tehai} tsumo={tsumo} />
 										</span>
 									)}
-									<span className={styles.handStatus}>
+									<span
+										style={{
+											gridColumn: "2",
+											gridRow: "1",
+										}}
+									>
 										{isLoading ? (
 											<>
 												<HandStatusSkelton />
@@ -249,12 +286,22 @@ const GameInterface = (props: GameInterfaceProps) => {
 									</span>
 									{isLoading ? (
 										<>
-											<span className={styles.waitingTiles}>
+											<span
+												style={{
+													gridColumn: "2",
+													gridRow: "2",
+												}}
+											>
 												<WaitingTilesSkeleton />
 											</span>
 										</>
 									) : (
-										<span className={styles.waitingTiles}>
+										<span
+											style={{
+												gridColumn: "2",
+												gridRow: "2",
+											}}
+										>
 											<WaitingTiles tehai={tehai} />
 										</span>
 									)}

@@ -1,6 +1,5 @@
 import { Hai } from "../../../utils/hai";
 import calculateValidTiles from "../../../utils/calculateValidTiles";
-import styles from "../styles/ValidTiles.module.css";
 
 type ValidTilesProps = {
 	tehai: Hai[];
@@ -12,11 +11,29 @@ export default function ValidTiles(props: ValidTilesProps) {
 	const shortenedInfo = extractValidTile(validTileInfo);
 	const keys = [...shortenedInfo.keys()];
 	return (
-		<div className={styles.container}>
+		<div
+			style={{
+				borderRadius: "1rem",
+				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+				height: "20.5rem",
+			}}
+		>
 			{keys.map((key) => (
 				<>
-					<p className={styles.status}>{key} </p>
-					<ul className={styles.tiles}>
+					<p
+						style={{
+							fontSize: "1.3rem",
+							fontWeight: "500",
+						}}
+					>
+						{key}{" "}
+					</p>
+					<ul
+						style={{
+							display: "flex",
+							listStyleType: "none",
+						}}
+					>
 						{shortenedInfo.get(key)?.map((hai, index) => (
 							<li key={index}>
 								<img
