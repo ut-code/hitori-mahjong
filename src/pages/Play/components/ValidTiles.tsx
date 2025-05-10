@@ -1,4 +1,4 @@
-import { Hai } from "../../../utils/hai";
+import type { Hai } from "../../../utils/hai";
 import calculateValidTiles from "../../../utils/calculateValidTiles";
 
 type ValidTilesProps = {
@@ -57,7 +57,7 @@ function extractValidTile(
 ): Map<string, Hai[]> {
 	const shortenedInfo = new Map<string, Hai[]>();
 	const minStn =
-		(function (validTileInfo: Map<number, Hai[]>) {
+		((validTileInfo: Map<number, Hai[]>) => {
 			for (let i = 0; i < 13; i++) {
 				if (validTileInfo.get(i) !== undefined) {
 					return i;

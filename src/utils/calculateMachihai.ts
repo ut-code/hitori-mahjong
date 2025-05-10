@@ -1,5 +1,5 @@
 import judgeAgari from "./judgeAgari";
-import { Hai, JihaiValue, HaiKind, constructHai } from "./hai.ts";
+import { type Hai, type JihaiValue, type HaiKind, constructHai } from "./hai.ts";
 
 export default function calculateMachihai(tehai: Hai[]): Hai[] {
 	const machihai: Hai[] = [];

@@ -1,4 +1,4 @@
-import { Hai } from "../../../utils/hai";
+import type { Hai } from "../../../utils/hai";
 
 interface DiscardAreaProps {
 	sutehai: Hai[];
