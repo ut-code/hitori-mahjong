@@ -8,16 +8,16 @@ type HaiWithID = {
 	kind: HaiKind;
 	value: JihaiValue | number;
 	id: number;
-}
+};
 
 function DiscardArea(props: DiscardAreaProps) {
 	const sutehaiWithId: HaiWithID[] = props.sutehai.map((hai, index) => {
 		return {
-			kind: hai.kind;
-			value: hai.value;
-			id: index;
-		}
-	})
+			kind: hai.kind,
+			value: hai.value,
+			id: index,
+		};
+	});
 	return (
 		<div
 			style={{
@@ -35,7 +35,7 @@ function DiscardArea(props: DiscardAreaProps) {
 					listStyle: "none",
 				}}
 			>
-				{sutehaiWithId.map(hai => (
+				{sutehaiWithId.map((hai) => (
 					<li key={hai.id}>
 						<img
 							src={`/hai/${hai.kind}_${hai.value}.png`}
