@@ -261,7 +261,9 @@ export function extractHai(
 		return null;
 	}
 	const haiIndexCopy = [...haiIndex];
-	targetIndices.forEach((v) => --haiIndexCopy[v]);
+	for (const v of targetIndices) {
+		haiIndexCopy[v] -= 1;
+	}
 	return haiIndexCopy.some((v) => v < 0) ? null : haiIndexCopy;
 }
 

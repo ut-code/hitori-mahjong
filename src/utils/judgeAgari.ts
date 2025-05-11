@@ -27,9 +27,9 @@ type TehaiIndex = number[];
 
 export default function judgeAgari(tehai: Hai[]) {
 	const tehaiIndex: TehaiIndex = Array(34).fill(0);
-	tehai.forEach((hai) => {
+	for (const hai of tehai) {
 		tehaiIndex[haiToIndex(hai) - 1] += 1;
-	});
+	}
 
 	// 雀頭を探す
 	const jantoCandidates: number[] = [];
