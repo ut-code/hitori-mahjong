@@ -1,17 +1,11 @@
-import type { Hai, JihaiValue, HaiKind } from "../../../utils/hai";
+import type { Hai, HaiWithID } from "../../../utils/hai";
 
 interface DiscardAreaProps {
 	sutehai: Hai[];
 }
 
-type HaiWithID = {
-	kind: HaiKind;
-	value: JihaiValue | number;
-	id: number;
-};
-
 function DiscardArea(props: DiscardAreaProps) {
-	const sutehaiWithId: HaiWithID[] = props.sutehai.map((hai, index) => {
+	const sutehaiWithID: HaiWithID[] = props.sutehai.map((hai, index) => {
 		return {
 			kind: hai.kind,
 			value: hai.value,
@@ -35,7 +29,7 @@ function DiscardArea(props: DiscardAreaProps) {
 					listStyle: "none",
 				}}
 			>
-				{sutehaiWithId.map((hai) => (
+				{sutehaiWithID.map((hai) => (
 					<li key={hai.id}>
 						<img
 							src={`/hai/${hai.kind}_${hai.value}.png`}

@@ -1,5 +1,5 @@
 import calculateMachihai from "../../../utils/calculateMachihai";
-import type { Hai } from "../../../utils/hai";
+import type { Hai, HaiWithID } from "../../../utils/hai";
 
 interface WaitingTilesProps {
 	tehai: Hai[];
@@ -7,6 +7,13 @@ interface WaitingTilesProps {
 
 function WaitingTiles(props: WaitingTilesProps) {
 	const machihai: Hai[] = calculateMachihai(props.tehai);
+	const machihaiWithId: HaiWithID[] = machihai.map((hai, index) => {
+		return {
+			value: hai.value,
+			kind: hai.kind,
+			id: index,
+		};
+	});
 	return (
 		<div
 			style={{
@@ -45,8 +52,8 @@ function WaitingTiles(props: WaitingTilesProps) {
 						paddingTop: "0.5rem",
 					}}
 				>
-					{machihai.map((hai, index) => (
-						<li key={index}>
+					{machihaiWithId.map((hai) => (
+						<li key={hai.id}>
 							<img
 								src={`/hai/${hai.kind}_${hai.value}.png`}
 								alt={`${hai.kind} ${hai.value}`}

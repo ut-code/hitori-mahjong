@@ -1,4 +1,4 @@
-import type { Hai } from "../../../utils/hai";
+import type { Hai, HaiWithID } from "../../../utils/hai";
 
 type HandTilesProps = {
 	tehai: Hai[];
@@ -7,6 +7,13 @@ type HandTilesProps = {
 	tsumogiri: () => void;
 };
 function HandTiles(props: HandTilesProps) {
+	const tehaiWithID: HaiWithID[] = props.tehai.map((hai, index) => {
+		return {
+			kind: hai.kind,
+			value: hai.value,
+			id: index,
+		};
+	});
 	return (
 		<>
 			<div
@@ -24,14 +31,14 @@ function HandTiles(props: HandTilesProps) {
 						listStyleType: "none",
 					}}
 				>
-					{props.tehai.map((hai, index) => (
-						<li key={index}>
+					{tehaiWithID.map((hai) => (
+						<li key={hai.id}>
 							<img
 								src={`/hai/${hai.kind}_${hai.value}.png`}
 								alt={`${hai.kind} ${hai.value}`}
 								width="50"
 								height="70"
-								onClick={() => props.tedashi(index)} // クリックイベントで関数を実行
+								onClick={() => props.tedashi(hai.id)} // クリックイベントで関数を実行
 								style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
 							/>
 						</li>
