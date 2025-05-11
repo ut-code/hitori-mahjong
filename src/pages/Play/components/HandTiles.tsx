@@ -39,6 +39,7 @@ function HandTiles(props: HandTilesProps) {
 								width="50"
 								height="70"
 								onClick={() => props.tedashi(hai.id)} // クリックイベントで関数を実行
+								onKeyDown={() => props.tedashi(hai.id)} // 意味あるのか分からない
 								style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
 							/>
 						</li>
@@ -51,6 +52,7 @@ function HandTiles(props: HandTilesProps) {
 					width="50"
 					height="70"
 					onClick={() => props.tsumogiri()} // クリックイベントでtsumogiri関数を実行
+					onKeyDown={() => props.tsumogiri()} // 意味あるのか分からない
 					style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
 				/>
 			</div>
