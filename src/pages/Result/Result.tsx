@@ -1,13 +1,4 @@
-import { useEffect, useState } from "react";
-import type { PlayerInfo } from "../../App";
-import { exampleUsers } from "../../utils/exampleUsers";
-import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { FaCrown } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import RankingTable from "./RankingTable";
-import * as styles from "./style";
-import { z } from "zod";
 import {
 	Button,
 	Dialog,
@@ -16,6 +7,15 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import { useEffect, useState } from "react";
+import { FaCrown } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
+import type { PlayerInfo } from "../../App";
+import { exampleUsers } from "../../utils/exampleUsers";
+import RankingTable from "./RankingTable";
+import * as styles from "./style";
 
 type ResultProps = {
 	playerInfo: PlayerInfo;

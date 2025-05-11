@@ -1,9 +1,9 @@
-import { useMemo } from "react";
 import {
+	type MRT_ColumnDef,
 	MaterialReactTable,
 	useMaterialReactTable,
-	type MRT_ColumnDef,
 } from "material-react-table";
+import { useMemo } from "react";
 import type { PlayerInfo } from "../../App";
 
 type RankingTableProps = {

@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { Button } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "../../styles/Tutorial.module.css";
 import BasicRules from "./BasicRules";
 import LocalRules from "./LocalRules";
-import { useState } from "react";
-import { Button } from "@mui/material";
-import styles from "../../styles/Tutorial.module.css";
 
 type ContentsType = "basic" | "local";
 

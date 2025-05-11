@@ -1,4 +1,4 @@
-import { Hai, constructHai, JihaiValue } from "../src/utils/hai.js";
+import { type Hai, type JihaiValue, constructHai } from "../src/utils/hai.js";
 
 function shuffleArray<T>(array: T[]): T[] {
 	for (let i = array.length - 1; i > 0; i--) {

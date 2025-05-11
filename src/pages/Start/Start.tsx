@@ -1,9 +1,9 @@
-import { useState } from "react";
-import type { PlayerInfo } from "../../App";
 import { TextField } from "@mui/material";
-import styles from "../../styles/Start.module.css";
 import Alert from "@mui/material/Alert";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { PlayerInfo } from "../../App";
+import styles from "../../styles/Start.module.css";
 
 type StartProps = {
 	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;

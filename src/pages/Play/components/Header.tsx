@@ -1,13 +1,13 @@
-import type React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import type React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { PlayerInfo } from "../../../App";
 import ProgressBar from "./ProgressBar";
 

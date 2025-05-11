@@ -1,25 +1,3 @@
-import type React from "react";
-import Header from "./components/Header";
-import DiscardArea from "./components/DiscardArea";
-import HandStatus from "./components/HandStatus";
-import WaitingTiles from "./components/WaitingTiles";
-import HandTiles from "./components/HandTiles";
-import { useState, useEffect } from "react";
-import { sortTehai } from "../../utils/hai";
-import type { Hai } from "../../utils/hai";
-import { useNavigate } from "react-router-dom";
-import judgeAgari from "../../utils/judgeAgari";
-import DrawEnd from "./components/DrawEnd";
-import TsumoEnd from "./components/TsumoEnd";
-import FinishGame from "./components/FinishGame";
-import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
-import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
-import type { PlayerInfo } from "../../App";
-import HandTileSkelton from "./components/HandTileSkeleton";
-import HandStatusSkelton from "./components/HandStatusSkeleton";
-import ValidTiles from "./components/ValidTiles";
-import DisplaySwitch from "./components/DisplaySwitch";
-import WaitingTilesSkeleton from "./components/WaitingTilesSkeleton";
 import {
 	Button,
 	Dialog,
@@ -28,6 +6,28 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from "@mui/material";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { PlayerInfo } from "../../App";
+import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
+import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
+import { sortTehai } from "../../utils/hai";
+import type { Hai } from "../../utils/hai";
+import judgeAgari from "../../utils/judgeAgari";
+import DiscardArea from "./components/DiscardArea";
+import DisplaySwitch from "./components/DisplaySwitch";
+import DrawEnd from "./components/DrawEnd";
+import FinishGame from "./components/FinishGame";
+import HandStatus from "./components/HandStatus";
+import HandStatusSkelton from "./components/HandStatusSkeleton";
+import HandTileSkelton from "./components/HandTileSkeleton";
+import HandTiles from "./components/HandTiles";
+import Header from "./components/Header";
+import TsumoEnd from "./components/TsumoEnd";
+import ValidTiles from "./components/ValidTiles";
+import WaitingTiles from "./components/WaitingTiles";
+import WaitingTilesSkeleton from "./components/WaitingTilesSkeleton";
 
 export type GameState = {
 	kyoku: number;
@@ -56,42 +56,41 @@ const GameInterface = (props: GameInterfaceProps) => {
 	const [display, setDisplay] = useState<"sutehai" | "validTiles">("sutehai");
 	const apiUrl = import.meta.env.VITE_API_URL;
 
-	useEffect(() => {
-		const fetchInitialHaiyama = async () => {
-			const controller = new AbortController();
-			const timeout = setTimeout(() => controller.abort(), 5000);
-			try {
-				setIsLoading(true);
-				const response = await fetch(`${apiUrl}/tiles`, {
-					method: "GET",
-					mode: "cors",
-					signal: controller.signal,
-				});
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-				const data = await response.json();
-
-				setTehai(sortTehai(data.slice(0, 13)));
-				setTsumo(data[13]);
-				setHaiyama(data.slice(14));
-				setIsLoading(false);
-			} catch (error) {
-				setIsLoading(true);
-				console.error("failed in fetching initial haiyama:", error);
-				if (error instanceof DOMException && error.name === "AbortError") {
-					//タイムアウトしたときの処理を追加
-					setIsAborted(true);
-				}
-				setOpen(true);
-			} finally {
-				clearTimeout(timeout);
+	const fetchInitialHaiyama = useCallback(async () => {
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 5000);
+		try {
+			setIsLoading(true);
+			const response = await fetch(`${apiUrl}/tiles`, {
+				method: "GET",
+				mode: "cors",
+				signal: controller.signal,
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-		};
-		if ((gameState.kyoku <= 4 && gameState.junme === 1) || isAgari) {
-			fetchInitialHaiyama();
+			const data = await response.json();
+
+			setTehai(sortTehai(data.slice(0, 13)));
+			setTsumo(data[13]);
+			setHaiyama(data.slice(14));
+			setIsLoading(false);
+		} catch (error) {
+			setIsLoading(true);
+			console.error("failed in fetching initial haiyama:", error);
+			if (error instanceof DOMException && error.name === "AbortError") {
+				//タイムアウトしたときの処理を追加
+				setIsAborted(true);
+			}
+			setOpen(true);
+		} finally {
+			clearTimeout(timeout);
 		}
-	}, [isAgari, gameState.junme, gameState.kyoku]);
+	}, []);
+
+	useEffect(() => {
+		fetchInitialHaiyama();
+	}, [fetchInitialHaiyama]);
 
 	useEffect(() => {
 		if (gameState.kyoku === 5) {
@@ -147,6 +146,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 	};
 
 	const drawEnd = () => {
+		fetchInitialHaiyama();
 		setSutehai([]);
 		setGameState({
 			junme: 1,
@@ -166,6 +166,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 	};
 
 	const tsumoEnd = () => {
+		fetchInitialHaiyama();
 		setSutehai([]);
 		setTehai([]);
 		setGameState({
