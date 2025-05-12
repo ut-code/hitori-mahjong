@@ -65,49 +65,6 @@ const GameInterface = (props: GameInterfaceProps) => {
 	const [display, setDisplay] = useState<"sutehai" | "validTiles">("sutehai");
 	const apiUrl = import.meta.env.VITE_API_URL;
 
-	const fetchNextState = useCallback(async (): Promise<
-		GameState | undefined
-	> => {
-		const controller = new AbortController();
-		const timeout = setTimeout(() => controller.abort(), 5000);
-		try {
-			setIsLoading(true);
-			const response = await fetch(`${apiUrl}/tiles`, {
-				method: "GET",
-				mode: "cors",
-				signal: controller.signal,
-			});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
-
-			const nextGameState = {
-				kyoku: gameState.kyoku,
-				junme: 1,
-				tehai: sortTehai(data.slice(0, 13)),
-				tsumo: data[13],
-				haiyama: data.slice(14),
-				isAgari: judgeAgari([...data.slice(0, 13), data[13]]),
-				mentsuSyanten: calculateSyantenMentsu(data.slice(0, 13)),
-				toitsuSyanten: calculateSyantenToitsu(data.slice(0, 13)),
-				sutehai: [],
-			};
-			setIsLoading(false);
-			return nextGameState;
-		} catch (error) {
-			setIsLoading(true);
-			console.error("failed in fetching initial haiyama:", error);
-			if (error instanceof DOMException && error.name === "AbortError") {
-				//タイムアウトしたときの処理を追加
-				setIsAborted(true);
-			}
-			setOpen(true);
-		} finally {
-			clearTimeout(timeout);
-		}
-	}, [gameState.kyoku]);
-
 	const sendResult = useCallback(async () => {
 		try {
 			fetch(`${apiUrl}/scores`, {
@@ -125,6 +82,46 @@ const GameInterface = (props: GameInterfaceProps) => {
 	}, [props.playerInfo]);
 
 	useEffect(() => {
+		const fetchNextState = async (): Promise<GameState | undefined> => {
+			const controller = new AbortController();
+			const timeout = setTimeout(() => controller.abort(), 5000);
+			try {
+				setIsLoading(true);
+				const response = await fetch(`${apiUrl}/tiles`, {
+					method: "GET",
+					mode: "cors",
+					signal: controller.signal,
+				});
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				const data = await response.json();
+
+				const nextGameState = {
+					kyoku: gameState.kyoku,
+					junme: 1,
+					tehai: sortTehai(data.slice(0, 13)),
+					tsumo: data[13],
+					haiyama: data.slice(14),
+					isAgari: judgeAgari([...data.slice(0, 13), data[13]]),
+					mentsuSyanten: calculateSyantenMentsu(data.slice(0, 13)),
+					toitsuSyanten: calculateSyantenToitsu(data.slice(0, 13)),
+					sutehai: [],
+				};
+				setIsLoading(false);
+				return nextGameState;
+			} catch (error) {
+				setIsLoading(true);
+				console.error("failed in fetching initial haiyama:", error);
+				if (error instanceof DOMException && error.name === "AbortError") {
+					//タイムアウトしたときの処理を追加
+					setIsAborted(true);
+				}
+				setOpen(true);
+			} finally {
+				clearTimeout(timeout);
+			}
+		};
 		const initializeGameState = async () => {
 			const nextState = await fetchNextState();
 			if (nextState) {
@@ -132,7 +129,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 			}
 		};
 		initializeGameState();
-	}, [fetchNextState]);
+	}, [gameState.kyoku]);
 
 	const tedashi = (index: number) => {
 		const nextTehai = sortTehai([
