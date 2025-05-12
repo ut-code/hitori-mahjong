@@ -76,6 +76,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 					score: props.playerInfo.score,
 				}),
 			});
+			console.log("result sent");
 		} catch (error) {
 			console.error("failed in creating score", error);
 		}

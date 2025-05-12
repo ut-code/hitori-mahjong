@@ -1,6 +1,4 @@
 import Button from "@mui/material/Button";
-import React from "react";
-import styles from "../styles/TsumoEnd.module.css";
 
 type TsumoEndProps = {
 	tsumoEnd: () => void;
@@ -8,12 +6,33 @@ type TsumoEndProps = {
 
 export default function TsumoEnd(props: TsumoEndProps) {
 	return (
-		<div className={styles.container}>
-			<div className={styles.title}>ツモ！</div>
+		<div
+			style={{
+				justifyContent: "center",
+				height: "20rem",
+				width: "70rem",
+				margin: "0 auto",
+				transform: "translateY(3rem)",
+			}}
+		>
+			<div
+				style={{
+					fontFamily:
+						"Noto Serif JP, Source Han Serif JP, Hiragino Mincho ProN, Yu Mincho, serif",
+					fontSize: "8rem",
+					fontWeight: "1000",
+					color: "red",
+				}}
+			>
+				ツモ！
+			</div>
 			<Button
 				variant="contained"
 				onClick={props.tsumoEnd}
-				className={styles.checkButton}
+				sx={{
+					width: "8rem",
+					height: "4rem",
+				}}
 			>
 				確認
 			</Button>
