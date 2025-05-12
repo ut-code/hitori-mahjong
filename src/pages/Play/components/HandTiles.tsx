@@ -18,11 +18,9 @@ function HandTiles(props: HandTilesProps) {
 		<>
 			<div
 				style={{
-					margin: "auto",
 					display: "flex",
-					gap: "1rem",
 					flexDirection: "row",
-					alignItems: "center",
+					justifyContent: "center",
 				}}
 			>
 				<ul
@@ -53,7 +51,7 @@ function HandTiles(props: HandTilesProps) {
 					height="70"
 					onClick={() => props.tsumogiri()} // クリックイベントでtsumogiri関数を実行
 					onKeyDown={() => props.tsumogiri()} // 意味あるのか分からない
-					style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
+					style={{ cursor: "pointer", transform: "translate(0.5rem, 1.5rem)" }} // クリックできることを示すためにポインターに変更
 				/>
 			</div>
 		</>
