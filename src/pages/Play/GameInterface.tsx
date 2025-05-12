@@ -32,31 +32,42 @@ import WaitingTilesSkeleton from "./components/WaitingTilesSkeleton";
 export type GameState = {
 	kyoku: number;
 	junme: number;
+	haiyama: Hai[];
+	tehai: Hai[];
+	tsumo: Hai;
+	isAgari: boolean;
+	mentsuSyanten: number;
+	toitsuSyanten: number;
+	sutehai: Hai[];
 };
 
 type GameInterfaceProps = {
 	playerInfo: PlayerInfo;
 	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
 };
+
 const GameInterface = (props: GameInterfaceProps) => {
 	const navigate = useNavigate();
-	const [haiyama, setHaiyama] = useState<Hai[]>([]);
-	const [tehai, setTehai] = useState<Hai[]>([]);
-	const [tsumo, setTsumo] = useState<Hai>({ kind: "manzu", value: 1 }); //適当な値を設定している
-	const [gameState, setGameState] = useState<GameState>({ kyoku: 1, junme: 1 });
-	const [isAgari, setIsAgari] = useState(
-		judgeAgari(sortTehai([...tehai, tsumo])),
-	);
-	const [mentsuSyanten, setMentsuSyanten] = useState(13); //適当な初期値を設定
-	const [toitsuSyanten, setToitsuSyanten] = useState(6); //適当な初期値を設定
-	const [sutehai, setSutehai] = useState<Hai[]>([]);
+	const [gameState, setGameState] = useState<GameState>({
+		kyoku: 1,
+		junme: 1,
+		haiyama: [],
+		tehai: [],
+		tsumo: { kind: "jihai", value: "haku" },
+		isAgari: false,
+		mentsuSyanten: 100,
+		toitsuSyanten: 100,
+		sutehai: [],
+	});
 	const [isLoading, setIsLoading] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [isAborted, setIsAborted] = useState(false);
 	const [display, setDisplay] = useState<"sutehai" | "validTiles">("sutehai");
 	const apiUrl = import.meta.env.VITE_API_URL;
 
-	const fetchInitialHaiyama = useCallback(async () => {
+	const fetchNextState = useCallback(async (): Promise<
+		GameState | undefined
+	> => {
 		const controller = new AbortController();
 		const timeout = setTimeout(() => controller.abort(), 5000);
 		try {
@@ -71,10 +82,19 @@ const GameInterface = (props: GameInterfaceProps) => {
 			}
 			const data = await response.json();
 
-			setTehai(sortTehai(data.slice(0, 13)));
-			setTsumo(data[13]);
-			setHaiyama(data.slice(14));
+			const nextGameState = {
+				kyoku: gameState.kyoku,
+				junme: 1,
+				tehai: sortTehai(data.slice(0, 13)),
+				tsumo: data[13],
+				haiyama: data.slice(14),
+				isAgari: judgeAgari([...data.slice(0, 13), data[13]]),
+				mentsuSyanten: calculateSyantenMentsu(data.slice(0, 13)),
+				toitsuSyanten: calculateSyantenToitsu(data.slice(0, 13)),
+				sutehai: [],
+			};
 			setIsLoading(false);
+			return nextGameState;
 		} catch (error) {
 			setIsLoading(true);
 			console.error("failed in fetching initial haiyama:", error);
@@ -86,93 +106,106 @@ const GameInterface = (props: GameInterfaceProps) => {
 		} finally {
 			clearTimeout(timeout);
 		}
-	}, []);
+	}, [gameState.kyoku]);
 
-	useEffect(() => {
-		fetchInitialHaiyama();
-	}, [fetchInitialHaiyama]);
-
-	useEffect(() => {
-		if (gameState.kyoku === 5) {
-			const sendResult = () => {
-				try {
-					fetch(`${apiUrl}/scores`, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						mode: "cors",
-						body: JSON.stringify({
-							name: props.playerInfo.name,
-							score: props.playerInfo.score,
-						}),
-					});
-				} catch (error) {
-					console.error("failed in creating score", error);
-				}
-			};
-			sendResult();
+	const sendResult = useCallback(async () => {
+		try {
+			fetch(`${apiUrl}/scores`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				mode: "cors",
+				body: JSON.stringify({
+					name: props.playerInfo.name,
+					score: props.playerInfo.score,
+				}),
+			});
+		} catch (error) {
+			console.error("failed in creating score", error);
 		}
-	}, [gameState.kyoku, props.playerInfo.name, props.playerInfo.score]);
+	}, [props.playerInfo]);
 
 	useEffect(() => {
-		if (gameState.junme <= 18) {
-			setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
-		}
-		setMentsuSyanten(calculateSyantenMentsu(tehai));
-		setToitsuSyanten(calculateSyantenToitsu(tehai));
-	}, [tehai, tsumo, gameState.junme]);
+		const initializeGameState = async () => {
+			const nextState = await fetchNextState();
+			if (nextState) {
+				setGameState(nextState);
+			}
+		};
+		initializeGameState();
+	}, [fetchNextState]);
 
 	const tedashi = (index: number) => {
-		setSutehai((sutehai) => [...sutehai, tehai[index]]);
-		const newTehai = [...tehai];
-		newTehai.splice(index, 1);
-		const sortedTehai = sortTehai([...newTehai, tsumo]);
-		setTehai(sortedTehai);
-		setTsumo(haiyama[0]);
-		setHaiyama(haiyama.slice(1));
-		setGameState({
+		const nextTehai = sortTehai([
+			...gameState.tehai.slice(0, index),
+			...gameState.tehai.slice(index + 1),
+			gameState.tsumo,
+		]);
+		const nextState = {
 			...gameState,
 			junme: gameState.junme + 1,
-		});
+			haiyama: gameState.haiyama.slice(1),
+			tehai: nextTehai,
+			tsumo: gameState.haiyama[0],
+			isAgari: judgeAgari([...nextTehai, gameState.haiyama[0]]),
+			mentsuSyanten: calculateSyantenMentsu(nextTehai),
+			toitsuSyanten: calculateSyantenToitsu(nextTehai),
+			sutehai: [...gameState.sutehai, gameState.tehai[index]],
+		};
+		setGameState(nextState);
 	};
 
 	const tsumogiri = () => {
-		setSutehai((sutehai) => [...sutehai, tsumo]);
-		setTsumo(haiyama[0]);
-		setHaiyama(haiyama.slice(1));
-		setGameState({
+		const nextState = {
 			...gameState,
 			junme: gameState.junme + 1,
-		});
+			haiyama: gameState.haiyama.slice(1),
+			tsumo: gameState.haiyama[0],
+			isAgari: judgeAgari([...gameState.tehai, gameState.haiyama[0]]),
+			mentsuSyanten: calculateSyantenMentsu(gameState.tehai),
+			toitsuSyanten: calculateSyantenToitsu(gameState.tehai),
+			sutehai: [...gameState.sutehai, gameState.tsumo],
+		};
+		setGameState(nextState);
 	};
 
-	const drawEnd = () => {
-		fetchInitialHaiyama();
-		setSutehai([]);
-		setGameState({
-			junme: 1,
-			kyoku: gameState.kyoku + 1,
-		});
-		setTehai([]);
-		const bonusPoint =
-			toitsuSyanten === 0 || mentsuSyanten === 0
-				? 1000
-				: toitsuSyanten === 1 || mentsuSyanten === 1
-					? 500
-					: 0; //聴牌してたら1000点、イーシャンテンなら500点
-		props.setPlayerInfo((prevInfo) => ({
-			...prevInfo,
-			score: prevInfo.score + bonusPoint,
-		}));
+	const drawEnd = async () => {
+		const fetchedState = await fetchNextState();
+		if (fetchedState) {
+			const nextState = {
+				...fetchedState,
+				kyoku: fetchedState.kyoku + 1,
+			};
+			if (nextState.kyoku === 5) {
+				sendResult();
+			}
+			setGameState(nextState);
+
+			const bonusPoint =
+				gameState.toitsuSyanten === 0 || gameState.mentsuSyanten === 0
+					? 1000
+					: gameState.toitsuSyanten === 1 || gameState.mentsuSyanten === 1
+						? 500
+						: 0; //聴牌してたら1000点、イーシャンテンなら500点
+			props.setPlayerInfo((prevInfo) => ({
+				...prevInfo,
+				score: prevInfo.score + bonusPoint,
+			}));
+		}
 	};
 
-	const tsumoEnd = () => {
-		fetchInitialHaiyama();
-		setSutehai([]);
-		setTehai([]);
-		setGameState({
-			junme: 1,
-			kyoku: gameState.kyoku + 1,
-		});
+	const tsumoEnd = async () => {
+		const fetchedState = await fetchNextState();
+		if (fetchedState) {
+			const nextState = {
+				...fetchedState,
+				kyoku: fetchedState.kyoku + 1,
+			};
+			if (nextState.kyoku === 5) {
+				sendResult();
+			}
+			setGameState(nextState);
+		}
+
 		props.setPlayerInfo({
 			...props.playerInfo,
 			score: props.playerInfo.score + 8000,
@@ -237,7 +270,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 								gap: "0.1rem",
 							}}
 						>
-							{isAgari ? (
+							{gameState.isAgari ? (
 								<TsumoEnd tsumoEnd={tsumoEnd} />
 							) : (
 								<>
@@ -252,7 +285,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 												display={display}
 												setDisplay={setDisplay}
 											/>
-											<DiscardArea sutehai={sutehai} />
+											<DiscardArea sutehai={gameState.sutehai} />
 										</span>
 									) : (
 										<span
@@ -265,7 +298,10 @@ const GameInterface = (props: GameInterfaceProps) => {
 												display={display}
 												setDisplay={setDisplay}
 											/>
-											<ValidTiles tehai={tehai} tsumo={tsumo} />
+											<ValidTiles
+												tehai={gameState.tehai}
+												tsumo={gameState.tsumo}
+											/>
 										</span>
 									)}
 									<span
@@ -280,8 +316,8 @@ const GameInterface = (props: GameInterfaceProps) => {
 											</>
 										) : (
 											<HandStatus
-												mentsuSyanten={mentsuSyanten}
-												toitsuSyanten={toitsuSyanten}
+												mentsuSyanten={gameState.mentsuSyanten}
+												toitsuSyanten={gameState.toitsuSyanten}
 											/>
 										)}
 									</span>
@@ -303,7 +339,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 												gridRow: "2",
 											}}
 										>
-											<WaitingTiles tehai={tehai} />
+											<WaitingTiles tehai={gameState.tehai} />
 										</span>
 									)}
 								</>
@@ -313,8 +349,8 @@ const GameInterface = (props: GameInterfaceProps) => {
 							<HandTileSkelton />
 						) : (
 							<HandTiles
-								tehai={tehai}
-								tsumo={tsumo}
+								tehai={gameState.tehai}
+								tsumo={gameState.tsumo}
 								tedashi={tedashi}
 								tsumogiri={tsumogiri}
 							/>
