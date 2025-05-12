@@ -168,43 +168,37 @@ const GameInterface = (props: GameInterfaceProps) => {
 		setGameState(nextState);
 	};
 
-	const drawEnd = async () => {
-		const fetchedState = await fetchNextState();
-		if (fetchedState) {
-			const nextState = {
-				...fetchedState,
-				kyoku: fetchedState.kyoku + 1,
-			};
-			if (nextState.kyoku === 5) {
-				sendResult();
-			}
-			setGameState(nextState);
-
-			const bonusPoint =
-				gameState.toitsuSyanten === 0 || gameState.mentsuSyanten === 0
-					? 1000
-					: gameState.toitsuSyanten === 1 || gameState.mentsuSyanten === 1
-						? 500
-						: 0; //聴牌してたら1000点、イーシャンテンなら500点
-			props.setPlayerInfo((prevInfo) => ({
-				...prevInfo,
-				score: prevInfo.score + bonusPoint,
-			}));
+	const drawEnd = () => {
+		const nextState = {
+			...gameState,
+			kyoku: gameState.kyoku + 1,
+		};
+		if (nextState.kyoku === 5) {
+			sendResult();
 		}
+		setGameState(nextState);
+
+		const bonusPoint =
+			gameState.toitsuSyanten === 0 || gameState.mentsuSyanten === 0
+				? 1000
+				: gameState.toitsuSyanten === 1 || gameState.mentsuSyanten === 1
+					? 500
+					: 0; //聴牌してたら1000点、イーシャンテンなら500点
+		props.setPlayerInfo((prevInfo) => ({
+			...prevInfo,
+			score: prevInfo.score + bonusPoint,
+		}));
 	};
 
-	const tsumoEnd = async () => {
-		const fetchedState = await fetchNextState();
-		if (fetchedState) {
-			const nextState = {
-				...fetchedState,
-				kyoku: fetchedState.kyoku + 1,
-			};
-			if (nextState.kyoku === 5) {
-				sendResult();
-			}
-			setGameState(nextState);
+	const tsumoEnd = () => {
+		const nextState = {
+			...gameState,
+			kyoku: gameState.kyoku + 1,
+		};
+		if (nextState.kyoku === 5) {
+			sendResult();
 		}
+		setGameState(nextState);
 
 		props.setPlayerInfo({
 			...props.playerInfo,
