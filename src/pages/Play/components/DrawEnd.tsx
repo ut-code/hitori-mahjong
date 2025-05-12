@@ -1,41 +1,38 @@
 import Button from "@mui/material/Button";
-import React from "react";
 
 type DrawEndProps = {
 	drawEnd: () => void;
 };
 export default function DrawEnd(props: DrawEndProps) {
 	return (
-		<div
-			style={{
-				backgroundColor: "white",
-				justifyContent: "center",
-				minWidth: "80vw",
-				minHeight: "80vh",
-				borderRadius: "1rem",
-			}}
-		>
+		<>
 			<div
 				style={{
-					paddingTop: "2rem",
-					fontSize: "5rem",
+					justifyContent: "center",
 				}}
 			>
-				流局
+				<div
+					style={{
+						marginTop: "10px",
+						fontFamily:
+							"Noto Serif JP, Source Han Serif JP, Hiragino Mincho ProN,Yu Mincho, serif",
+						fontSize: "80px",
+						marginBottom: "20px",
+					}}
+				>
+					流局
+				</div>
+				<Button
+					variant="contained"
+					onClick={props.drawEnd}
+					sx={{
+						width: "max-content",
+						height: "20%",
+					}}
+				>
+					確認
+				</Button>
 			</div>
-			<Button
-				variant="contained"
-				onClick={props.drawEnd}
-				sx={{
-					marginTop: "3rem",
-					width: "10rem",
-					height: "5rem",
-					fontSize: "2rem",
-					borderRadius: "1rem",
-				}}
-			>
-				確認
-			</Button>
-		</div>
+		</>
 	);
 }

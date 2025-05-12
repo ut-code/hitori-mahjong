@@ -130,7 +130,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 		};
 		initializeGameState();
 	}, [gameState.kyoku]);
-
+	//TODO: tedashiとtsumogiri, drawEndとtsumoEndをそれぞれ同じ関数にする
 	const tedashi = (index: number) => {
 		const nextTehai = sortTehai([
 			...gameState.tehai.slice(0, index),
@@ -208,7 +208,21 @@ const GameInterface = (props: GameInterfaceProps) => {
 	};
 
 	return (
-		<div>
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				padding: "1rem",
+				fontFamily: "Arial, sans-serif",
+				minWidth: "80vw",
+				minHeight: "80vh",
+				gap: "1rem",
+				backgroundColor: "white",
+				borderRadius: "1rem",
+				margin: "0 auto",
+			}}
+		>
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<DialogTitle>
 					{isAborted
@@ -230,21 +244,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 				gameState.junme === 19 ? (
 					<DrawEnd drawEnd={drawEnd} />
 				) : (
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "column",
-							alignItems: "center",
-							padding: "1rem",
-							fontFamily: "Arial, sans-serif",
-							minWidth: "80vw",
-							minHeight: "80vh",
-							gap: "1rem",
-							backgroundColor: "white",
-							borderRadius: "1rem",
-							margin: "0 auto",
-						}}
-					>
+					<div>
 						<Header
 							kyoku={gameState.kyoku}
 							junme={gameState.junme}
