@@ -19,13 +19,12 @@ export default function ValidTiles(props: ValidTilesProps) {
 			}}
 		>
 			{keys.map((key) => (
-				<>
+				<div key={key}>
 					<p
 						style={{
 							fontSize: "1.3rem",
 							fontWeight: "500",
 						}}
-						key={key}
 					>
 						{key}{" "}
 					</p>
@@ -34,10 +33,9 @@ export default function ValidTiles(props: ValidTilesProps) {
 							display: "flex",
 							listStyleType: "none",
 						}}
-						key={key}
 					>
 						{shortenedInfo.get(key)?.map((hai) => (
-							<li key={String(hai)}>
+							<li key={`${hai.kind} - ${hai.value}`}>
 								<img
 									src={`/hai/${hai.kind}_${hai.value}.png`}
 									alt={`${hai.kind} ${hai.value}`}
@@ -47,7 +45,7 @@ export default function ValidTiles(props: ValidTilesProps) {
 							</li>
 						))}
 					</ul>
-				</>
+				</div>
 			))}
 		</div>
 	);
