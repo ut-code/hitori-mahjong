@@ -1,4 +1,4 @@
-import { Hai, HaiKind, JihaiValue } from "./hai.ts";
+import type { Hai, HaiKind, JihaiValue } from "./hai.ts";
 
 /** 抜き出した面子と面子候補の数、及び対子を含むかの情報 */
 export type MentsuCountInfo = {
@@ -261,7 +261,9 @@ export function extractHai(
 		return null;
 	}
 	const haiIndexCopy = [...haiIndex];
-	targetIndices.forEach((v) => --haiIndexCopy[v]);
+	for (const v of targetIndices) {
+		haiIndexCopy[v] -= 1;
+	}
 	return haiIndexCopy.some((v) => v < 0) ? null : haiIndexCopy;
 }
 

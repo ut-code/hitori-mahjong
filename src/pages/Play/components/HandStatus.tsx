@@ -1,5 +1,3 @@
-import styles from "../styles/HandStatus.module.css";
-
 type HandStatusProps = {
 	mentsuSyanten: number;
 	toitsuSyanten: number;
@@ -7,9 +5,37 @@ type HandStatusProps = {
 
 function HandStatus(props: HandStatusProps) {
 	return (
-		<div className={styles.handStatus}>
-			<div className={styles.statusText}>向聴数</div>
-			<div className={styles.details}>
+		<div
+			style={{
+				height: "100%",
+				display: "flex",
+				gap: "1rem",
+				flexDirection: "column",
+				borderRadius: "1rem",
+				backgroundColor: "white",
+				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+			}}
+		>
+			<div
+				style={{
+					paddingTop: "1rem",
+					fontWeight: "500",
+					paddingLeft: "1rem",
+					fontSize: "1.5rem",
+					textAlign: "left",
+				}}
+			>
+				向聴数
+			</div>
+			<div
+				style={{
+					fontWeight: "500",
+					paddingLeft: "1.5rem",
+					textAlign: "left",
+					fontSize: "1.3rem",
+					lineHeight: "1.5",
+				}}
+			>
 				{props.mentsuSyanten === 0 ? (
 					<>メンツ手: テンパイ</>
 				) : (

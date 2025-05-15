@@ -1,16 +1,36 @@
-import styles from "../styles/DiscardArea.module.css";
-import { Hai } from "../../../utils/hai";
+import type { Hai, HaiWithID } from "../../../utils/hai";
 
 interface DiscardAreaProps {
 	sutehai: Hai[];
 }
 
 function DiscardArea(props: DiscardAreaProps) {
+	const sutehaiWithID: HaiWithID[] = props.sutehai.map((hai, index) => {
+		return {
+			kind: hai.kind,
+			value: hai.value,
+			id: index,
+		};
+	});
 	return (
-		<div className={styles.discardArea}>
-			<div className={styles.tiles}>
-				{props.sutehai.map((hai, index) => (
-					<li key={index}>
+		<div
+			style={{
+				height: "90%",
+				borderRadius: "1rem",
+				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+			}}
+		>
+			<div
+				style={{
+					paddingTop: "1rem",
+					justifyContent: "center",
+					display: "grid",
+					gridTemplateColumns: "repeat(6, 50px)",
+					listStyle: "none",
+				}}
+			>
+				{sutehaiWithID.map((hai) => (
+					<li key={hai.id}>
 						<img
 							src={`/hai/${hai.kind}_${hai.value}.png`}
 							alt={`${hai.kind} ${hai.value}`}

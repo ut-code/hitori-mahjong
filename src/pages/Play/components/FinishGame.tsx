@@ -1,5 +1,5 @@
-import React from "react";
 import Button from "@mui/material/Button";
+import React from "react";
 import styles from "../styles/FinishGame.module.css";
 
 type FinishGameProps = {

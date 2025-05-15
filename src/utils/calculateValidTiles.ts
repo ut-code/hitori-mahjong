@@ -1,5 +1,5 @@
-import { Hai, sortTehai } from "./hai";
 import calculateSyantenMentsu from "./calculateSyantenMentsu";
+import { type Hai, sortTehai } from "./hai";
 
 type ValidTileInfo = Map<number, Hai[]>;
 

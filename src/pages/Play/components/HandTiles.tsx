@@ -1,6 +1,4 @@
-import React from "react";
-import styles from "../styles/HandTiles.module.css";
-import { Hai } from "../../../utils/hai";
+import type { Hai, HaiWithID } from "../../../utils/hai";
 
 type HandTilesProps = {
 	tehai: Hai[];
@@ -9,18 +7,37 @@ type HandTilesProps = {
 	tsumogiri: () => void;
 };
 function HandTiles(props: HandTilesProps) {
+	const tehaiWithID: HaiWithID[] = props.tehai.map((hai, index) => {
+		return {
+			kind: hai.kind,
+			value: hai.value,
+			id: index,
+		};
+	});
 	return (
 		<>
-			<div className={styles.tilesContainer}>
-				<ul className={styles.tiles}>
-					{props.tehai.map((hai, index) => (
-						<li key={index}>
+			<div
+				style={{
+					display: "flex",
+					flexDirection: "row",
+					justifyContent: "center",
+				}}
+			>
+				<ul
+					style={{
+						display: "flex",
+						listStyleType: "none",
+					}}
+				>
+					{tehaiWithID.map((hai) => (
+						<li key={hai.id}>
 							<img
 								src={`/hai/${hai.kind}_${hai.value}.png`}
 								alt={`${hai.kind} ${hai.value}`}
 								width="50"
 								height="70"
-								onClick={() => props.tedashi(index)} // クリックイベントで関数を実行
+								onClick={() => props.tedashi(hai.id)} // クリックイベントで関数を実行
+								onKeyDown={() => props.tedashi(hai.id)} // 意味あるのか分からない
 								style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
 							/>
 						</li>
@@ -33,7 +50,8 @@ function HandTiles(props: HandTilesProps) {
 					width="50"
 					height="70"
 					onClick={() => props.tsumogiri()} // クリックイベントでtsumogiri関数を実行
-					style={{ cursor: "pointer" }} // クリックできることを示すためにポインターに変更
+					onKeyDown={() => props.tsumogiri()} // 意味あるのか分からない
+					style={{ cursor: "pointer", transform: "translate(0.5rem, 1.5rem)" }} // クリックできることを示すためにポインターに変更
 				/>
 			</div>
 		</>

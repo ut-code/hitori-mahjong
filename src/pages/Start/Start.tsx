@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { PlayerInfo } from "../../App";
 import { TextField } from "@mui/material";
-import styles from "../../styles/Start.module.css";
 import Alert from "@mui/material/Alert";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { PlayerInfo } from "../../App";
+import styles from "../../styles/Start.module.css";
 
 type StartProps = {
 	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
@@ -60,13 +60,18 @@ export default function Start(props: StartProps) {
 					className={styles.textField}
 				/>
 
-				<button onClick={handleUserNameSubmit} className={styles.playButton}>
+				<button
+					onClick={handleUserNameSubmit}
+					className={styles.playButton}
+					type="button"
+				>
 					プレイ
 				</button>
 				<div className={styles.buttonContainer}>
 					<button
 						onClick={() => navigate("/tutorial")}
 						className={styles.grayButton}
+						type="button"
 					>
 						遊び方
 					</button>
@@ -80,6 +85,7 @@ export default function Start(props: StartProps) {
 							navigate("/result");
 						}}
 						className={styles.grayButton}
+						type="button"
 					>
 						ランキング
 					</button>

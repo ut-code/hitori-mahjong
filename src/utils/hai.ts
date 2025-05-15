@@ -11,6 +11,12 @@ export type Hai =
 export type SuhaiKind = "manzu" | "pinzu" | "souzu";
 export type HaiKind = SuhaiKind | "jihai";
 
+export type HaiWithID = {
+	kind: HaiKind;
+	value: JihaiValue | number;
+	id: number;
+};
+
 const kindOrder: HaiKind[] = ["manzu", "pinzu", "souzu", "jihai"];
 
 const jihaiOrder: JihaiValue[] = [

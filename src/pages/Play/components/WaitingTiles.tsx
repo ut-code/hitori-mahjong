@@ -1,6 +1,5 @@
-import styles from "../styles/WaitingTiles.module.css";
-import { Hai } from "../../../utils/hai";
 import calculateMachihai from "../../../utils/calculateMachihai";
+import type { Hai, HaiWithID } from "../../../utils/hai";
 
 interface WaitingTilesProps {
 	tehai: Hai[];
@@ -8,15 +7,53 @@ interface WaitingTilesProps {
 
 function WaitingTiles(props: WaitingTilesProps) {
 	const machihai: Hai[] = calculateMachihai(props.tehai);
+	const machihaiWithId: HaiWithID[] = machihai.map((hai, index) => {
+		return {
+			value: hai.value,
+			kind: hai.kind,
+			id: index,
+		};
+	});
 	return (
-		<div className={styles.waitingTiles}>
-			<div className={styles.title}>待ち</div>
+		<div
+			style={{
+				height: "100%",
+				borderRadius: "1rem",
+				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+			}}
+		>
+			<div
+				style={{
+					paddingTop: "0.5rem",
+					paddingLeft: "1rem",
+					fontSize: "1.5rem",
+					textAlign: "left",
+					fontWeight: "500",
+				}}
+			>
+				待ち
+			</div>
 			{machihai.length === 0 ? (
-				<p className={styles.nothing}>なし</p>
+				<div
+					style={{
+						paddingLeft: "1.5rem",
+						fontSize: "1.3rem",
+						fontWeight: "500",
+					}}
+				>
+					なし
+				</div>
 			) : (
-				<div className={styles.tiles}>
-					{machihai.map((hai, index) => (
-						<li key={index}>
+				<div
+					style={{
+						listStyleType: "none",
+						display: "flex",
+						paddingLeft: "1.3rem",
+						paddingTop: "0.5rem",
+					}}
+				>
+					{machihaiWithId.map((hai) => (
+						<li key={hai.id}>
 							<img
 								src={`/hai/${hai.kind}_${hai.value}.png`}
 								alt={`${hai.kind} ${hai.value}`}

@@ -1,4 +1,4 @@
-import { Hai } from "./hai.ts";
+import type { Hai } from "./hai.ts";
 
 export default function calculateSyantenToitsu(tehai: Hai[]): number {
 	const tehaiSet: Hai[] = [];

@@ -1,26 +1,3 @@
-import React from "react";
-import styles from "./styles/GameInterface.module.css";
-import Header from "./components/Header";
-import DiscardArea from "./components/DiscardArea";
-import HandStatus from "./components/HandStatus";
-import WaitingTiles from "./components/WaitingTiles";
-import HandTiles from "./components/HandTiles";
-import { useState, useEffect } from "react";
-import { sortTehai } from "../../utils/hai";
-import { Hai } from "../../utils/hai";
-import { useNavigate } from "react-router-dom";
-import judgeAgari from "../../utils/judgeAgari";
-import DrawEnd from "./components/DrawEnd";
-import TsumoEnd from "./components/TsumoEnd";
-import FinishGame from "./components/FinishGame";
-import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
-import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
-import { PlayerInfo } from "../../App";
-import HandTileSkelton from "./components/HandTileSkeleton";
-import HandStatusSkelton from "./components/HandStatusSkeleton";
-import ValidTiles from "./components/ValidTiles";
-import DisplaySwitch from "./components/DisplaySwitch";
-import WaitingTilesSkeleton from "./components/WaitingTilesSkeleton";
 import {
 	Button,
 	Dialog,
@@ -29,134 +6,180 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from "@mui/material";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { PlayerInfo } from "../../App";
+import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
+import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
+import { sortTehai } from "../../utils/hai";
+import type { Hai } from "../../utils/hai";
+import judgeAgari from "../../utils/judgeAgari";
+import DiscardArea from "./components/DiscardArea";
+import DisplaySwitch from "./components/DisplaySwitch";
+import DrawEnd from "./components/DrawEnd";
+import FinishGame from "./components/FinishGame";
+import HandStatus from "./components/HandStatus";
+import HandStatusSkelton from "./components/HandStatusSkeleton";
+import HandTileSkelton from "./components/HandTileSkeleton";
+import HandTiles from "./components/HandTiles";
+import Header from "./components/Header";
+import TsumoEnd from "./components/TsumoEnd";
+import ValidTiles from "./components/ValidTiles";
+import WaitingTiles from "./components/WaitingTiles";
+import WaitingTilesSkeleton from "./components/WaitingTilesSkeleton";
 
 export type GameState = {
 	kyoku: number;
 	junme: number;
+	haiyama: Hai[];
+	tehai: Hai[];
+	tsumo: Hai;
+	isAgari: boolean;
+	mentsuSyanten: number;
+	toitsuSyanten: number;
+	sutehai: Hai[];
 };
 
 type GameInterfaceProps = {
 	playerInfo: PlayerInfo;
 	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
 };
+
 const GameInterface = (props: GameInterfaceProps) => {
 	const navigate = useNavigate();
-	const [haiyama, setHaiyama] = useState<Hai[]>([]);
-	const [tehai, setTehai] = useState<Hai[]>([]);
-	const [tsumo, setTsumo] = useState<Hai>({ kind: "manzu", value: 1 }); //適当な値を設定している
-	const [gameState, setGameState] = useState<GameState>({ kyoku: 1, junme: 1 });
-	const [isAgari, setIsAgari] = useState(
-		judgeAgari(sortTehai([...tehai, tsumo])),
-	);
-	const [mentsuSyanten, setMentsuSyanten] = useState(13); //適当な初期値を設定
-	const [toitsuSyanten, setToitsuSyanten] = useState(2); //適当な初期値を設定
-	const [sutehai, setSutehai] = useState<Hai[]>([]);
+	const [gameState, setGameState] = useState<GameState>({
+		kyoku: 1,
+		junme: 1,
+		haiyama: [],
+		tehai: [],
+		tsumo: { kind: "jihai", value: "haku" },
+		isAgari: false,
+		mentsuSyanten: 100,
+		toitsuSyanten: 100,
+		sutehai: [],
+	});
 	const [isLoading, setIsLoading] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [isAborted, setIsAborted] = useState(false);
 	const [display, setDisplay] = useState<"sutehai" | "validTiles">("sutehai");
 	const apiUrl = import.meta.env.VITE_API_URL;
 
-	const fetchInitialHaiyama = async () => {
-		const controller = new AbortController();
-		const timeout = setTimeout(() => controller.abort(), 5000);
+	const sendResult = useCallback(async () => {
 		try {
-			setIsLoading(true);
-			const response = await fetch(`${apiUrl}/tiles`, {
-				method: "GET",
+			fetch(`${apiUrl}/scores`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
 				mode: "cors",
-				signal: controller.signal,
+				body: JSON.stringify({
+					name: props.playerInfo.name,
+					score: props.playerInfo.score,
+				}),
 			});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
-
-			setTehai(sortTehai(data.slice(0, 13)));
-			setTsumo(data[13]);
-			setHaiyama(data.slice(14));
-			setIsLoading(false);
+			console.log("result sent");
 		} catch (error) {
-			setIsLoading(true);
-			console.error("failed in fetching initial haiyama:", error);
-			if (error instanceof DOMException && error.name === "AbortError") {
-				//タイムアウトしたときの処理を追加
-				setIsAborted(true);
-			}
-			setOpen(true);
-		} finally {
-			clearTimeout(timeout);
+			console.error("failed in creating score", error);
 		}
-	};
+	}, [props.playerInfo]);
 
 	useEffect(() => {
-		fetchInitialHaiyama();
-	}, []);
-	useEffect(() => {
-		if (gameState.kyoku === 5) {
-			const sendResult = () => {
-				try {
-					fetch(`${apiUrl}/scores`, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						mode: "cors",
-						body: JSON.stringify({
-							name: props.playerInfo.name,
-							score: props.playerInfo.score,
-						}),
-					});
-				} catch (error) {
-					console.error("failed in creating score", error);
+		const fetchNextState = async (): Promise<GameState | undefined> => {
+			const controller = new AbortController();
+			const timeout = setTimeout(() => controller.abort(), 5000);
+			try {
+				setIsLoading(true);
+				const response = await fetch(`${apiUrl}/tiles`, {
+					method: "GET",
+					mode: "cors",
+					signal: controller.signal,
+				});
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
 				}
-			};
-			sendResult();
-		}
+				const data = await response.json();
+
+				const nextGameState = {
+					kyoku: gameState.kyoku,
+					junme: 1,
+					tehai: sortTehai(data.slice(0, 13)),
+					tsumo: data[13],
+					haiyama: data.slice(14),
+					isAgari: judgeAgari([...data.slice(0, 13), data[13]]),
+					mentsuSyanten: calculateSyantenMentsu(data.slice(0, 13)),
+					toitsuSyanten: calculateSyantenToitsu(data.slice(0, 13)),
+					sutehai: [],
+				};
+				setIsLoading(false);
+				return nextGameState;
+			} catch (error) {
+				setIsLoading(true);
+				console.error("failed in fetching initial haiyama:", error);
+				if (error instanceof DOMException && error.name === "AbortError") {
+					//タイムアウトしたときの処理を追加
+					setIsAborted(true);
+				}
+				setOpen(true);
+			} finally {
+				clearTimeout(timeout);
+			}
+		};
+		const initializeGameState = async () => {
+			const nextState = await fetchNextState();
+			if (nextState) {
+				setGameState(nextState);
+			}
+		};
+		initializeGameState();
 	}, [gameState.kyoku]);
-
-	useEffect(() => {
-		if (gameState.junme <= 18) {
-			setIsAgari(judgeAgari(sortTehai([...tehai, tsumo])));
-		}
-		setMentsuSyanten(calculateSyantenMentsu(tehai));
-		setToitsuSyanten(calculateSyantenToitsu(tehai));
-	}, [tehai, tsumo]);
-
+	//TODO: tedashiとtsumogiri, drawEndとtsumoEndをそれぞれ同じ関数にする
 	const tedashi = (index: number) => {
-		setSutehai((sutehai) => [...sutehai, tehai[index]]);
-		const newTehai = [...tehai];
-		newTehai.splice(index, 1);
-		const sortedTehai = sortTehai([...newTehai, tsumo]);
-		setTehai(sortedTehai);
-		setTsumo(haiyama[0]);
-		setHaiyama(haiyama.slice(1));
-		setGameState({
+		const nextTehai = sortTehai([
+			...gameState.tehai.slice(0, index),
+			...gameState.tehai.slice(index + 1),
+			gameState.tsumo,
+		]);
+		const nextState = {
 			...gameState,
 			junme: gameState.junme + 1,
-		});
+			haiyama: gameState.haiyama.slice(1),
+			tehai: nextTehai,
+			tsumo: gameState.haiyama[0],
+			isAgari: judgeAgari([...nextTehai, gameState.haiyama[0]]),
+			mentsuSyanten: calculateSyantenMentsu(nextTehai),
+			toitsuSyanten: calculateSyantenToitsu(nextTehai),
+			sutehai: [...gameState.sutehai, gameState.tehai[index]],
+		};
+		setGameState(nextState);
 	};
 
 	const tsumogiri = () => {
-		setSutehai((sutehai) => [...sutehai, tsumo]);
-		setTsumo(haiyama[0]);
-		setHaiyama(haiyama.slice(1));
-		setGameState({
+		const nextState = {
 			...gameState,
 			junme: gameState.junme + 1,
-		});
+			haiyama: gameState.haiyama.slice(1),
+			tsumo: gameState.haiyama[0],
+			isAgari: judgeAgari([...gameState.tehai, gameState.haiyama[0]]),
+			mentsuSyanten: calculateSyantenMentsu(gameState.tehai),
+			toitsuSyanten: calculateSyantenToitsu(gameState.tehai),
+			sutehai: [...gameState.sutehai, gameState.tsumo],
+		};
+		setGameState(nextState);
 	};
 
 	const drawEnd = () => {
-		setSutehai([]);
-		setGameState({
-			junme: 1,
+		const nextState = {
+			...gameState,
 			kyoku: gameState.kyoku + 1,
-		});
-		setTehai([]);
-		fetchInitialHaiyama();
+		};
+		if (nextState.kyoku === 5) {
+			sendResult();
+		}
+		setGameState(nextState);
+
 		const bonusPoint =
-			toitsuSyanten === 0 || mentsuSyanten === 0
+			gameState.toitsuSyanten === 0 || gameState.mentsuSyanten === 0
 				? 1000
-				: toitsuSyanten === 1 || mentsuSyanten === 1
+				: gameState.toitsuSyanten === 1 || gameState.mentsuSyanten === 1
 					? 500
 					: 0; //聴牌してたら1000点、イーシャンテンなら500点
 		props.setPlayerInfo((prevInfo) => ({
@@ -166,13 +189,15 @@ const GameInterface = (props: GameInterfaceProps) => {
 	};
 
 	const tsumoEnd = () => {
-		setSutehai([]);
-		setTehai([]);
-		setGameState({
-			junme: 1,
+		const nextState = {
+			...gameState,
 			kyoku: gameState.kyoku + 1,
-		});
-		fetchInitialHaiyama();
+		};
+		if (nextState.kyoku === 5) {
+			sendResult();
+		}
+		setGameState(nextState);
+
 		props.setPlayerInfo({
 			...props.playerInfo,
 			score: props.playerInfo.score + 8000,
@@ -184,7 +209,21 @@ const GameInterface = (props: GameInterfaceProps) => {
 	};
 
 	return (
-		<div className={styles.container}>
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				padding: "1rem",
+				fontFamily: "Arial, sans-serif",
+				width: "80vw",
+				height: "80vh",
+				gap: "1rem",
+				backgroundColor: "white",
+				borderRadius: "1rem",
+				margin: "0 auto",
+			}}
+		>
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<DialogTitle>
 					{isAborted
@@ -206,56 +245,93 @@ const GameInterface = (props: GameInterfaceProps) => {
 				gameState.junme === 19 ? (
 					<DrawEnd drawEnd={drawEnd} />
 				) : (
-					<div className={styles.container}>
+					<div>
 						<Header
 							kyoku={gameState.kyoku}
 							junme={gameState.junme}
 							playerInfo={props.playerInfo}
 							setPlayerInfo={props.setPlayerInfo}
 						/>
-						<div className={styles.gridContainer}>
-							{isAgari ? (
+						<div
+							style={{
+								display: "grid",
+								gridTemplateColumns: "50% 50%",
+								gridTemplateRows: "50% 50%",
+								width: "70rem",
+								height: "20rem",
+								gap: "0.1rem",
+							}}
+						>
+							{gameState.isAgari ? (
 								<TsumoEnd tsumoEnd={tsumoEnd} />
 							) : (
 								<>
 									{display === "sutehai" ? (
-										<span className={styles.discardArea}>
+										<span
+											style={{
+												gridColumn: "1",
+												gridRow: "1 / 3",
+											}}
+										>
 											<DisplaySwitch
 												display={display}
 												setDisplay={setDisplay}
 											/>
-											<DiscardArea sutehai={sutehai} />
+											<DiscardArea sutehai={gameState.sutehai} />
 										</span>
 									) : (
-										<span className={styles.discardArea}>
+										<span
+											style={{
+												gridColumn: "1",
+												gridRow: "1 / 3",
+											}}
+										>
 											<DisplaySwitch
 												display={display}
 												setDisplay={setDisplay}
 											/>
-											<ValidTiles tehai={tehai} tsumo={tsumo} />
+											<ValidTiles
+												tehai={gameState.tehai}
+												tsumo={gameState.tsumo}
+											/>
 										</span>
 									)}
-									<span className={styles.handStatus}>
+									<span
+										style={{
+											gridColumn: "2",
+											gridRow: "1",
+										}}
+									>
 										{isLoading ? (
 											<>
 												<HandStatusSkelton />
 											</>
 										) : (
 											<HandStatus
-												mentsuSyanten={mentsuSyanten}
-												toitsuSyanten={toitsuSyanten}
+												mentsuSyanten={gameState.mentsuSyanten}
+												toitsuSyanten={gameState.toitsuSyanten}
 											/>
 										)}
 									</span>
 									{isLoading ? (
 										<>
-											<span className={styles.waitingTiles}>
+											<span
+												style={{
+													gridColumn: "2",
+													gridRow: "2",
+												}}
+											>
 												<WaitingTilesSkeleton />
 											</span>
 										</>
 									) : (
-										<span className={styles.waitingTiles}>
-											<WaitingTiles tehai={tehai} />
+										<span
+											style={{
+												gridColumn: "2",
+												gridRow: "2",
+											}}
+										>
+											<WaitingTiles tehai={gameState.tehai} />
 										</span>
 									)}
 								</>
@@ -265,8 +341,8 @@ const GameInterface = (props: GameInterfaceProps) => {
 							<HandTileSkelton />
 						) : (
 							<HandTiles
-								tehai={tehai}
-								tsumo={tsumo}
+								tehai={gameState.tehai}
+								tsumo={gameState.tsumo}
 								tedashi={tedashi}
 								tsumogiri={tsumogiri}
 							/>

@@ -1,13 +1,15 @@
-import styles from "../styles/HandTiles.module.css";
 import { Skeleton } from "@mui/material";
 
 export default function HandTileSkelton() {
-	const arr = new Array(14).fill(0);
+	const arr = new Array(14).fill(0).map((value, index) => {
+		return value + index;
+	});
+
 	return (
-		<div className={styles.tilesContainer}>
-			<ul className={styles.tiles}>
-				{arr.map((_, index) => (
-					<li key={index}>
+		<div>
+			<ul>
+				{arr.map((value) => (
+					<li key={value}>
 						<Skeleton variant="rectangular" width={50} height={70} />
 					</li>
 				))}

@@ -1,6 +1,5 @@
-import { Hai } from "../../../utils/hai";
 import calculateValidTiles from "../../../utils/calculateValidTiles";
-import styles from "../styles/ValidTiles.module.css";
+import type { Hai } from "../../../utils/hai";
 
 type ValidTilesProps = {
 	tehai: Hai[];
@@ -12,13 +11,32 @@ export default function ValidTiles(props: ValidTilesProps) {
 	const shortenedInfo = extractValidTile(validTileInfo);
 	const keys = [...shortenedInfo.keys()];
 	return (
-		<div className={styles.container}>
+		<div
+			style={{
+				borderRadius: "1rem",
+				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+				height: "90%",
+				overflow: "hidden",
+			}}
+		>
 			{keys.map((key) => (
-				<>
-					<p className={styles.status}>{key} </p>
-					<ul className={styles.tiles}>
-						{shortenedInfo.get(key)?.map((hai, index) => (
-							<li key={index}>
+				<div key={key}>
+					<p
+						style={{
+							fontSize: "1.3rem",
+							fontWeight: "500",
+						}}
+					>
+						{key}{" "}
+					</p>
+					<ul
+						style={{
+							display: "flex",
+							listStyleType: "none",
+						}}
+					>
+						{shortenedInfo.get(key)?.map((hai) => (
+							<li key={`${hai.kind} - ${hai.value}`}>
 								<img
 									src={`/hai/${hai.kind}_${hai.value}.png`}
 									alt={`${hai.kind} ${hai.value}`}
@@ -28,7 +46,7 @@ export default function ValidTiles(props: ValidTilesProps) {
 							</li>
 						))}
 					</ul>
-				</>
+				</div>
 			))}
 		</div>
 	);
@@ -40,7 +58,7 @@ function extractValidTile(
 ): Map<string, Hai[]> {
 	const shortenedInfo = new Map<string, Hai[]>();
 	const minStn =
-		(function (validTileInfo: Map<number, Hai[]>) {
+		((validTileInfo: Map<number, Hai[]>) => {
 			for (let i = 0; i < 13; i++) {
 				if (validTileInfo.get(i) !== undefined) {
 					return i;
