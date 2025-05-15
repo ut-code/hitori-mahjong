@@ -17,7 +17,7 @@ function WaitingTiles(props: WaitingTilesProps) {
 	return (
 		<div
 			style={{
-				paddingBottom: "6rem",
+				height: "100%",
 				borderRadius: "1rem",
 				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
 			}}

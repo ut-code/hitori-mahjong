@@ -15,7 +15,7 @@ function DiscardArea(props: DiscardAreaProps) {
 	return (
 		<div
 			style={{
-				height: "20.5rem",
+				height: "90%",
 				borderRadius: "1rem",
 				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
 			}}

@@ -7,7 +7,7 @@ function HandStatus(props: HandStatusProps) {
 	return (
 		<div
 			style={{
-				paddingBottom: "3rem",
+				height: "100%",
 				display: "flex",
 				gap: "1rem",
 				flexDirection: "column",

@@ -6,7 +6,7 @@ type DisplaySwitchProps = {
 };
 export default function DisplaySwitch(props: DisplaySwitchProps) {
 	return (
-		<div style={{ height: "2.8rem" }}>
+		<div style={{ height: "10%" }}>
 			{props.display === "sutehai" ? (
 				<div
 					style={{

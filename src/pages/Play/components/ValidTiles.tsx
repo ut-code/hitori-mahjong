@@ -15,7 +15,7 @@ export default function ValidTiles(props: ValidTilesProps) {
 			style={{
 				borderRadius: "1rem",
 				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-				height: "20.5rem",
+				height: "90%",
 				overflow: "hidden",
 			}}
 		>
