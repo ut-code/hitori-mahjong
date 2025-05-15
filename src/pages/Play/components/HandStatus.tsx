@@ -18,7 +18,7 @@ function HandStatus(props: HandStatusProps) {
 		>
 			<div
 				style={{
-					paddingTop: "0.5rem",
+					paddingTop: "1rem",
 					fontWeight: "500",
 					paddingLeft: "1rem",
 					fontSize: "1.5rem",
