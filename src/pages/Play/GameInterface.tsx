@@ -258,7 +258,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 								gridTemplateColumns: "50% 50%",
 								gridTemplateRows: "50% 50%",
 								width: "70rem",
-								height: "22rem",
+								height: "20rem",
 								gap: "0.1rem",
 							}}
 						>
