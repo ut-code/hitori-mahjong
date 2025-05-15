@@ -3,7 +3,6 @@ import { Skeleton } from "@mui/material";
 export default function HandStatusSkelton() {
 	return (
 		<>
-
 			<div
 				style={{
 					height: "100%",
@@ -33,10 +32,10 @@ export default function HandStatusSkelton() {
 						textAlign: "left",
 						fontSize: "1.3rem",
 						lineHeight: "1.5",
+						width: "80%",
 					}}
 				>
 					<Skeleton variant="text" />
-					<br />
 					<Skeleton variant="text" />
 				</div>
 			</div>
