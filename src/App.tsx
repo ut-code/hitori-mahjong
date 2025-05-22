@@ -26,6 +26,9 @@ function App() {
 		score: 25000,
 	});
 	return (
+		<div style={{
+			fontFamily: "YuMincho, Hiragino Mincho ProN, serif"
+		}}>
 		<Router>
 			<Routes>
 				<Route path="/" element={<Start setPlayerInfo={setPlayerInfo} />} />
@@ -43,6 +46,7 @@ function App() {
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</Router>
+		</div>
 	);
 }
 

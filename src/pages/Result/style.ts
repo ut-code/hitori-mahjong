@@ -9,7 +9,6 @@ export const containerStyle: { [key: string]: string } = {
 	flexDirection: "column",
 	alignItems: "center",
 	padding: "20px",
-	fontFamily: "'Arial', sans-serif",
 	minWidth: "400px",
 	maxHeight: "800px",
 	gap: "16px",

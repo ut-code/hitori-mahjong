@@ -215,7 +215,6 @@ const GameInterface = (props: GameInterfaceProps) => {
 				flexDirection: "column",
 				alignItems: "center",
 				padding: "1rem",
-				fontFamily: "Arial, sans-serif",
 				width: "80vw",
 				height: "80vh",
 				gap: "1rem",

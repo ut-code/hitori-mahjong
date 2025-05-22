@@ -17,8 +17,6 @@ export default function TsumoEnd(props: TsumoEndProps) {
 		>
 			<div
 				style={{
-					fontFamily:
-						"Noto Serif JP, Source Han Serif JP, Hiragino Mincho ProN, Yu Mincho, serif",
 					fontSize: "8rem",
 					fontWeight: "1000",
 					color: "red",

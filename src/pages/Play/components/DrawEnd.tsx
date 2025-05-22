@@ -14,8 +14,6 @@ export default function DrawEnd(props: DrawEndProps) {
 				<div
 					style={{
 						marginTop: "10px",
-						fontFamily:
-							"Noto Serif JP, Source Han Serif JP, Hiragino Mincho ProN,Yu Mincho, serif",
 						fontSize: "80px",
 						marginBottom: "20px",
 					}}

@@ -2,7 +2,6 @@
 	position: fixed;
 	top: 40px;
 	left: 40px;
-	font-family: "Noto Sans", serif;
 	font-size: 18px;
 	color: #ffffff;
 }
@@ -10,7 +9,6 @@
 .mainTitle {
 	font-size: 6em;
 	text-align: center;
-	font-family: "Noto Sans", serif;
 	font-weight: bold;
 	color: #ffffff;
 }
@@ -18,7 +16,6 @@
 .subTitle {
 	font-size: 1.5em;
 	text-align: center;
-	font-family: "Noto Sans", serif;
 	color: #ffffff;
 }
 
@@ -46,7 +43,6 @@
 	height: 70px;
 	background-color: #fd903c;
 	color: white;
-	font-family: "Noto Sans", serif;
 	font-size: 1.5em;
 	border-radius: 6px;
 	margin: 15px;
@@ -56,7 +52,6 @@
 	width: 220px;
 	background-color: #85a4ba;
 	color: white;
-	font-family: "Noto Sans", serif;
 	border-radius: 6px;
 }
 
