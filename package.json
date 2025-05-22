@@ -8,7 +8,7 @@
 		"build": "bun vite build",
 		"lint": "eslint .",
 		"preview": "bun vite preview",
-		"format": "bunx biome format . --write"
+		"format": "bunx biome check . --write"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.13.3",
