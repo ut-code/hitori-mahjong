@@ -35,9 +35,9 @@ export default function Start(props: StartProps) {
 
 	return (
 		<>
-			{/* 			<a href="https://kf75.utcode.net/" className={styles.home}>
-				＜駒場祭ホームに戻る
-			</a> */}
+			<a href="https://mf98.utcode.net/" className={styles.home}>
+				＜五月祭ホームに戻る
+			</a> 
 			<div className={styles.titleContainer}>
 				<div className={styles.mainTitle}>一人麻雀</div>
 				<div className={styles.subTitle}>～麻雀の基礎は平面にある～</div>
