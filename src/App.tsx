@@ -26,26 +26,28 @@ function App() {
 		score: 25000,
 	});
 	return (
-		<div style={{
-			fontFamily: "YuMincho, Hiragino Mincho ProN, serif"
-		}}>
-		<Router>
-			<Routes>
-				<Route path="/" element={<Start setPlayerInfo={setPlayerInfo} />} />
-				<Route path="/tutorial" element={<Tutorial />} />
-				<Route
-					path="/play"
-					element={
-						<GameInterface
-							playerInfo={playerInfo}
-							setPlayerInfo={setPlayerInfo}
-						/>
-					}
-				/>
-				<Route path="/result" element={<Result playerInfo={playerInfo} />} />
-				<Route path="*" element={<NotFound />} />
-			</Routes>
-		</Router>
+		<div
+			style={{
+				fontFamily: "YuMincho, Hiragino Mincho ProN, serif",
+			}}
+		>
+			<Router>
+				<Routes>
+					<Route path="/" element={<Start setPlayerInfo={setPlayerInfo} />} />
+					<Route path="/tutorial" element={<Tutorial />} />
+					<Route
+						path="/play"
+						element={
+							<GameInterface
+								playerInfo={playerInfo}
+								setPlayerInfo={setPlayerInfo}
+							/>
+						}
+					/>
+					<Route path="/result" element={<Result playerInfo={playerInfo} />} />
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</Router>
 		</div>
 	);
 }
