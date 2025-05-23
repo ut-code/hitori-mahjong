@@ -30,6 +30,8 @@ export const headerTitleStyle: { [key: string]: string } = {
 	position: "absolute",
 	left: "50%",
 	transform: "translateX(-50%)",
+	fontSize: "30px",
+	fontWeight: "bold",
 };
 
 export const topRankingStyle: { [key: string]: string } = {
