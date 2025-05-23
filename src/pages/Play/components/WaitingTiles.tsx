@@ -15,43 +15,12 @@ function WaitingTiles(props: WaitingTilesProps) {
 		};
 	});
 	return (
-		<div
-			style={{
-				height: "100%",
-				borderRadius: "1rem",
-				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-			}}
-		>
-			<div
-				style={{
-					paddingTop: "0.5rem",
-					paddingLeft: "1rem",
-					fontSize: "1.5rem",
-					textAlign: "left",
-					fontWeight: "500",
-				}}
-			>
-				待ち
-			</div>
+		<div className="h-full rounded-[1rem] shadow-md">
+			<div className="pt-2 pl-4 text-2xl text-left font-medium">待ち</div>
 			{machihai.length === 0 ? (
-				<div
-					style={{
-						paddingLeft: "1.5rem",
-						fontSize: "1.3rem",
-						fontWeight: "500",
-					}}
-				>
-					なし
-				</div>
+				<div className="pl-6 text-xl font-medium">なし</div>
 			) : (
-				<div
-					style={{
-						listStyleType: "none",
-						display: "flex",
-						paddingLeft: "1.3rem",
-						paddingTop: "0.5rem",
-					}}
-				>
+				<div className="list-none flex pl-5 pt-2">
 					{machihaiWithId.map((hai) => (
 						<li key={hai.id}>
 							<img

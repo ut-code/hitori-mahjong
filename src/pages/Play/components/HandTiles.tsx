@@ -16,19 +16,8 @@ function HandTiles(props: HandTilesProps) {
 	});
 	return (
 		<>
-			<div
-				style={{
-					display: "flex",
-					flexDirection: "row",
-					justifyContent: "center",
-				}}
-			>
-				<ul
-					style={{
-						display: "flex",
-						listStyleType: "none",
-					}}
-				>
+			<div className="flex justify-center">
+				<ul className="flex list-none">
 					{tehaiWithID.map((hai) => (
 						<li key={hai.id}>
 							<img

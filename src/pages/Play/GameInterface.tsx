@@ -240,7 +240,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 								setPlayerInfo={props.setPlayerInfo}
 							/>
 						</div>
-						<div className="grid grid-cols-2 grid-rows-2 w-[70rem] h-[20rem] gap-[0.1rem]">
+						<div className="grid grid-cols-2 grid-rows-2 w-[70rem] h-[20rem] gap-[0.1rem] mx-auto">
 							{gameState.isAgari ? (
 								<TsumoEnd tsumoEnd={tsumoEnd} />
 							) : (
