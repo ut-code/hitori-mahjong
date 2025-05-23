@@ -8,13 +8,7 @@ export default function DisplaySwitch(props: DisplaySwitchProps) {
 	return (
 		<div style={{ height: "10%" }}>
 			{props.display === "sutehai" ? (
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "center",
-						gap: "40px",
-					}}
-				>
+				<div className="flex justify-center gap-10">
 					<Button
 						variant="contained"
 						onClick={() => props.setDisplay("sutehai")}
@@ -29,13 +23,7 @@ export default function DisplaySwitch(props: DisplaySwitchProps) {
 					</Button>
 				</div>
 			) : (
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "center",
-						gap: "40px",
-					}}
-				>
+				<div className="flex justify-center gap-10">
 					<Button
 						variant="outlined"
 						onClick={() => props.setDisplay("sutehai")}

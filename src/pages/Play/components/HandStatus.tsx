@@ -5,9 +5,9 @@ type HandStatusProps = {
 
 function HandStatus(props: HandStatusProps) {
 	return (
-		<div className="h-full flex flex-col gap-4 rounded-[1rem] shadow-md">
+		<div className="h-full flex flex-col rounded-[1rem] shadow-md">
 			<div className="pt-4 font-medium pl-4 text-2xl text-left">向聴数</div>
-			<div className="font-medium pl-6 text-left text-xl leading-normal">
+			<div className="font-medium pt-4 pl-6 text-left text-xl leading-normal">
 				{props.mentsuSyanten === 0 ? (
 					<>メンツ手: テンパイ</>
 				) : (

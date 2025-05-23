@@ -13,22 +13,8 @@ function DiscardArea(props: DiscardAreaProps) {
 		};
 	});
 	return (
-		<div
-			style={{
-				height: "90%",
-				borderRadius: "1rem",
-				boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
-			}}
-		>
-			<div
-				style={{
-					paddingTop: "1rem",
-					justifyContent: "center",
-					display: "grid",
-					gridTemplateColumns: "repeat(6, 50px)",
-					listStyle: "none",
-				}}
-			>
+		<div className="h-[90%] rounded-[1rem] shadow-md">
+			<div className="pt-4 justify-center grid grid-cols-[repeat(6,50px)] list-none">
 				{sutehaiWithID.map((hai) => (
 					<li key={hai.id}>
 						<img

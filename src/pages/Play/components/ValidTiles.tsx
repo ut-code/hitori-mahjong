@@ -11,11 +11,11 @@ export default function ValidTiles(props: ValidTilesProps) {
 	const shortenedInfo = extractValidTile(validTileInfo);
 	const keys = [...shortenedInfo.keys()];
 	return (
-		<div className="rounded-[1rem] shadow-md h-[90%] overflow-hidden">
+		<div className="rounded-[1rem] shadow-md h-[90%]">
 			{keys.map((key) => (
 				<div key={key}>
 					<p className="text-xl font-medium pt-4">{key} </p>
-					<ul className="flex list-none">
+					<ul className="flex justify-center list-none">
 						{shortenedInfo.get(key)?.map((hai) => (
 							<li key={`${hai.kind} - ${hai.value}`}>
 								<img

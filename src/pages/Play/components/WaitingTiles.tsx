@@ -16,9 +16,11 @@ function WaitingTiles(props: WaitingTilesProps) {
 	});
 	return (
 		<div className="h-full rounded-[1rem] shadow-md">
-			<div className="pt-2 pl-4 text-2xl text-left font-medium">待ち</div>
+			<div className="pt-4 pl-4 text-2xl text-left font-medium">待ち</div>
 			{machihai.length === 0 ? (
-				<div className="pl-6 text-xl font-medium">なし</div>
+				<div className="font-medium pt-4 pl-6 text-left text-xl leading-normal">
+					なし
+				</div>
 			) : (
 				<div className="list-none flex pl-5 pt-2">
 					{machihaiWithId.map((hai) => (
