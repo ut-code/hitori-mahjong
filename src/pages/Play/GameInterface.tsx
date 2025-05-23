@@ -209,20 +209,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 	};
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				padding: "1rem",
-				width: "80vw",
-				height: "80vh",
-				gap: "1rem",
-				backgroundColor: "white",
-				borderRadius: "1rem",
-				margin: "0 auto",
-			}}
-		>
+		<div className="p-4 w-[80vw] h-[80vh] bg-white rounded-[1rem] overflow-hidden">
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<DialogTitle>
 					{isAborted
@@ -244,47 +231,30 @@ const GameInterface = (props: GameInterfaceProps) => {
 				gameState.junme === 19 ? (
 					<DrawEnd drawEnd={drawEnd} />
 				) : (
-					<div>
-						<Header
-							kyoku={gameState.kyoku}
-							junme={gameState.junme}
-							playerInfo={props.playerInfo}
-							setPlayerInfo={props.setPlayerInfo}
-						/>
-						<div
-							style={{
-								display: "grid",
-								gridTemplateColumns: "50% 50%",
-								gridTemplateRows: "50% 50%",
-								width: "70rem",
-								height: "20rem",
-								gap: "0.1rem",
-							}}
-						>
+					<div className="flex flex-col size-full">
+						<div className="h-16">
+							<Header
+								kyoku={gameState.kyoku}
+								junme={gameState.junme}
+								playerInfo={props.playerInfo}
+								setPlayerInfo={props.setPlayerInfo}
+							/>
+						</div>
+						<div className="grid grid-cols-2 grid-rows-2 w-[70rem] h-[20rem] gap-[0.1rem]">
 							{gameState.isAgari ? (
 								<TsumoEnd tsumoEnd={tsumoEnd} />
 							) : (
 								<>
 									{display === "sutehai" ? (
-										<span
-											style={{
-												gridColumn: "1",
-												gridRow: "1 / 3",
-											}}
-										>
+										<div className="col-1 row-start-1 row-end-3">
 											<DisplaySwitch
 												display={display}
 												setDisplay={setDisplay}
 											/>
 											<DiscardArea sutehai={gameState.sutehai} />
-										</span>
+										</div>
 									) : (
-										<span
-											style={{
-												gridColumn: "1",
-												gridRow: "1 / 3",
-											}}
-										>
+										<div className="col-1 row-start-1 row-end-3">
 											<DisplaySwitch
 												display={display}
 												setDisplay={setDisplay}
@@ -293,14 +263,9 @@ const GameInterface = (props: GameInterfaceProps) => {
 												tehai={gameState.tehai}
 												tsumo={gameState.tsumo}
 											/>
-										</span>
+										</div>
 									)}
-									<span
-										style={{
-											gridColumn: "2",
-											gridRow: "1",
-										}}
-									>
+									<div className="col-2 row-1">
 										{isLoading ? (
 											<>
 												<HandStatusSkelton />
@@ -311,41 +276,33 @@ const GameInterface = (props: GameInterfaceProps) => {
 												toitsuSyanten={gameState.toitsuSyanten}
 											/>
 										)}
-									</span>
+									</div>
 									{isLoading ? (
 										<>
-											<span
-												style={{
-													gridColumn: "2",
-													gridRow: "2",
-												}}
-											>
+											<div className="col-2 row-2">
 												<WaitingTilesSkeleton />
-											</span>
+											</div>
 										</>
 									) : (
-										<span
-											style={{
-												gridColumn: "2",
-												gridRow: "2",
-											}}
-										>
+										<div className="col-2 row-2">
 											<WaitingTiles tehai={gameState.tehai} />
-										</span>
+										</div>
 									)}
 								</>
 							)}
 						</div>
-						{isLoading ? (
-							<HandTileSkelton />
-						) : (
-							<HandTiles
-								tehai={gameState.tehai}
-								tsumo={gameState.tsumo}
-								tedashi={tedashi}
-								tsumogiri={tsumogiri}
-							/>
-						)}
+						<div className="h-24 my-auto">
+							{isLoading ? (
+								<HandTileSkelton />
+							) : (
+								<HandTiles
+									tehai={gameState.tehai}
+									tsumo={gameState.tsumo}
+									tedashi={tedashi}
+									tsumogiri={tsumogiri}
+								/>
+							)}
+						</div>
 					</div>
 				)
 			) : (
