@@ -7,14 +7,7 @@ export default function HandTileSkelton() {
 
 	return (
 		<div>
-			<ul
-				style={{
-					padding: "0",
-					display: "flex",
-					listStyleType: "none",
-					justifyContent: "center",
-				}}
-			>
+			<ul className="p-0 flex list-none justify-center">
 				{arr.map((value) => (
 					<li key={value}>
 						<Skeleton variant="rectangular" width={50} height={70} />
