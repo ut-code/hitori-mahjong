@@ -1,7 +1,9 @@
 export default function LocalRules() {
 	return (
 		<>
-			<h2>一人麻雀のローカルルールについて</h2>
+			<div className="text-2xl font-bold mb-2">
+				一人麻雀のローカルルールについて
+			</div>
 
 			<ul>
 				<li>
