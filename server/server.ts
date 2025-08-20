@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import cors from "cors";
 import express, { type Request, type Response } from "express";
 import { z } from "zod";
-import createHaiyama from "./createHaiyama.js";
+import createHaiyama from "./createHaiyama.ts";
 
 const app = express();
 const prisma = new PrismaClient();
