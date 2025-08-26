@@ -9,11 +9,11 @@ import {
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { sortTehai } from "shared/hai";
+import type { Hai } from "shared/hai";
 import type { PlayerInfo } from "../../App";
 import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
 import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
-import { sortTehai } from "../../utils/hai";
-import type { Hai } from "../../utils/hai";
 import judgeAgari from "../../utils/judgeAgari";
 import DiscardArea from "./components/DiscardArea";
 import DisplaySwitch from "./components/DisplaySwitch";

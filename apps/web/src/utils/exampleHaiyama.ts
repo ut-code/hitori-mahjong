@@ -1,4 +1,4 @@
-import type { Hai } from "../utils/hai";
+import type { Hai } from "shared/hai";
 export const exampleHaiyama: Hai[] = [
 	{ kind: "manzu", value: 1 },
 	{ kind: "manzu", value: 2 },

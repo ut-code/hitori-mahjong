@@ -1,0 +1,25 @@
+{
+	"name": "server",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "bun --hot --env-file=../../.env run index.ts"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.3",
+		"prisma": "^6.14.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@prisma/client": "^6.14.0",
+		"cors": "^2.8.5",
+		"express": "^5.1.0",
+		"shared": "workspace:*",
+		"zod": "^4.0.17"
+	}
+}

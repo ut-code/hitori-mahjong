@@ -3,7 +3,7 @@ import {
 	type HaiKind,
 	type JihaiValue,
 	constructHai,
-} from "./hai.ts";
+} from "shared/hai";
 import judgeAgari from "./judgeAgari";
 
 export default function calculateMachihai(tehai: Hai[]): Hai[] {
