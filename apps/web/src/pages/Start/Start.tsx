@@ -3,7 +3,6 @@ import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { PlayerInfo } from "../../App";
-import styles from "../../styles/Start.module.css";
 
 type StartProps = {
 	setPlayerInfo: React.Dispatch<React.SetStateAction<PlayerInfo>>;
@@ -35,15 +34,22 @@ export default function Start(props: StartProps) {
 
 	return (
 		<>
-			<a href="https://mf98.utcode.net/" className={styles.home}>
+			<a
+				href="https://mf98.utcode.net/"
+				className="fixed top-10 left-10 text-lg text-white"
+			>
 				＜五月祭ホームに戻る
 			</a>
-			<div className={styles.titleContainer}>
-				<div className={styles.mainTitle}>一人麻雀</div>
-				<div className={styles.subTitle}>～麻雀の基礎は平面にある～</div>
+			<div className="flex flex-col">
+				<div className="text-center font-bold text-white" style={{ fontSize: "6em" }}>
+					一人麻雀
+				</div>
+				<div className="text-center text-white text-[1.5em]">
+					～麻雀の基礎は平面にある～
+				</div>
 			</div>
 
-			<div className={styles.formContainer}>
+			<div className="flex flex-col items-center gap-2.5 mt-16">
 				<TextField
 					label="ユーザーネーム"
 					variant="filled"
@@ -57,20 +63,20 @@ export default function Start(props: StartProps) {
 					onChange={(e) => setInputText(e.target.value)}
 					placeholder="ユーザー名を入力"
 					autoComplete="off"
-					className={styles.textField}
+					className="bg-white rounded-md w-[460px]"
 				/>
 
 				<button
 					onClick={handleUserNameSubmit}
-					className={styles.playButton}
+					className="w-[460px] h-[70px] bg-[#fd903c] text-white text-[1.5em] rounded-md my-4"
 					type="button"
 				>
 					プレイ
 				</button>
-				<div className={styles.buttonContainer}>
+				<div className="flex gap-5">
 					<button
 						onClick={() => navigate("/tutorial")}
-						className={styles.grayButton}
+						className="w-[220px] bg-[#85a4ba] text-white rounded-md"
 						type="button"
 					>
 						遊び方
@@ -84,7 +90,7 @@ export default function Start(props: StartProps) {
 							});
 							navigate("/result");
 						}}
-						className={styles.grayButton}
+						className="w-[220px] bg-[#85a4ba] text-white rounded-md"
 						type="button"
 					>
 						ランキング
