@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import calculateSyantenToitsu from "../src/utils/calculateSyantenToitsu";
 import { type Hai, constructHai } from "shared/hai";
+import calculateSyantenToitsu from "../src/utils/calculateSyantenToitsu";
 
 const tenpai: Hai[] = [
 	constructHai("jihai", "ton"),

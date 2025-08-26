@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
+import { type Hai, constructHai } from "shared/hai";
 import {
 	calculateCountInfoForJihai,
 	countHaiIndexForJihai,
 	extractTehaiValueByKind,
 } from "../src/utils/calculateSyantenMentsu";
-import { type Hai, constructHai } from "shared/hai";
 
 const tenpai: Hai[] = [
 	constructHai("manzu", 1),
