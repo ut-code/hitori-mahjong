@@ -41,7 +41,10 @@ export default function Start(props: StartProps) {
 				＜五月祭ホームに戻る
 			</a>
 			<div className="flex flex-col">
-				<div className="text-center font-bold text-white" style={{ fontSize: "6em" }}>
+				<div
+					className="text-center font-bold text-white"
+					style={{ fontSize: "6em" }}
+				>
 					一人麻雀
 				</div>
 				<div className="text-center text-white text-[1.5em]">
