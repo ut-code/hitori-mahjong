@@ -1,5 +1,5 @@
 import calculateValidTiles from "../../../utils/calculateValidTiles";
-import type { Hai } from "../../../utils/hai";
+import type { Hai } from "shared/hai";
 
 type ValidTilesProps = {
 	tehai: Hai[];

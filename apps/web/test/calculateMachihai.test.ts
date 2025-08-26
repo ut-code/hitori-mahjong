@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import calculateMachihai from "../src/utils/calculateMachihai";
-import { type Hai, constructHai } from "../src/utils/hai";
+import { type Hai, constructHai } from "shared/hai";
 
 const ryanmen: Hai[] = [
 	constructHai("jihai", "pei"),

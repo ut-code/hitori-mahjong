@@ -1,5 +1,5 @@
 import calculateMachihai from "../../../utils/calculateMachihai";
-import type { Hai, HaiWithID } from "../../../utils/hai";
+import type { Hai, HaiWithID } from "shared/hai";
 
 interface WaitingTilesProps {
 	tehai: Hai[];
