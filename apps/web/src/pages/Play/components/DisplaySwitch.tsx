@@ -6,7 +6,7 @@ type DisplaySwitchProps = {
 };
 export default function DisplaySwitch(props: DisplaySwitchProps) {
 	return (
-		<div style={{ height: "10%" }}>
+		<div className="h-[10%]">
 			{props.display === "sutehai" ? (
 				<div className="flex justify-center gap-10">
 					<Button

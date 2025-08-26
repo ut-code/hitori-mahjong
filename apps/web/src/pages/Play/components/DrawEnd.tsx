@@ -5,32 +5,15 @@ type DrawEndProps = {
 };
 export default function DrawEnd(props: DrawEndProps) {
 	return (
-		<>
-			<div
-				style={{
-					justifyContent: "center",
-				}}
+		<div className="flex flex-col items-center justify-center">
+			<div className="mt-2 mb-5 text-[80px]">流局</div>
+			<Button
+				variant="contained"
+				onClick={props.drawEnd}
+				className="w-fit h-16 text-lg bg-[#fd903c] text-white rounded-md shadow-md"
 			>
-				<div
-					style={{
-						marginTop: "10px",
-						fontSize: "80px",
-						marginBottom: "20px",
-					}}
-				>
-					流局
-				</div>
-				<Button
-					variant="contained"
-					onClick={props.drawEnd}
-					sx={{
-						width: "max-content",
-						height: "20%",
-					}}
-				>
-					確認
-				</Button>
-			</div>
-		</>
+				確認
+			</Button>
+		</div>
 	);
 }

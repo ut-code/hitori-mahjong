@@ -38,24 +38,12 @@ function Header(props: HeaderProps) {
 	};
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "space-between",
-				width: "100%",
-			}}
-		>
+		<div className="flex items-center justify-between w-full">
 			<IconButton onClick={handleOpenDialog}>
 				<HighlightOffIcon style={{ color: "#2B2B2B", fontSize: "2rem" }} />
 			</IconButton>
 
-			<div
-				style={{
-					fontSize: "2em",
-					fontWeight: "bold",
-				}}
-			>
+			<div className="text-[2em] font-bold">
 				東風戦 東{props.kyoku}局 {props.playerInfo.score}点
 			</div>
 			<ProgressBar progress={progress} label={`${props.junme}巡目`} />
