@@ -1,4 +1,4 @@
-import type { Hai, HaiWithID } from "../../../utils/hai";
+import type { Hai, HaiWithID } from "shared/hai";
 
 type HandTilesProps = {
 	tehai: Hai[];
