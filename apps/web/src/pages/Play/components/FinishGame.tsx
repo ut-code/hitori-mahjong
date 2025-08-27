@@ -1,18 +1,16 @@
 import Button from "@mui/material/Button";
-import React from "react";
-import styles from "../styles/FinishGame.module.css";
 
 type FinishGameProps = {
 	finishGame: () => void;
 };
 export default function FinishGame(props: FinishGameProps) {
 	return (
-		<div className={styles.container}>
-			<div className={styles.title}>終局</div>
+		<div className="justify-center">
+			<div className="mt-2.5 text-[80px] mb-5">終局</div>
 			<Button
 				variant="contained"
 				onClick={props.finishGame}
-				className={styles.checkButton}
+				className="w-max h-1/5"
 			>
 				結果画面へ
 			</Button>
