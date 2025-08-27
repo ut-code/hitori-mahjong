@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
+import { type Hai, constructHai } from "shared/hai";
 import calculateValidTiles from "../src/utils/calculateValidTiles";
-import { type Hai, constructHai } from "../src/utils/hai";
 
 const tehaiQ148: Hai[] = [
 	constructHai("manzu", 1),
