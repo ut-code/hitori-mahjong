@@ -6,6 +6,8 @@ import Start from "./pages/Start/Start";
 import Tutorial from "./pages/Tutorial/Tutorial";
 import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import BasicRules from "./pages/Tutorial/BasicRules";
+import LocalRules from "./pages/Tutorial/LocalRules";
 
 export type PlayerInfo = {
 	rank: number | null;
@@ -34,7 +36,11 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/" element={<Start setPlayerInfo={setPlayerInfo} />} />
-					<Route path="/tutorial" element={<Tutorial />} />
+					<Route path="/tutorial" element={<Tutorial />}>
+						<Route index element={<BasicRules />} />
+						<Route path="basic" element={<BasicRules />} />
+						<Route path="local" element={<LocalRules />} />
+					</Route>
 					<Route
 						path="/play"
 						element={
