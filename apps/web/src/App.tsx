@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { Route, Routes } from "react-router";
 import NotFound from "./pages/NotFound/NotFound";
 import GameInterface from "./pages/Play/GameInterface";
 import Result from "./pages/Result/Result";
 import Start from "./pages/Start/Start";
+import BasicRules from "./pages/Tutorial/BasicRules";
+import LocalRules from "./pages/Tutorial/LocalRules";
 import Tutorial from "./pages/Tutorial/Tutorial";
 import "./App.css";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 export type PlayerInfo = {
 	rank: number | null;
@@ -31,23 +33,25 @@ function App() {
 				fontFamily: "YuMincho, Hiragino Mincho ProN, serif",
 			}}
 		>
-			<Router>
-				<Routes>
-					<Route path="/" element={<Start setPlayerInfo={setPlayerInfo} />} />
-					<Route path="/tutorial" element={<Tutorial />} />
-					<Route
-						path="/play"
-						element={
-							<GameInterface
-								playerInfo={playerInfo}
-								setPlayerInfo={setPlayerInfo}
-							/>
-						}
-					/>
-					<Route path="/result" element={<Result playerInfo={playerInfo} />} />
-					<Route path="*" element={<NotFound />} />
-				</Routes>
-			</Router>
+			<Routes>
+				<Route index element={<Start setPlayerInfo={setPlayerInfo} />} />
+				<Route path="tutorial" element={<Tutorial />}>
+					<Route index element={<BasicRules />} />
+					<Route path="basic" element={<BasicRules />} />
+					<Route path="local" element={<LocalRules />} />
+				</Route>
+				<Route
+					path="play"
+					element={
+						<GameInterface
+							playerInfo={playerInfo}
+							setPlayerInfo={setPlayerInfo}
+						/>
+					}
+				/>
+				<Route path="result" element={<Result playerInfo={playerInfo} />} />
+				<Route path="*" element={<NotFound />} />
+			</Routes>
 		</div>
 	);
 }
