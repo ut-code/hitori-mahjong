@@ -68,7 +68,7 @@ export default function Start(props: StartProps) {
 
 				<button
 					onClick={handleUserNameSubmit}
-					className="w-115 h-17.5 bg-[#fd903c] text-white text-xl rounded-md my-3.5"
+					className="w-115 h-17.5 bg-black text-white text-xl rounded-md my-3.5"
 					type="button"
 				>
 					プレイ
@@ -76,7 +76,7 @@ export default function Start(props: StartProps) {
 				<div className="flex gap-5">
 					<button
 						onClick={() => navigate("/tutorial")}
-						className="w-55 bg-[#85a4ba] text-white rounded-md"
+						className="w-55 bg-black text-white rounded-md"
 						type="button"
 					>
 						遊び方
@@ -90,7 +90,7 @@ export default function Start(props: StartProps) {
 							});
 							navigate("/result");
 						}}
-						className="w-55 bg-[#85a4ba] text-white rounded-md"
+						className="w-55 bg-black text-white rounded-md"
 						type="button"
 					>
 						ランキング
