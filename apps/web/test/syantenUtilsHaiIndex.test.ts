@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test";
 import {
-	type HaiIndex,
 	countHaiIndex,
 	extractHai,
+	type HaiIndex,
 } from "../src/utils/calculateSyantenMentsu";
 
 const tenpaiValue = [1, 2, 2, 3, 3, 4, 5, 5, 5, 6, 7, 8, 9];

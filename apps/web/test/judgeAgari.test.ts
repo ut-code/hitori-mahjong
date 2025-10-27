@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { type Hai, constructHai } from "shared/hai";
+import { constructHai, type Hai } from "shared/hai";
 import judgeAgari from "../src/utils/judgeAgari";
 
 const chinitsu1: Hai[] = [

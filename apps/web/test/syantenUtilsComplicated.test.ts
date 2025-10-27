@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test";
 import {
-	type HaiIndex,
-	type MentsuCountInfo,
 	calculateCountInfo,
 	calculateInfo,
+	type HaiIndex,
+	type MentsuCountInfo,
 	screenMentsuCount,
 } from "../src/utils/calculateSyantenMentsu";
 

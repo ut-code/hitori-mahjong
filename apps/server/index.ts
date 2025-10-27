@@ -14,7 +14,7 @@ app.use(
 	}),
 );
 
-app.get("/tiles", (req: Request, res: Response) => {
+app.get("/tiles", (_req: Request, res: Response) => {
 	const haiyama = createHaiyama();
 	res.json(haiyama);
 });
@@ -60,7 +60,7 @@ app.post("/scores", async (req: Request, res: Response) => {
 	}
 });
 
-app.get("/scores", async (req: Request, res: Response) => {
+app.get("/scores", async (_req: Request, res: Response) => {
 	try {
 		const data = await prisma.user.findMany();
 		res.json(data);
@@ -76,7 +76,7 @@ app.get("/scores", async (req: Request, res: Response) => {
 	}
 });
 
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
 	res.send("OK");
 });
 

@@ -80,7 +80,7 @@ export function calculateCountInfoForJihai(
 export function countHaiIndex(targetTehaiValue: number[]): HaiIndex {
 	return Array(9)
 		.fill(0)
-		.map((v, i) => i + 1)
+		.map((_v, i) => i + 1)
 		.map((i) => targetTehaiValue.filter((v) => v === i).length);
 }
 
@@ -100,7 +100,7 @@ export function calculateCountInfo(haiIndex: HaiIndex): MentsuCountInfo[] {
 		mentsu: 0,
 		candidate: 0,
 		haveToitsu: false,
-	}).map(([haiIndex, info]) => info);
+	}).map(([_haiIndex, info]) => info);
 
 	// 効率の良いものに絞る
 	return screenMentsuCount(infoDump);
@@ -116,7 +116,7 @@ export function screenMentsuCount(
 ): MentsuCountInfo[] {
 	const result: MentsuCountInfo[] = [];
 	for (const info of infoCandidate) {
-		let insertFlag: boolean | undefined = undefined;
+		let insertFlag: boolean | undefined;
 		for (const [index, infoForComparision] of result.entries()) {
 			// 構築の方法により、同じresultの要素に対しisBetterはtrueかfalseの高々片方しかとらない
 			const isBetter = compareInfo(info, infoForComparision);

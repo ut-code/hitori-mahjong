@@ -9,8 +9,8 @@ import {
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sortTehai } from "shared/hai";
 import type { Hai } from "shared/hai";
+import { sortTehai } from "shared/hai";
 import type { PlayerInfo } from "../../App";
 import calculateSyantenMentsu from "../../utils/calculateSyantenMentsu";
 import calculateSyantenToitsu from "../../utils/calculateSyantenToitsu";
@@ -267,9 +267,7 @@ const GameInterface = (props: GameInterfaceProps) => {
 									)}
 									<div className="col-2 row-1">
 										{isLoading ? (
-											<>
-												<HandStatusSkelton />
-											</>
+											<HandStatusSkelton />
 										) : (
 											<HandStatus
 												mentsuSyanten={gameState.mentsuSyanten}
@@ -278,11 +276,9 @@ const GameInterface = (props: GameInterfaceProps) => {
 										)}
 									</div>
 									{isLoading ? (
-										<>
-											<div className="col-2 row-2">
-												<WaitingTilesSkeleton />
-											</div>
-										</>
+										<div className="col-2 row-2">
+											<WaitingTilesSkeleton />
+										</div>
 									) : (
 										<div className="col-2 row-2">
 											<WaitingTiles tehai={gameState.tehai} />
