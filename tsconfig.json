@@ -1,21 +1,21 @@
 {
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "module": "ESNext",
-    "target": "ESNext",
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "lib": ["es2020", "dom"],
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowImportingTsExtensions": true
-  },
-  "include": [
-    "server/server.ts",
-    "server/createYamahai.ts",
-    "src",
-    "src/vite-env.d.ts"
-  ]
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"module": "ESNext",
+		"target": "ESNext",
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"moduleResolution": "node",
+		"lib": ["es2020", "dom"],
+		"strict": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"allowImportingTsExtensions": true
+	},
+	"include": [
+		"server/server.ts",
+		"server/createYamahai.ts",
+		"src",
+		"src/vite-env.d.ts"
+	]
 }
