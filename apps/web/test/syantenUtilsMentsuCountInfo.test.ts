@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test";
 import {
-	type MentsuCountInfo,
 	calculateSyantenFromCountInfo,
 	compareInfo,
 	incrementInfo,
 	iterProduct,
+	type MentsuCountInfo,
 	screenMentsuCount,
 } from "../src/utils/calculateSyantenMentsu";
 

@@ -1,8 +1,8 @@
 import {
+	constructHai,
 	type Hai,
 	type HaiKind,
 	type JihaiValue,
-	constructHai,
 } from "shared/hai";
 import judgeAgari from "./judgeAgari";
 
