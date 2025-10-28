@@ -1,5 +1,5 @@
-import type { Route } from "./+types/api.auth.$";
 import { getAuth } from "~/lib/auth";
+import type { Route } from "./+types/api.auth.$";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
 	const { env } = context.cloudflare;

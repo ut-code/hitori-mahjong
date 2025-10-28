@@ -1,10 +1,10 @@
 import {
+	boolean,
 	integer,
 	pgTable,
-	varchar,
 	text,
 	timestamp,
-	boolean,
+	varchar,
 } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
