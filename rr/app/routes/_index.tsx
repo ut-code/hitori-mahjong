@@ -1,4 +1,15 @@
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
+import { drizzle as drizzlePg } from "drizzle-orm/node-postgres";
 import { Link } from "react-router";
+import type { Route } from "./+types/_index";
+
+export async function loader({ context }: Route.LoaderArgs) {
+	const { env } = context.cloudflare;
+	const db =
+		env.NODE_ENV === "development"
+			? drizzlePg(env.DATABASE_URL)
+			: drizzleNeon(env.DATABASE_URL);
+}
 
 export default function Page() {
 	return (
