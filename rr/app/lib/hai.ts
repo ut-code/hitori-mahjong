@@ -78,3 +78,22 @@ export function constructHai(kind: HaiKind, value: number | JihaiValue): Hai {
 export function sortTehai(haiArray: Hai[]): Hai[] {
 	return haiArray.sort((a, b) => haiToIndex(a) - haiToIndex(b));
 }
+
+// To store hai in DB
+export type DBHai = {
+	haiyamaId: string;
+	kind: HaiKind;
+	value: string;
+	order: number;
+	index: number;
+};
+
+export function haiToDBHai(hai: Hai, haiyamaId: string, order: number): DBHai {
+	return {
+		haiyamaId,
+		kind: hai.kind,
+		value: String(hai.value),
+		order,
+		index: haiToIndex(hai),
+	};
+}

@@ -11,7 +11,7 @@
 		"build": "bun vite build",
 		"lint": "eslint .",
 		"preview": "bun vite preview",
-		"format": "bunx biome check . --write"
+		"format": "bunx @biomejs/biome check . --write"
 	},
 	"dependencies": {},
 	"devDependencies": {
