@@ -1,21 +1,65 @@
+import { sql } from "drizzle-orm";
 import {
-  boolean,
+  check,
   integer,
   pgTable,
+  serial,
   text,
   timestamp,
-  varchar,
+  boolean,
+  primaryKey,
+  pgEnum,
+  index,
 } from "drizzle-orm/pg-core";
 
-export const usersTable = pgTable("users", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull(),
-  age: integer().notNull(),
-  email: varchar({ length: 255 }).notNull().unique(),
+export const haiyama = pgTable("haiyama", {
+  id: text("id").primaryKey(),
 });
 
-// better-auth
+export const haiKindEnum = pgEnum("hai_kind", [
+  "manzu",
+  "pinzu",
+  "souzu",
+  "jihai",
+]);
 
+export const hai = pgTable("hai", {
+  id: serial("id").primaryKey(),
+  haiyamaId: text("haiyama_id")
+    .notNull()
+    .references(() => haiyama.id, { onDelete: "cascade" }),
+  kind: haiKindEnum("kind").notNull(), // "manzu" | "pinzu" | "souzu" | "jihai"
+  value: text("value").notNull(), // 1~9 or "ton" ~ "tyun"
+  order: integer("order").notNull(), // 0~17
+  index: integer("index").notNull(), // haiToIndex
+});
+
+// relation between user and haiyama
+// TODO: index
+export const kyoku = pgTable(
+  "kyoku",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    haiyamaId: text("haiyama_id")
+      .notNull()
+      .references(() => haiyama.id, { onDelete: "cascade" }),
+    didAgari: boolean("did_agari").notNull(),
+    agariJunme: integer("agari_junme"),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.haiyamaId] }),
+    index("kyoku_user_id_idx").on(table.userId),
+    index("kyoku_haiyama_id_idx").on(table.haiyamaId),
+    check(
+      "agari_consistency",
+      sql`(${table.didAgari} = false) OR (${table.didAgari} = true AND ${table.agariJunme} IS NOT NULL)`,
+    ),
+  ],
+);
+
+// better-auth
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
