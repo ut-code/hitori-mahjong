@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { getDB } from "./db";
 import { anonymous } from "better-auth/plugins";
+import { eq } from "drizzle-orm";
 
 export function getAuth(env?: Env) {
   const auth = betterAuth({
@@ -11,7 +12,18 @@ export function getAuth(env?: Env) {
     emailAndPassword: {
       enabled: true,
     },
-    plugins: [anonymous()],
+    plugins: [
+      anonymous({
+        onLinkAccount: async ({ anonymousUser, newUser }) => {
+          const db = getDB(env);
+          // migrate like this
+          // await db
+          //   .update(playHistory)
+          //   .set({ userId: newUser.user.id })
+          //   .where(eq(playHistory.userId, anonymousUser.user.id));
+        },
+      }),
+    ],
   });
   return auth;
 }
