@@ -10,17 +10,10 @@ interface GameState {
 	tehai: Hai[];
 }
 
-const useGameState = create<GameState>()(
-	persist(
-		(set) => ({
-			kyoku: 1,
-			junme: 1,
-			haiyama: [],
-			sutehai: [],
-			tehai: [],
-		}),
-		{
-			name: "game-state-storage",
-		},
-	),
-);
+const useGameState = create<GameState>()((set) => ({
+	kyoku: 1,
+	junme: 1,
+	haiyama: [],
+	sutehai: [],
+	tehai: [],
+}));
