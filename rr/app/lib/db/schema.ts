@@ -35,7 +35,6 @@ export const hai = pgTable("hai", {
 });
 
 // relation between user and haiyama
-// TODO: index
 export const kyoku = pgTable(
 	"kyoku",
 	{
