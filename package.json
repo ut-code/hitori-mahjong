@@ -33,6 +33,7 @@
 		"@types/react-dom": "^19.1.9",
 		"daisyui": "^5.3.10",
 		"drizzle-kit": "^0.31.5",
+		"lefthook": "^2.0.2",
 		"tailwindcss": "^4.1.13",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
