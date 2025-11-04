@@ -17,6 +17,7 @@ interface PlayerAction {
 	// tsumo just after tedashi or tsumogiri
 	tedashi: (index: number) => void;
 	tsumogiri: () => void;
+	jikyoku: () => void;
 }
 
 const useGameStore = create<GameState & PlayerAction>()((set, get) => ({
@@ -40,7 +41,6 @@ const useGameStore = create<GameState & PlayerAction>()((set, get) => ({
 		const deletedTehai = state.tehai.filter((_, i) => i !== index);
 		const discardedHai = state.tehai[index];
 		set(() => ({
-			kyoku: state.kyoku + 1,
 			junme: state.junme + 1,
 			haiyama: state.haiyama.slice(1),
 			sutehai: [...state.sutehai, discardedHai],
@@ -55,11 +55,16 @@ const useGameStore = create<GameState & PlayerAction>()((set, get) => ({
 		}
 		const tsumohai = state.tsumohai;
 		set(() => ({
-			kyoku: state.kyoku + 1,
 			junme: state.junme + 1,
 			haiyama: state.haiyama.slice(1),
 			sutehai: [...state.sutehai, tsumohai],
 			tsumohai: state.haiyama[0],
+		}));
+	},
+	jikyoku: () => {
+		const state = get();
+		set(() => ({
+			kyoku: state.kyoku + 1,
 		}));
 	},
 }));
