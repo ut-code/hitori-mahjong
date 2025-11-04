@@ -12,9 +12,26 @@ services:
     networks:
       - mynetwork
 
+  redis:
+    image: redis:7-alpine
+    container_name: myredis
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "devpass"]
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "devpass", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - mynetwork
+
 networks:
   mynetwork:
     driver: bridge
 
 volumes:
   db-store:
+  redis-data:
