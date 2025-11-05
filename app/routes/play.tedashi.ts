@@ -1,11 +1,9 @@
+import { redirect } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { type GameState, getRedisClient, tedashi } from "~/lib/redis";
 import type { Route } from "./+types/play.tedashi";
 
-export async function action({
-	context,
-	request,
-}: Route.ActionArgs): Promise<GameState> {
+export async function action({ context, request }: Route.ActionArgs) {
 	const { env } = context.cloudflare;
 	const auth = getAuth(env);
 	const session = await auth.api.getSession({ headers: request.headers });
@@ -31,7 +29,7 @@ export async function action({
 		const gameState = gameStateJSON ? JSON.parse(gameStateJSON) : null;
 
 		await redisClient.quit();
-		return gameState;
+		return redirect("/play");
 	} catch (error) {
 		await redisClient.quit();
 		const errorMessage = error instanceof Error ? error.message : String(error);
