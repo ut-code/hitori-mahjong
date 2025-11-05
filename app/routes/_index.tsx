@@ -23,7 +23,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 export default function Page() {
 	const navigate = useNavigate();
 	const anonymousLoginAndStart = async () => {
-		const _user = await authClient.signIn.anonymous();
+		const user = await authClient.getSession();
+		if (!user) {
+			const _user = await authClient.signIn.anonymous();
+		}
 		navigate("/play");
 	};
 	return (

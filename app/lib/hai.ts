@@ -97,3 +97,17 @@ export function haiToDBHai(hai: Hai, haiyamaId: string, order: number): DBHai {
 		index: haiToIndex(hai),
 	};
 }
+
+export function dbHaiToHai(dbHai: DBHai): Hai {
+	if (dbHai.kind === "jihai") {
+		return {
+			kind: dbHai.kind,
+			value: dbHai.value as JihaiValue,
+		};
+	} else {
+		return {
+			kind: dbHai.kind as SuhaiKind,
+			value: Number(dbHai.value),
+		};
+	}
+}

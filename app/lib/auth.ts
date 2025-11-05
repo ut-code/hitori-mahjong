@@ -1,7 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { anonymous } from "better-auth/plugins";
-import { eq } from "drizzle-orm";
 import * as schema from "../lib/db/schema";
 import { getDB } from "./db";
 
@@ -29,5 +28,5 @@ export function getAuth(env?: Env) {
 	});
 	return auth;
 }
-
-export const auth = getAuth();
+// This is for @better-auth/cli
+// export const auth = getAuth();
