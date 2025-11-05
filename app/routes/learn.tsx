@@ -10,6 +10,9 @@ export default function Page() {
 		<div className="drawer drawer-open">
 			<input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 			<div className="drawer-content ml-4 mt-4">
+				<Link to="/" className="btn btn-outline mb-4">
+					Back to Home
+				</Link>
 				<div id="basic">
 					<BasicRule />
 				</div>
@@ -24,7 +27,7 @@ export default function Page() {
 					aria-label="close sidebar"
 					className="drawer-overlay"
 				></label>
-				<div className="is-drawer-close:w-14 is-drawer-open:w-48 bg-gray-100 flex flex-col items-start min-h-full">
+				<div className="is-drawer-close:w-14 is-drawer-open:w-48 bg-base-200 flex flex-col items-start min-h-full">
 					<ul className="menu w-full grow">
 						{contents.map((content) => {
 							if (currentHash === `#${content}`) {

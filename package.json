@@ -9,7 +9,8 @@
 		"dev": "react-router dev",
 		"postinstall": "npm run cf-typegen",
 		"preview": "bun run build && vite preview",
-		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
+		"format": "bunx @biomejs/biome format . --write"
 	},
 	"dependencies": {
 		"@neondatabase/serverless": "^1.0.2",
@@ -21,7 +22,7 @@
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-router": "^7.9.2",
-		"zustand": "^5.0.8"
+		"redis": "^5.9.0"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.13.5",
@@ -31,6 +32,7 @@
 		"@types/pg": "^8.15.6",
 		"@types/react": "^19.1.13",
 		"@types/react-dom": "^19.1.9",
+		"@types/redis": "^4.0.11",
 		"daisyui": "^5.3.10",
 		"drizzle-kit": "^0.31.5",
 		"lefthook": "^2.0.2",
