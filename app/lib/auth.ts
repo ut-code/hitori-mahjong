@@ -2,12 +2,14 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { anonymous } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
+import * as schema from "../lib/db/schema";
 import { getDB } from "./db";
 
 export function getAuth(env?: Env) {
 	const auth = betterAuth({
 		database: drizzleAdapter(getDB(env), {
 			provider: "pg",
+			schema: schema,
 		}),
 		emailAndPassword: {
 			enabled: true,
