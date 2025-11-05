@@ -1,6 +1,8 @@
 import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 import { drizzle as drizzlePg } from "drizzle-orm/node-postgres";
-import { Link } from "react-router";
+import type { c } from "node_modules/better-auth/dist/shared/better-auth.C9FmyZ5W.cjs";
+import { Link, useNavigate } from "react-router";
+import { authClient } from "~/lib/auth-client";
 import { getRedisClient } from "~/lib/redis";
 import type { Route } from "./+types/_index";
 
@@ -19,16 +21,28 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Page() {
+	const navigate = useNavigate();
+	const anonymousLoginAndStart = async () => {
+		const user = await authClient.getSession();
+		if (!user) {
+			const _user = await authClient.signIn.anonymous();
+		}
+		navigate("/play");
+	};
 	return (
 		<>
 			<h1 className="text-5xl text-center pb-1">Hitori Mahjong</h1>
-			<Link to="/start">
-				<p className="text-center link">Get Started</p>
-			</Link>
-
-			<Link to="/learn">
-				<p className="text-center link">Learn How to Play</p>
-			</Link>
+			<div className="flex justify-center items-center flex-col gap-4 py-4">
+				<button onClick={anonymousLoginAndStart} className="link" type="button">
+					Play as Guest
+				</button>
+				<Link to="/login" className="link">
+					Login
+				</Link>
+				<Link to="/learn" className="link">
+					Learn How to Play
+				</Link>
+			</div>
 		</>
 	);
 }

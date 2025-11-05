@@ -11,7 +11,7 @@
 		"postinstall": "npm run cf-typegen",
 		"preview": "bun run build && vite preview",
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
-		"format": "bunx @biomejs/biome format . --write"
+		"format": "bunx @biomejs/biome check . --write"
 	},
 	"dependencies": {
 		"@neondatabase/serverless": "^1.0.2",

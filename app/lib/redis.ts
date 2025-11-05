@@ -9,7 +9,7 @@ export function getRedisClient(env: Env) {
 	return client;
 }
 
-interface GameState {
+export interface GameState {
 	kyoku: number;
 	junme: number;
 	haiyama: Hai[];
@@ -122,4 +122,18 @@ export const jikyoku = async (
 		kyoku: state.kyoku + 1,
 	};
 	await setGameState(client, userId, newGameState);
+};
+
+export const getCurrentGameState = async (
+	client: ReturnType<typeof createClient>,
+	userId: string,
+): Promise<GameState | null> => {
+	return await getGameState(client, userId);
+};
+
+export const deleteGameState = async (
+	client: ReturnType<typeof createClient>,
+	userId: string,
+) => {
+	await client.del(`user:${userId}:game`);
 };
