@@ -1,6 +1,6 @@
 import { createClient } from "redis";
-import type { Hai } from "./hai";
-import { sortTehai } from "./hai";
+import type { Hai } from "./hai/utils";
+import { sortTehai } from "./hai/utils";
 
 export function getRedisClient(env: Env) {
 	const client = createClient({
