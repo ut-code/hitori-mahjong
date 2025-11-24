@@ -5,9 +5,10 @@ export default function Page() {
 	const navigate = useNavigate();
 	const anonymousLoginAndStart = async () => {
 		const user = await authClient.getSession();
-		if (!user.data) {
-			const _user = await authClient.signIn.anonymous();
+		if (user.data) {
+			const _user = await authClient.signOut();
 		}
+		const _user = await authClient.signIn.anonymous();
 		navigate("/play");
 	};
 	return (
