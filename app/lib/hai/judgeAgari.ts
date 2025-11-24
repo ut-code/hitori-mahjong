@@ -1,4 +1,4 @@
-import { type Hai, haiToIndex } from "shared/hai.ts";
+import { type Hai, haiToIndex } from "./utils";
 
 function deleteSyuntsu(remainingTehai: TehaiIndex): number {
 	let extractCount = 0;
