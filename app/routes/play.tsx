@@ -3,7 +3,8 @@ import { Form } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { hai, haiyama } from "~/lib/db/schema";
-import { dbHaiToHai, sortTehai } from "~/lib/hai";
+import judgeAgari from "~/lib/hai/judgeAgari";
+import { dbHaiToHai, sortTehai } from "~/lib/hai/utils";
 import { type GameState, getRedisClient, init } from "~/lib/redis";
 import type { Route } from "./+types/play";
 
@@ -73,6 +74,9 @@ export async function loader({
 export default function Page({ loaderData }: Route.ComponentProps) {
 	let { haiyama, sutehai, tsumohai, junme, kyoku, tehai } = loaderData;
 	tehai = sortTehai(tehai);
+	const isAgari =
+		tehai && tsumohai ? judgeAgari(sortTehai([...tehai, tsumohai])) : false;
+	const isRyukyoku = junme === 19;
 	const indexedSutehai = sutehai.map((hai, index) => ({
 		...hai,
 		index: index,
@@ -84,6 +88,36 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div className="p-4">
+			{isAgari && (
+				<dialog id="agari_modal" className="modal" open>
+					<div className="modal-box">
+						<h3 className="font-bold text-lg">ツモ！</h3>
+						<div className="modal-action">
+							<form method="post" action="/play/agari">
+								<input type="hidden" value={junme} name="junme" />
+								<button className="btn" type="submit">
+									確認
+								</button>
+							</form>
+						</div>
+					</div>
+				</dialog>
+			)}
+			{isRyukyoku && (
+				<dialog id="ryukyoku_modal" className="modal" open>
+					<div className="modal-box">
+						<h3 className="font-bold text-lg">流局</h3>
+						<div className="modal-action">
+							<form method="post" action="/play/ryukyoku">
+								<button className="btn" type="submit">
+									確認
+								</button>
+							</form>
+						</div>
+					</div>
+				</dialog>
+			)}
+
 			<p className="text-xl mb-4">
 				Play Page - 局 {kyoku} 巡目 {junme}
 			</p>

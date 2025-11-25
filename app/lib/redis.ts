@@ -1,6 +1,6 @@
 import { createClient } from "redis";
-import type { Hai } from "./hai";
-import { sortTehai } from "./hai";
+import type { Hai } from "./hai/utils";
+import { sortTehai } from "./hai/utils";
 
 export function getRedisClient(env: Env) {
 	const client = createClient({
@@ -73,8 +73,9 @@ export const tedashi = async (
 	if (index < 0 || 12 < index) {
 		throw new Error("index out of tehai length");
 	}
-	const deletedTehai = state.tehai.filter((_, i) => i !== index);
-	const discardedHai = state.tehai[index];
+	const sortedTehai = sortTehai(state.tehai);
+	const deletedTehai = sortedTehai.filter((_, i) => i !== index);
+	const discardedHai = sortedTehai[index];
 
 	const newGameState: GameState = {
 		...state,
