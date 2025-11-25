@@ -89,7 +89,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	return (
 		<div className="p-4">
 			{isAgari && (
-				<dialog id="my_modal_1" className="modal">
+				<dialog id="agari_modal" className="modal" open>
 					<div className="modal-box">
 						<h3 className="font-bold text-lg">ツモ！</h3>
 						<div className="modal-action">
@@ -104,7 +104,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				</dialog>
 			)}
 			{isRyukyoku && (
-				<dialog id="my_modal_1" className="modal">
+				<dialog id="ryukyoku_modal" className="modal" open>
 					<div className="modal-box">
 						<h3 className="font-bold text-lg">流局</h3>
 						<div className="modal-action">
