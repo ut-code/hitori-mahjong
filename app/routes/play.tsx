@@ -2,9 +2,9 @@ import { sql } from "drizzle-orm";
 import { Form } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { hai, haiyama } from "~/lib/db/schema";
+import { haiyama } from "~/lib/db/schema";
 import judgeAgari from "~/lib/hai/judgeAgari";
-import { dbHaiToHai, sortTehai } from "~/lib/hai/utils";
+import { sortTehai } from "~/lib/hai/utils";
 import { type GameState, getRedisClient, init } from "~/lib/redis";
 import type { Route } from "./+types/play";
 
@@ -47,15 +47,7 @@ export async function loader({
 			throw new Response("No haiyama found", { status: 404 });
 		}
 
-		const selectedHaiyama = randomHaiyama[0];
-		const rawHaiData = await db
-			.select()
-			.from(hai)
-			.where(sql`${hai.haiyamaId} = ${selectedHaiyama.id}`)
-			.orderBy(hai.order);
-
-		const haiData = rawHaiData.map((hai) => dbHaiToHai(hai));
-
+		const haiData = randomHaiyama[0].tiles;
 		// Initialize game state in Redis
 		await init(redisClient, userId, haiData);
 
