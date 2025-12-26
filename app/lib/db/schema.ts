@@ -1,4 +1,3 @@
-import type { string } from "better-auth";
 import { sql } from "drizzle-orm";
 import {
 	check,
@@ -11,7 +10,7 @@ import {
 } from "drizzle-orm/sqlite-core";
 import type { Hai } from "../hai/utils";
 
-const haiArray = customType<{ data: Hai[]; driverData: string }>({
+export const haiArray = customType<{ data: Hai[]; driverData: string }>({
 	dataType() {
 		return "text";
 	},

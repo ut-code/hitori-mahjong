@@ -6,7 +6,6 @@
 		"build": "react-router build",
 		"cf-typegen": "wrangler types",
 		"deploy": "bun run build && wrangler deploy",
-		"db:seed": "bun run app/lib/db/seed.ts",
 		"dev": "react-router dev",
 		"postinstall": "npm run cf-typegen",
 		"preview": "bun run build && vite preview",

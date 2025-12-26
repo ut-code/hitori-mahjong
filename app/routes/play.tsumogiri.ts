@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import { getAuth } from "~/lib/auth";
-import { type GameState, getRedisClient, tsumogiri } from "~/lib/redis";
+import getDOStub from "~/lib/do";
 import type { Route } from "./+types/play.tsumogiri";
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -13,18 +13,13 @@ export async function action({ context, request }: Route.ActionArgs) {
 	}
 	const userId = session.user.id;
 
-	const redisClient = getRedisClient(env);
-	await redisClient.connect();
+	const stub = getDOStub(env, userId);
 
 	try {
-		await tsumogiri(redisClient, userId);
-		const gameStateJSON = await redisClient.get(`user:${userId}:game`);
-		const gameState = gameStateJSON ? JSON.parse(gameStateJSON) : null;
+		await stub.tsumogiri();
 
-		await redisClient.quit();
 		return redirect("/play");
 	} catch (error) {
-		await redisClient.quit();
 		const errorMessage = error instanceof Error ? error.message : String(error);
 		throw new Response(errorMessage, { status: 400 });
 	}

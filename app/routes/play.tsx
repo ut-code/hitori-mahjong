@@ -3,9 +3,10 @@ import { Form } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
+import type { GameState } from "~/lib/do";
+import getDOStub from "~/lib/do";
 import judgeAgari from "~/lib/hai/judgeAgari";
 import { sortTehai } from "~/lib/hai/utils";
-import { type GameState, getRedisClient, init } from "~/lib/redis";
 import type { Route } from "./+types/play";
 
 export async function loader({
@@ -23,16 +24,14 @@ export async function loader({
 	const userId = session.user.id;
 
 	// Check if game state already exists in Redis
-	const redisClient = getRedisClient(env);
-	await redisClient.connect();
+	const stub = getDOStub(env, userId);
 
 	try {
-		const existingGameState = await redisClient.get(`user:${userId}:game`);
+		const existingGameState = await stub.getCurrentGameState();
 
 		if (existingGameState) {
 			// Return existing game state from Redis
-			await redisClient.quit();
-			return JSON.parse(existingGameState);
+			return existingGameState;
 		}
 
 		// No existing game state, so initialize from PostgreSQL
@@ -43,22 +42,20 @@ export async function loader({
 			.limit(1);
 
 		if (randomHaiyama.length === 0) {
-			await redisClient.quit();
 			throw new Response("No haiyama found", { status: 404 });
 		}
 
 		const haiData = randomHaiyama[0].tiles;
 		// Initialize game state in Redis
-		await init(redisClient, userId, haiData);
+		await stub.init(haiData);
 
 		// Get the initialized game state to return
-		const gameStateJSON = await redisClient.get(`user:${userId}:game`);
-		const gameState = gameStateJSON ? JSON.parse(gameStateJSON) : null;
-
-		await redisClient.quit();
+		const gameState = await stub.getCurrentGameState();
+		if (!gameState) {
+			throw new Error("Failed to get current game state");
+		}
 		return gameState;
 	} catch (error) {
-		await redisClient.quit();
 		throw error instanceof Error ? error : new Error(String(error));
 	}
 }
