@@ -19,6 +19,34 @@
 			"pattern": "mahjong.utcode.net",
 			"custom_domain": true
 		}
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "db",
+			"database_id": "3d47de4a-ae78-48e0-9aea-fab19d6c2fc9"
+		}
+	],
+	"migrations": [
+		{
+			"new_sqlite_classes": ["MyDurableObject"],
+			"tag": "v1"
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"class_name": "MyDurableObject",
+				"name": "DO"
+			}
+		]
+	},
+	"rules": [
+		{
+			"type": "Text",
+			"globs": ["**/*.sql"],
+			"fallthrough": true
+		}
 	]
 	/**
 	 * Smart Placement

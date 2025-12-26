@@ -4,10 +4,10 @@ import { anonymous } from "better-auth/plugins";
 import * as schema from "../lib/db/schema";
 import { getDB } from "./db";
 
-export function getAuth(env?: Env) {
+export function getAuth(env: Env) {
 	const auth = betterAuth({
 		database: drizzleAdapter(getDB(env), {
-			provider: "pg",
+			provider: "sqlite",
 			schema: schema,
 		}),
 		emailAndPassword: {
@@ -28,5 +28,3 @@ export function getAuth(env?: Env) {
 	});
 	return auth;
 }
-// This is for @better-auth/cli
-// export const auth = getAuth();

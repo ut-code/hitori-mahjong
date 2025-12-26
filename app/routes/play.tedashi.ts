@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import { getAuth } from "~/lib/auth";
-import { type GameState, getRedisClient, tedashi } from "~/lib/redis";
+import getDOStub from "~/lib/do";
 import type { Route } from "./+types/play.tedashi";
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -20,18 +20,13 @@ export async function action({ context, request }: Route.ActionArgs) {
 		throw new Response("Invalid index", { status: 400 });
 	}
 
-	const redisClient = getRedisClient(env);
-	await redisClient.connect();
+	const stub = getDOStub(env, userId);
 
 	try {
-		await tedashi(redisClient, userId, index);
-		const gameStateJSON = await redisClient.get(`user:${userId}:game`);
-		const gameState = gameStateJSON ? JSON.parse(gameStateJSON) : null;
+		await stub.tedashi(index);
 
-		await redisClient.quit();
 		return redirect("/play");
 	} catch (error) {
-		await redisClient.quit();
 		const errorMessage = error instanceof Error ? error.message : String(error);
 		throw new Response(errorMessage, { status: 400 });
 	}

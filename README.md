@@ -6,3 +6,5 @@ cp .env.example .env
 docker compose up
 bun dev
 ```
+
+After running `bunx drizzle-kit generate --config=drizzle-do.config.ts`, you need to add `?raw` to SQL file names in drizzle-do/migraions.js`.

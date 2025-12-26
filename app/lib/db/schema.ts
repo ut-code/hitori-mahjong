@@ -1,41 +1,37 @@
 import { sql } from "drizzle-orm";
 import {
-	boolean,
 	check,
+	customType,
 	index,
 	integer,
-	pgEnum,
-	pgTable,
 	primaryKey,
-	serial,
+	sqliteTable,
 	text,
-	timestamp,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/sqlite-core";
+import type { Hai } from "../hai/utils";
 
-export const haiyama = pgTable("haiyama", {
-	id: text("id").primaryKey(),
+export const haiArray = customType<{ data: Hai[]; driverData: string }>({
+	dataType() {
+		return "text";
+	},
+	toDriver(value: Hai[]) {
+		return JSON.stringify(value);
+	},
+	fromDriver(value: string) {
+		return JSON.parse(value) as Hai[];
+	},
 });
 
-export const haiKindEnum = pgEnum("hai_kind", [
-	"manzu",
-	"pinzu",
-	"souzu",
-	"jihai",
-]);
-
-export const hai = pgTable("hai", {
-	id: serial("id").primaryKey(),
-	haiyamaId: text("haiyama_id")
-		.notNull()
-		.references(() => haiyama.id, { onDelete: "cascade" }),
-	kind: haiKindEnum("kind").notNull(), // "manzu" | "pinzu" | "souzu" | "jihai"
-	value: text("value").notNull(), // 1~9 or "ton" ~ "tyun"
-	order: integer("order").notNull(), // 0~17
-	index: integer("index").notNull(), // haiToIndex
+export const haiyama = sqliteTable("haiyama", {
+	id: text("id")
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	// D1だと1クエリあたり100パラメータまでなので、あえて正規化していない
+	tiles: haiArray("tiles").notNull(),
 });
 
 // relation between user and haiyama
-export const kyoku = pgTable(
+export const kyoku = sqliteTable(
 	"kyoku",
 	{
 		userId: text("user_id")
@@ -44,7 +40,7 @@ export const kyoku = pgTable(
 		haiyamaId: text("haiyama_id")
 			.notNull()
 			.references(() => haiyama.id, { onDelete: "cascade" }),
-		didAgari: boolean("did_agari").notNull(),
+		didAgari: integer("did_agari", { mode: "boolean" }).notNull(),
 		agariJunme: integer("agari_junme"),
 	},
 	(table) => [
@@ -59,28 +55,35 @@ export const kyoku = pgTable(
 );
 
 // better-auth
-export const user = pgTable("user", {
+export const user = sqliteTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	email: text("email").notNull().unique(),
-	emailVerified: boolean("email_verified").default(false).notNull(),
-	image: text("image"),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	updatedAt: timestamp("updated_at")
-		.defaultNow()
-		.$onUpdate(() => /* @__PURE__ */ new Date())
+	emailVerified: integer("email_verified", { mode: "boolean" })
+		.default(false)
 		.notNull(),
-	isAnonymous: boolean("is_anonymous"),
+	image: text("image"),
+	createdAt: integer("created_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date()),
+	updatedAt: integer("updated_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date())
+		.$onUpdate(() => new Date()),
+	isAnonymous: integer("is_anonymous", { mode: "boolean" }),
 });
 
-export const session = pgTable("session", {
+export const session = sqliteTable("session", {
 	id: text("id").primaryKey(),
-	expiresAt: timestamp("expires_at").notNull(),
+	expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
 	token: text("token").notNull().unique(),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	updatedAt: timestamp("updated_at")
-		.$onUpdate(() => /* @__PURE__ */ new Date())
-		.notNull(),
+	createdAt: integer("created_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date()),
+	updatedAt: integer("updated_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date())
+		.$onUpdate(() => new Date()),
 	ipAddress: text("ip_address"),
 	userAgent: text("user_agent"),
 	userId: text("user_id")
@@ -88,7 +91,7 @@ export const session = pgTable("session", {
 		.references(() => user.id, { onDelete: "cascade" }),
 });
 
-export const account = pgTable("account", {
+export const account = sqliteTable("account", {
 	id: text("id").primaryKey(),
 	accountId: text("account_id").notNull(),
 	providerId: text("provider_id").notNull(),
@@ -98,24 +101,33 @@ export const account = pgTable("account", {
 	accessToken: text("access_token"),
 	refreshToken: text("refresh_token"),
 	idToken: text("id_token"),
-	accessTokenExpiresAt: timestamp("access_token_expires_at"),
-	refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+	accessTokenExpiresAt: integer("access_token_expires_at", {
+		mode: "timestamp",
+	}),
+	refreshTokenExpiresAt: integer("refresh_token_expires_at", {
+		mode: "timestamp",
+	}),
 	scope: text("scope"),
 	password: text("password"),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	updatedAt: timestamp("updated_at")
-		.$onUpdate(() => /* @__PURE__ */ new Date())
-		.notNull(),
+	createdAt: integer("created_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date()),
+	updatedAt: integer("updated_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date())
+		.$onUpdate(() => new Date()),
 });
 
-export const verification = pgTable("verification", {
+export const verification = sqliteTable("verification", {
 	id: text("id").primaryKey(),
 	identifier: text("identifier").notNull(),
 	value: text("value").notNull(),
-	expiresAt: timestamp("expires_at").notNull(),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	updatedAt: timestamp("updated_at")
-		.defaultNow()
-		.$onUpdate(() => /* @__PURE__ */ new Date())
-		.notNull(),
+	expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+	createdAt: integer("created_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date()),
+	updatedAt: integer("updated_at", { mode: "timestamp" })
+		.notNull()
+		.$defaultFn(() => new Date())
+		.$onUpdate(() => new Date()),
 });
