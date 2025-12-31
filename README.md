@@ -3,7 +3,6 @@
 ```sh
 bun install
 cp .env.example .env
-docker compose up
 bun dev
 ```
 
