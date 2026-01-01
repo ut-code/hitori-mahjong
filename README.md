@@ -1,9 +1,9 @@
 # 一人麻雀（Hitori Mahjong）
 ## development
 ```sh
-bun install
+npm install
 cp .env.example .env
-bun dev
+npm run dev
 ```
 
-- After running `bunx drizzle-kit generate --config=drizzle-do.config.ts`, you need to add `?raw` to SQL file names in drizzle-do/migraions.js`.
+- After running `npx drizzle-kit generate --config=drizzle-do.config.ts`, you need to add `?raw` to SQL file names in drizzle-do/migraions.js`.

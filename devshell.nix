@@ -2,7 +2,7 @@
 pkgs.mkShell {
   # Add build dependencies
   packages = with pkgs; [
-    bun
+    nodejs_24
   ];
 
   # Add environment variables

@@ -2,4 +2,4 @@ pre-commit:
   commands:
     format:
       glob: "*.{ts,tsx,json,jsonc}"
-      run: bunx @biomejs/biome check {staged_files} --write && git add {staged_files}
+      run: npx @biomejs/biome check {staged_files} --write && git add {staged_files}
