@@ -26,6 +26,7 @@
 		"react-server-dom-webpack": "^19.2.3"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "2.3.11",
 		"@cloudflare/vite-plugin": "^1.13.5",
 		"@react-router/dev": "^7.9.2",
 		"@tailwindcss/vite": "^4.1.13",
