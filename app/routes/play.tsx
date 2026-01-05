@@ -27,10 +27,9 @@ export async function loader({
 	const stub = getDOStub(env, userId);
 
 	try {
-		const existingGameState = await stub.getCurrentGameState();
+		const existingGameState = await stub.getGameState();
 
-		if (existingGameState) {
-			// Return existing game state from Redis
+		if (existingGameState.junme !== 0) {
 			return existingGameState;
 		}
 
@@ -50,7 +49,7 @@ export async function loader({
 		await stub.init(haiData);
 
 		// Get the initialized game state to return
-		const gameState = await stub.getCurrentGameState();
+		const gameState = await stub.getGameState();
 		if (!gameState) {
 			throw new Error("Failed to get current game state");
 		}

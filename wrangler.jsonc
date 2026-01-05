@@ -29,7 +29,7 @@
 	],
 	"migrations": [
 		{
-			"new_sqlite_classes": ["MyDurableObject"],
+			"new_classes": ["MyDurableObject"],
 			"tag": "v1"
 		}
 	],
