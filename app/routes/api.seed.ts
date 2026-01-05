@@ -27,7 +27,7 @@ function createHaiyama(): Hai[] {
 			);
 		}
 	}
-	const minLengthOfHaiyama = 31;
+	const minLengthOfHaiyama = 32;
 	const shuffledHaiyama = shuffleArray(sortedHaiyama);
 	const trimedHaiyama = shuffledHaiyama.slice(0, minLengthOfHaiyama);
 	return trimedHaiyama;
