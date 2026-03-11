@@ -1,3 +1,5 @@
+"use client";
+
 import { Link, useLocation } from "react-router";
 import BasicRule from "../lib/components/BasicRule";
 import LocalRule from "../lib/components/LocalRule";
