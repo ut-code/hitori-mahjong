@@ -1,7 +1,1 @@
-# 一人麻雀（Hitori Mahjong）
-## development
-```sh
-npm install
-cp .env.example .env
-npm run dev
-```
+Migrating to React Router v7...
