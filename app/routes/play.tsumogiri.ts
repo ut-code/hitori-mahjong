@@ -1,10 +1,12 @@
 import { redirect } from "react-router";
 import { getAuth } from "~/lib/auth";
-import getDOStub from "~/lib/do";
+import { getDB } from "~/lib/db";
+import { tsumogiri } from "~/lib/game";
 import type { Route } from "./+types/play.tsumogiri";
 
 export async function action({ context, request }: Route.ActionArgs) {
 	const { env } = context.cloudflare;
+	const db = getDB(env);
 	const auth = getAuth(env);
 	const session = await auth.api.getSession({ headers: request.headers });
 
@@ -13,11 +15,8 @@ export async function action({ context, request }: Route.ActionArgs) {
 	}
 	const userId = session.user.id;
 
-	const stub = getDOStub(env, userId);
-
 	try {
-		await stub.tsumogiri();
-
+		await tsumogiri(db, userId);
 		return redirect("/play");
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error);

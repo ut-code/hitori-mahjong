@@ -1,10 +1,9 @@
 import { sql } from "drizzle-orm";
-import { Form } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
 import type { GameState } from "~/lib/do";
-import getDOStub from "~/lib/do";
+import { getGameState, initGame, toGameState } from "~/lib/game";
 import judgeAgari from "~/lib/hai/judgeAgari";
 import { sortTehai } from "~/lib/hai/utils";
 import type { Route } from "./+types/play";
@@ -23,17 +22,15 @@ export async function loader({
 	}
 	const userId = session.user.id;
 
-	// Check if game state already exists in Redis
-	const stub = getDOStub(env, userId);
-
 	try {
-		const existingGameState = await stub.getGameState();
+		// Check if game state already exists in D1
+		const existingState = await getGameState(db, userId);
 
-		if (existingGameState.junme !== 0) {
-			return existingGameState;
+		if (existingState && existingState.junme !== 0) {
+			return toGameState(existingState);
 		}
 
-		// No existing game state, so initialize from PostgreSQL
+		// No existing game state, so initialize from haiyama
 		const randomHaiyama = await db
 			.select()
 			.from(haiyama)
@@ -45,26 +42,28 @@ export async function loader({
 		}
 
 		const haiData = randomHaiyama[0].tiles;
-		// Initialize game state in Redis
-		await stub.init(haiData);
+		const haiyamaId = randomHaiyama[0].id;
 
-		// Get the initialized game state to return
-		const gameState = await stub.getGameState();
-		if (!gameState) {
+		// Initialize game state in D1
+		await initGame(db, userId, haiyamaId, haiData);
+
+		// Get the initialized game state
+		const gameStateRecord = await getGameState(db, userId);
+		if (!gameStateRecord) {
 			throw new Error("Failed to get current game state");
 		}
-		return gameState;
+		return toGameState(gameStateRecord);
 	} catch (error) {
 		throw error instanceof Error ? error : new Error(String(error));
 	}
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-	let { haiyama, sutehai, tsumohai, junme, kyoku, tehai } = loaderData;
+	let { sutehai, tsumohai, junme, kyoku, tehai } = loaderData;
 	tehai = sortTehai(tehai);
 	const isAgari =
 		tehai && tsumohai ? judgeAgari(sortTehai([...tehai, tsumohai])) : false;
-	const isRyukyoku = junme === 19;
+	const isRyukyoku = junme >= 18;
 	const indexedSutehai = sutehai.map((hai, index) => ({
 		...hai,
 		index: index,
@@ -131,7 +130,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<h3 className="text-lg mb-2">手牌</h3>
 					<div className="flex gap-0">
 						{indexedTehai.map((hai) => (
-							<Form key={hai.index} method="post" action="/play/tedashi">
+							<form key={hai.index} method="post" action="/play/tedashi">
 								<input type="hidden" name="index" value={hai.index} />
 								<button type="submit">
 									<img
@@ -140,7 +139,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										className="w-12 h-16 cursor-pointer hover:scale-105 transition-transform"
 									/>
 								</button>
-							</Form>
+							</form>
 						))}
 					</div>
 				</div>
@@ -148,7 +147,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				{tsumohai && (
 					<div>
 						<h3 className="text-lg mb-2">ツモ牌</h3>
-						<Form method="post" action="/play/tsumogiri">
+						<form method="post" action="/play/tsumogiri">
 							<button type="submit">
 								<img
 									src={`/hai/${tsumohai.kind}_${tsumohai.value}.png`}
@@ -156,7 +155,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 									className="w-12 h-16 object-contain cursor-pointer hover:scale-105 transition-transform"
 								/>
 							</button>
-						</Form>
+						</form>
 					</div>
 				)}
 			</div>
