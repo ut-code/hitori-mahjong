@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { anonymous } from "better-auth/plugins";
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "../lib/db/schema";
-import { getDB } from "./db";
+import { findLocalD1Path, getDB } from "./db";
 
 export function getAuth(env: Env) {
 	const auth = betterAuth({
@@ -10,21 +12,16 @@ export function getAuth(env: Env) {
 			provider: "sqlite",
 			schema: schema,
 		}),
-		emailAndPassword: {
-			enabled: true,
-		},
-		plugins: [
-			anonymous({
-				onLinkAccount: async ({ anonymousUser, newUser }) => {
-					const db = getDB(env);
-					// migrate like this
-					// await db
-					//   .update(playHistory)
-					//   .set({ userId: newUser.user.id })
-					//   .where(eq(playHistory.userId, anonymousUser.user.id));
-				},
-			}),
-		],
+		plugins: [anonymous()],
 	});
 	return auth;
 }
+
+// better-auth cli needs the following auth instance
+export const auth = betterAuth({
+	database: drizzleAdapter(drizzle(new Database(findLocalD1Path())), {
+		provider: "sqlite",
+		schema: schema,
+	}),
+	plugins: [anonymous()],
+});
