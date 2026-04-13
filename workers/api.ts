@@ -28,7 +28,12 @@ const app = new Hono<{
 
 // Auth middleware
 app.use("/*", async (c, next) => {
-	if (c.req.path === "/auth" || c.req.path.startsWith("/auth/")) {
+	if (
+		c.req.path === "/auth" ||
+		c.req.path.startsWith("/auth/") ||
+		c.req.path === "/api/auth" ||
+		c.req.path.startsWith("/api/auth/")
+	) {
 		await next();
 		return;
 	}
