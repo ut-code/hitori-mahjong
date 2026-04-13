@@ -28,6 +28,13 @@ npx drizzle-kit generate --name <migration_name>
 npx drizzle-kit migrate
 ```
 
+### Better-Auth Schema Generation
+
+```bash
+# Generate auth schema to match DB schema location
+npx auth generate --output ./app/lib/db/auth-schema.ts --adapter drizzle --dialect sqlite
+```
+
 ### Remote (Production)
 
 ```bash
