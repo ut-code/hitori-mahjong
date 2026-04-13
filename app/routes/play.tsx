@@ -4,6 +4,7 @@ import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
 import { getGameState, initGame, toGameState } from "~/lib/game-service";
 import judgeAgari from "~/lib/hai/agari";
+import { calculateShanten } from "~/lib/hai/shanten";
 import type { Hai } from "~/lib/hai/types";
 import { sortTehai } from "~/lib/hai/types";
 import type { GameState } from "~/lib/types";
@@ -27,7 +28,7 @@ export async function loader({
 		// Check if game state already exists in D1
 		const existingState = await getGameState(db, userId);
 
-		if (existingState && existingState.junme !== 0) {
+		if (existingState) {
 			return toGameState(existingState);
 		}
 
@@ -60,11 +61,15 @@ export async function loader({
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-	let { sutehai, tsumohai, junme, kyoku, tehai } = loaderData;
+	let { sutehai, tsumohai, junme, kyoku, tehai, remainTsumo, score } =
+		loaderData;
 	tehai = sortTehai(tehai);
 	const isAgari =
 		tehai && tsumohai ? judgeAgari(sortTehai([...tehai, tsumohai])) : false;
-	const isRyukyoku = junme >= 18;
+	const shantenResult = tehai
+		? calculateShanten(tehai)
+		: { shanten: 8, isTenpai: false };
+	const isRyukyoku = remainTsumo <= 0;
 
 	type IndexedHai = Hai & { index: number };
 
@@ -111,9 +116,15 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				</dialog>
 			)}
 
-			<p className="text-xl mb-4">
-				Play Page - 局 {kyoku} 巡目 {junme}
-			</p>
+			<div className="flex justify-between items-center mb-4">
+				<p className="text-xl">
+					東{kyoku}局 | 巡目: {junme} | 残りツモ: {remainTsumo}
+				</p>
+				<p className="text-xl">
+					スコア: {score} | シャンテン:{" "}
+					{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
+				</p>
+			</div>
 
 			{/* Sutehai grid (3x6) */}
 			<div className="mb-6">
