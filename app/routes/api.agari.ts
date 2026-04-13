@@ -23,11 +23,13 @@ export async function action({ context, request }: Route.ActionArgs) {
 
 	const tsumohai = gameStateRecord.tsumohai[0];
 	if (!tsumohai) {
-		return new Response("Invalid agari request", { status: 400 });
+		return new Response("No tile drawn - cannot declare win", { status: 400 });
 	}
 	const canAgari = judgeAgari(sortTehai([...gameStateRecord.tehai, tsumohai]));
 	if (!canAgari) {
-		return new Response("Invalid agari request", { status: 400 });
+		return new Response("Hand does not form a valid winning combination", {
+			status: 400,
+		});
 	}
 
 	// Record win with +8000 points
