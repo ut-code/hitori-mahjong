@@ -30,10 +30,25 @@ export const haiyama = sqliteTable("haiyama", {
 	tiles: haiArray("tiles").notNull(),
 });
 
-// relation between user and haiyama
+// Game state (active game per user)
+export const gameState = sqliteTable("game_state", {
+	userId: text("user_id").primaryKey(),
+	kyoku: integer("kyoku").notNull().default(0),
+	junme: integer("junme").notNull().default(0),
+	haiyama: haiArray("haiyama").notNull(),
+	sutehai: haiArray("sutehai").notNull(),
+	tehai: haiArray("tehai").notNull(),
+	tsumohai: haiArray("tsumohai").notNull(), // 0 or 1 element
+	haiyamaId: text("haiyama_id"),
+});
+
+// relation between user and haiyama (game history)
 export const kyoku = sqliteTable(
 	"kyoku",
 	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
 		userId: text("user_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
@@ -42,9 +57,11 @@ export const kyoku = sqliteTable(
 			.references(() => haiyama.id, { onDelete: "cascade" }),
 		didAgari: integer("did_agari", { mode: "boolean" }).notNull(),
 		agariJunme: integer("agari_junme"),
+		createdAt: integer("created_at", { mode: "timestamp" })
+			.notNull()
+			.$defaultFn(() => new Date()),
 	},
 	(table) => [
-		primaryKey({ columns: [table.userId, table.haiyamaId] }),
 		index("kyoku_user_id_idx").on(table.userId),
 		index("kyoku_haiyama_id_idx").on(table.haiyamaId),
 		check(
