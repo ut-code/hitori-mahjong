@@ -3,7 +3,7 @@ import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { kyoku } from "~/lib/db/schema";
 import { getGameState, restartGame } from "~/lib/game";
-import type { Route } from "./+types/play.ryukyoku";
+import type { Route } from "./+types/api.agari";
 
 export async function action({ context, request }: Route.ActionArgs) {
 	const { env } = context.cloudflare;
@@ -22,12 +22,12 @@ export async function action({ context, request }: Route.ActionArgs) {
 		throw new Response("Game state not found", { status: 404 });
 	}
 
-	// Record the ryukyoku (draw) in the database
+	// Record the agari (win) in the database
 	await db.insert(kyoku).values({
 		userId,
 		haiyamaId: gameStateRecord.haiyamaId ?? "",
-		didAgari: false,
-		agariJunme: null,
+		didAgari: true,
+		agariJunme: gameStateRecord.junme,
 	});
 
 	// Start a new game

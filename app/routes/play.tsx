@@ -80,7 +80,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box">
 						<h3 className="font-bold text-lg">ツモ！</h3>
 						<div className="modal-action">
-							<form method="post" action="/play/agari">
+							<form method="post" action="/api/agari">
 								<input type="hidden" value={junme} name="junme" />
 								<button className="btn" type="submit">
 									確認
@@ -95,7 +95,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box">
 						<h3 className="font-bold text-lg">流局</h3>
 						<div className="modal-action">
-							<form method="post" action="/play/ryukyoku">
+							<form method="post" action="/api/ryukyoku">
 								<button className="btn" type="submit">
 									確認
 								</button>
@@ -130,7 +130,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<h3 className="text-lg mb-2">手牌</h3>
 					<div className="flex gap-0">
 						{indexedTehai.map((hai) => (
-							<form key={hai.index} method="post" action="/play/tedashi">
+							<form key={hai.index} method="post" action="/api/tedashi">
 								<input type="hidden" name="index" value={hai.index} />
 								<button type="submit">
 									<img
@@ -147,7 +147,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				{tsumohai && (
 					<div>
 						<h3 className="text-lg mb-2">ツモ牌</h3>
-						<form method="post" action="/play/tsumogiri">
+						<form method="post" action="/api/tsumogiri">
 							<button type="submit">
 								<img
 									src={`/hai/${tsumohai.kind}_${tsumohai.value}.png`}

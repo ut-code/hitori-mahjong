@@ -2,7 +2,7 @@ import { redirect } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { tedashi } from "~/lib/game";
-import type { Route } from "./+types/play.tedashi";
+import type { Route } from "./+types/api.tedashi";
 
 export async function action({ context, request }: Route.ActionArgs) {
 	const { env } = context.cloudflare;

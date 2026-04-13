@@ -2,7 +2,7 @@ import { redirect } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { tsumogiri } from "~/lib/game";
-import type { Route } from "./+types/play.tsumogiri";
+import type { Route } from "./+types/api.tsumogiri";
 
 export async function action({ context, request }: Route.ActionArgs) {
 	const { env } = context.cloudflare;
