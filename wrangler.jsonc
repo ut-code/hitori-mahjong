@@ -24,7 +24,8 @@
 		{
 			"binding": "DB",
 			"database_name": "db",
-			"database_id": "3d47de4a-ae78-48e0-9aea-fab19d6c2fc9"
+			"database_id": "c9ec718c-0fe1-42d6-885b-35e8a5483a85",
+			"migrations_dir": "drizzle"
 		}
 	],
 	"rules": [

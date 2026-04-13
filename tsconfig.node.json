@@ -1,6 +1,6 @@
 {
 	"extends": "./tsconfig.json",
-	"include": ["vite.config.ts"],
+	"include": ["vite.config.ts", "find-local-d1.ts"],
 	"compilerOptions": {
 		"composite": true,
 		"strict": true,

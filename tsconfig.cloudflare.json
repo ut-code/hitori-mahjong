@@ -7,13 +7,14 @@
 		"app/**/.client/**/*",
 		"workers/**/*",
 		"worker-configuration.d.ts",
-		"drizzle-do/**/*"
+		"drizzle-do/**/*",
+		"find-local-d1.ts"
 	],
 	"compilerOptions": {
 		"composite": true,
 		"strict": true,
 		"lib": ["DOM", "DOM.Iterable", "ES2022"],
-		"types": ["vite/client"],
+		"types": ["vite/client", "node"],
 		"target": "ES2022",
 		"module": "ES2022",
 		"moduleResolution": "bundler",
