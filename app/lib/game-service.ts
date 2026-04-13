@@ -1,7 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { gameState, haiyama, kyoku } from "~/lib/db/schema";
-import { calculateShanten } from "~/lib/hai/shanten";
 import type { Hai } from "~/lib/hai/types";
 import { sortTehai } from "~/lib/hai/types";
 import type { GameState } from "~/lib/types";
@@ -70,6 +69,68 @@ export async function initGame(
 				haiyamaId,
 			},
 		});
+}
+
+const jihaiValues = [
+	"ton",
+	"nan",
+	"sya",
+	"pei",
+	"haku",
+	"hatsu",
+	"tyun",
+] as const;
+
+function createShuffledHaiyama(): Hai[] {
+	const tiles: Hai[] = [];
+
+	for (const kind of ["manzu", "pinzu", "souzu"] as const) {
+		for (let value = 1; value <= 9; value += 1) {
+			for (let i = 0; i < 4; i += 1) {
+				tiles.push({ kind, value });
+			}
+		}
+	}
+
+	for (const value of jihaiValues) {
+		for (let i = 0; i < 4; i += 1) {
+			tiles.push({ kind: "jihai", value });
+		}
+	}
+
+	for (let i = tiles.length - 1; i > 0; i -= 1) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+	}
+
+	return tiles;
+}
+
+export async function getRandomHaiyamaOrCreate(db: DrizzleD1Database) {
+	const randomHaiyama = await db
+		.select()
+		.from(haiyama)
+		.orderBy(sql`RANDOM()`)
+		.limit(1);
+
+	if (randomHaiyama.length > 0) {
+		return randomHaiyama[0];
+	}
+
+	const generatedTiles = createShuffledHaiyama();
+	await db.insert(haiyama).values({ tiles: generatedTiles });
+
+	const insertedHaiyama = await db
+		.select()
+		.from(haiyama)
+		.orderBy(sql`RANDOM()`)
+		.limit(1);
+
+	if (insertedHaiyama.length === 0) {
+		throw new Error("Failed to create haiyama");
+	}
+
+	return insertedHaiyama[0];
 }
 
 export async function tedashi(
@@ -171,18 +232,10 @@ export async function restartGame(
 		return { newKyoku, isGameOver: true };
 	}
 
-	const randomHaiyama = await db
-		.select()
-		.from(haiyama)
-		.orderBy(sql`RANDOM()`)
-		.limit(1);
+	const randomHaiyama = await getRandomHaiyamaOrCreate(db);
 
-	if (randomHaiyama.length === 0) {
-		throw new Error("No haiyama found");
-	}
-
-	const newHaiyama = randomHaiyama[0].tiles;
-	const newHaiyamaId = randomHaiyama[0].id;
+	const newHaiyama = randomHaiyama.tiles;
+	const newHaiyamaId = randomHaiyama.id;
 
 	await initGame(db, userId, newHaiyamaId, newHaiyama);
 

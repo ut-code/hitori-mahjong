@@ -35,7 +35,6 @@ export async function action({ context, request }: Route.ActionArgs) {
 	// Record ryukyoku
 	await recordKyoku(db, userId, {
 		didAgari: false,
-		agariJunme: null,
 		shanten,
 		scoreDelta,
 	});

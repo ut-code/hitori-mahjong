@@ -1,8 +1,11 @@
-import { sql } from "drizzle-orm";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { haiyama } from "~/lib/db/schema";
-import { getGameState, initGame, toGameState } from "~/lib/game-service";
+import {
+	getGameState,
+	getRandomHaiyamaOrCreate,
+	initGame,
+	toGameState,
+} from "~/lib/game-service";
 import judgeAgari from "~/lib/hai/agari";
 import { calculateShanten } from "~/lib/hai/shanten";
 import type { Hai } from "~/lib/hai/types";
@@ -33,18 +36,9 @@ export async function loader({
 		}
 
 		// No existing game state, so initialize from haiyama
-		const randomHaiyama = await db
-			.select()
-			.from(haiyama)
-			.orderBy(sql`RANDOM()`)
-			.limit(1);
-
-		if (randomHaiyama.length === 0) {
-			throw new Response("No haiyama found", { status: 404 });
-		}
-
-		const haiData = randomHaiyama[0].tiles;
-		const haiyamaId = randomHaiyama[0].id;
+		const randomHaiyama = await getRandomHaiyamaOrCreate(db);
+		const haiData = randomHaiyama.tiles;
+		const haiyamaId = randomHaiyama.id;
 
 		// Initialize game state in D1
 		await initGame(db, userId, haiyamaId, haiData);
@@ -56,6 +50,9 @@ export async function loader({
 		}
 		return toGameState(gameStateRecord);
 	} catch (error) {
+		if (error instanceof Response) {
+			throw error;
+		}
 		throw error instanceof Error ? error : new Error(String(error));
 	}
 }
