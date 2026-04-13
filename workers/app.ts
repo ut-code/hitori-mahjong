@@ -1,7 +1,5 @@
 import { createRequestHandler } from "react-router";
 
-export { MyDurableObject } from "./do";
-
 declare module "react-router" {
 	export interface AppLoadContext {
 		cloudflare: {
