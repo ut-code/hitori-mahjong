@@ -71,16 +71,6 @@ export async function initGame(
 		});
 }
 
-const jihaiValues = [
-	"ton",
-	"nan",
-	"sya",
-	"pei",
-	"haku",
-	"hatsu",
-	"tyun",
-] as const;
-
 /**
  * Create a shuffled haiyama with only suited tiles (no jihai)
  * Each haiyama has exactly `tileCount` tiles (default 32)
