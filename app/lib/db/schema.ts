@@ -4,11 +4,13 @@ import {
 	customType,
 	index,
 	integer,
-	primaryKey,
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
 import type { Hai } from "../hai/types";
+import { user } from "./auth-schema";
+
+export * from "./auth-schema";
 
 export const haiArray = customType<{ data: Hai[]; driverData: string }>({
 	dataType() {
@@ -33,8 +35,10 @@ export const haiyama = sqliteTable("haiyama", {
 // Game state (active game per user)
 export const gameState = sqliteTable("game_state", {
 	userId: text("user_id").primaryKey(),
-	kyoku: integer("kyoku").notNull().default(0),
-	junme: integer("junme").notNull().default(0),
+	kyoku: integer("kyoku").notNull().default(1),
+	junme: integer("junme").notNull().default(1),
+	remainTsumo: integer("remain_tsumo").notNull().default(18),
+	score: integer("score").notNull().default(25000),
 	haiyama: haiArray("haiyama").notNull(),
 	sutehai: haiArray("sutehai").notNull(),
 	tehai: haiArray("tehai").notNull(),
@@ -57,6 +61,8 @@ export const kyoku = sqliteTable(
 			.references(() => haiyama.id, { onDelete: "cascade" }),
 		didAgari: integer("did_agari", { mode: "boolean" }).notNull(),
 		agariJunme: integer("agari_junme"),
+		shanten: integer("shanten").notNull().default(0),
+		scoreDelta: integer("score_delta").notNull().default(0),
 		createdAt: integer("created_at", { mode: "timestamp" })
 			.notNull()
 			.$defaultFn(() => new Date()),
@@ -70,81 +76,3 @@ export const kyoku = sqliteTable(
 		),
 	],
 );
-
-// better-auth
-export const user = sqliteTable("user", {
-	id: text("id").primaryKey(),
-	name: text("name").notNull(),
-	email: text("email").notNull().unique(),
-	emailVerified: integer("email_verified", { mode: "boolean" })
-		.default(false)
-		.notNull(),
-	image: text("image"),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
-	updatedAt: integer("updated_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date())
-		.$onUpdate(() => new Date()),
-	isAnonymous: integer("is_anonymous", { mode: "boolean" }),
-});
-
-export const session = sqliteTable("session", {
-	id: text("id").primaryKey(),
-	expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-	token: text("token").notNull().unique(),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
-	updatedAt: integer("updated_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date())
-		.$onUpdate(() => new Date()),
-	ipAddress: text("ip_address"),
-	userAgent: text("user_agent"),
-	userId: text("user_id")
-		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
-});
-
-export const account = sqliteTable("account", {
-	id: text("id").primaryKey(),
-	accountId: text("account_id").notNull(),
-	providerId: text("provider_id").notNull(),
-	userId: text("user_id")
-		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
-	accessToken: text("access_token"),
-	refreshToken: text("refresh_token"),
-	idToken: text("id_token"),
-	accessTokenExpiresAt: integer("access_token_expires_at", {
-		mode: "timestamp",
-	}),
-	refreshTokenExpiresAt: integer("refresh_token_expires_at", {
-		mode: "timestamp",
-	}),
-	scope: text("scope"),
-	password: text("password"),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
-	updatedAt: integer("updated_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date())
-		.$onUpdate(() => new Date()),
-});
-
-export const verification = sqliteTable("verification", {
-	id: text("id").primaryKey(),
-	identifier: text("identifier").notNull(),
-	value: text("value").notNull(),
-	expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date()),
-	updatedAt: integer("updated_at", { mode: "timestamp" })
-		.notNull()
-		.$defaultFn(() => new Date())
-		.$onUpdate(() => new Date()),
-});
