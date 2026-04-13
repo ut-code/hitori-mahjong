@@ -8,9 +8,3 @@ export interface GameState {
 	tehai: Hai[];
 	tsumohai: Hai | null;
 }
-
-export default function getDOStub(env: Env, userId: string) {
-	const id = env.DO.idFromName(userId);
-	const stub = env.DO.get(id);
-	return stub;
-}
