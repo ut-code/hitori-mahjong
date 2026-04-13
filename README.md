@@ -39,7 +39,7 @@ npx auth generate --output ./app/lib/db/auth-schema.ts --adapter drizzle --diale
 
 ```bash
 # Apply migration to remote D1
-npx wrangler d1 migrations apply db --remote
+npx wrangler d1 migrations apply hitori-mahjong-db --remote
 ```
 
 This reads the generated SQL files from `drizzle/` and applies them to the remote D1 database.

@@ -5,6 +5,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "hitori-mahjong",
+	"account_id": "df6c3acd32f66bd1eb95e50607684297",
 	"compatibility_date": "2025-04-04",
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./workers/app.ts",
@@ -23,8 +24,8 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "db",
-			"database_id": "c9ec718c-0fe1-42d6-885b-35e8a5483a85",
+			"database_name": "hitori-mahjong-db",
+			"database_id": "8998e522-2477-4b58-b0d1-214c530c5d40",
 			"migrations_dir": "drizzle"
 		}
 	],
