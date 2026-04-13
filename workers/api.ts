@@ -28,6 +28,11 @@ const app = new Hono<{
 
 // Auth middleware
 app.use("/*", async (c, next) => {
+	if (c.req.path === "/auth" || c.req.path.startsWith("/auth/")) {
+		await next();
+		return;
+	}
+
 	const auth = getAuth(c.env);
 	const session = await auth.api.getSession({ headers: c.req.raw.headers });
 

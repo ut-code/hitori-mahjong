@@ -25,12 +25,6 @@ export default function Page() {
 					プレイ
 				</button>
 				<Link
-					to="/login"
-					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 flex items-center justify-center transition-transform duration-150 hover:scale-105"
-				>
-					ログイン
-				</Link>
-				<Link
 					to="/learn"
 					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 flex items-center justify-center transition-transform duration-150 hover:scale-105"
 				>
