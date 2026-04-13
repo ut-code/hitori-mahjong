@@ -6,7 +6,7 @@ import { getGameState, tedashi } from "~/lib/game-service";
 import type { Route } from "./+types/api.tedashi";
 
 const tedashiSchema = z.object({
-	index: z.coerce.number(),
+	index: z.coerce.number().int().min(0),
 });
 
 export async function action({ context, request }: Route.ActionArgs) {

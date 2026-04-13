@@ -19,6 +19,9 @@ export async function action({ context, request }: Route.ActionArgs) {
 	if (!gameStateRecord) {
 		return new Response("Game state not found", { status: 404 });
 	}
+	if (gameStateRecord.remainTsumo > 0) {
+		return new Response("Ryukyoku is not allowed yet", { status: 400 });
+	}
 
 	// Calculate shanten for current hand
 	const shantenResult = calculateShanten(gameStateRecord.tehai);
