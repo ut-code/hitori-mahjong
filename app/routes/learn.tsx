@@ -1,12 +1,11 @@
-"use client";
-
+import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import BasicRule from "~/lib/components/BasicRule";
 import LocalRule from "~/lib/components/LocalRule";
 
 export default function Page() {
 	const location = useLocation();
-	const currentHash = location.hash;
+	const [currentHash] = useState(location.hash);
 	const contents = ["basic", "local"];
 	return (
 		<div className="drawer drawer-open bg-[#1A472A] font-serif">

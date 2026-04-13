@@ -1,5 +1,6 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { drizzle } from "drizzle-orm/d1";
 
 export function getDB(env: Env) {
@@ -7,8 +8,13 @@ export function getDB(env: Env) {
 	return db;
 }
 
+const projectRoot = path.resolve(
+	path.dirname(fileURLToPath(import.meta.url)),
+	"../../..",
+);
+
 export function findLocalD1Path(): string {
-	const wranglerDir = path.resolve(".wrangler/state/v3/d1");
+	const wranglerDir = path.join(projectRoot, ".wrangler/state/v3/d1");
 	try {
 		const files = readdirSync(wranglerDir, { recursive: true }).filter(
 			(f) => typeof f === "string" && f.endsWith(".sqlite"),
