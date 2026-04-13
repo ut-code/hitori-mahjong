@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { Form } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
@@ -94,96 +95,120 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	}));
 
 	return (
-		<div className="p-4">
+		<div className="min-h-screen bg-[#1A472A] p-4 md:p-8 font-serif text-white">
 			{isAgari && (
 				<dialog id="agari_modal" className="modal" open>
-					<div className="modal-box">
-						<h3 className="font-bold text-lg">ツモ！</h3>
+					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
+						<h3 className="font-bold text-2xl text-yellow-400">ツモ！</h3>
+						<p className="mt-2 text-sm text-gray-200">
+							お見事です。和了を確定しますか？
+						</p>
 						<div className="modal-action">
-							<form method="post" action="/api/agari">
+							<Form method="post" action="/api/agari">
 								<input type="hidden" value={junme} name="junme" />
-								<button className="btn" type="submit">
+								<button
+									className="btn bg-yellow-600 text-white border-none"
+									type="submit"
+								>
 									確認
 								</button>
-							</form>
+							</Form>
 						</div>
 					</div>
 				</dialog>
 			)}
 			{isRyukyoku && (
 				<dialog id="ryukyoku_modal" className="modal" open>
-					<div className="modal-box">
-						<h3 className="font-bold text-lg">流局</h3>
+					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
+						<h3 className="font-bold text-2xl text-yellow-400">流局</h3>
+						<p className="mt-2 text-sm text-gray-200">
+							この局は終了です。結果を確定しますか？
+						</p>
 						<div className="modal-action">
-							<form method="post" action="/api/ryukyoku">
-								<button className="btn" type="submit">
+							<Form method="post" action="/api/ryukyoku">
+								<button
+									className="btn bg-yellow-600 text-white border-none"
+									type="submit"
+								>
 									確認
 								</button>
-							</form>
+							</Form>
 						</div>
 					</div>
 				</dialog>
 			)}
 
-			<div className="flex justify-between items-center mb-4">
-				<p className="text-xl">
-					東{kyoku}局 | 巡目: {junme} | 残りツモ: {remainTsumo}
-				</p>
-				<p className="text-xl">
-					スコア: {score} | シャンテン:{" "}
-					{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
-				</p>
-			</div>
-
-			{/* Sutehai grid (3x6) */}
-			<div className="mb-6">
-				<h3 className="text-lg mb-2">捨て牌</h3>
-				<div className="grid grid-cols-6 gap-0 w-max min-h-48">
-					{indexedSutehai.map((hai) => (
-						<img
-							key={hai.index}
-							src={`/hai/${hai.kind}_${hai.value}.png`}
-							alt={`${hai.kind} ${hai.value}`}
-							className="w-12 h-16"
-						/>
-					))}
+			<div className="max-w-6xl mx-auto">
+				<div className="mb-4 md:mb-6">
+					<h1 className="text-2xl md:text-3xl font-bold text-yellow-400">対局中</h1>
 				</div>
-			</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 mb-4 md:mb-6 text-sm md:text-xl bg-[#0F2918] rounded-lg p-3 md:p-4 border border-[#1A472A]">
+					<p>
+						東{kyoku}局 | 巡目: {junme} | 残りツモ: {remainTsumo}
+					</p>
+					<p className="md:text-right">
+						スコア: {score} | シャンテン:{" "}
+						{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
+					</p>
+				</div>
 
-			{/* Tehai and Tsumohai */}
-			<div className="flex items-center gap-4">
-				<div>
-					<h3 className="text-lg mb-2">手牌</h3>
-					<div className="flex gap-0">
-						{indexedTehai.map((hai) => (
-							<form key={hai.index} method="post" action="/api/tedashi">
-								<input type="hidden" name="index" value={hai.index} />
-								<button type="submit">
+				<div className="mb-6">
+					<h3 className="text-base md:text-lg mb-2 text-yellow-300">捨て牌</h3>
+					<div className="overflow-x-auto pb-2">
+						<div className="grid grid-cols-6 gap-0 w-max min-h-40 md:min-h-48 bg-[#0F2918] rounded-md p-2 border border-[#1A472A]">
+							{indexedSutehai.map((hai) => (
+								<img
+									key={hai.index}
+									src={`/hai/${hai.kind}_${hai.value}.png`}
+									alt={`${hai.kind} ${hai.value}`}
+									className="w-10 h-14 md:w-12 md:h-16"
+								/>
+							))}
+						</div>
+					</div>
+				</div>
+
+				<div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-6">
+					<div>
+						<h3 className="text-base md:text-lg mb-2 text-yellow-300">手牌</h3>
+						<div className="overflow-x-auto pb-2">
+							<div className="flex gap-0 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-max">
+								{indexedTehai.map((hai) => (
+									<Form key={hai.index} method="post" action="/api/tedashi">
+										<input type="hidden" name="index" value={hai.index} />
+										<button
+											type="submit"
+											aria-label={`手牌 ${hai.kind} ${hai.value} を切る`}
+										>
+											<img
+												src={`/hai/${hai.kind}_${hai.value}.png`}
+												alt={`${hai.kind} ${hai.value}`}
+												className="w-10 h-14 md:w-12 md:h-16 cursor-pointer hover:scale-105 transition-transform"
+											/>
+										</button>
+									</Form>
+								))}
+							</div>
+						</div>
+					</div>
+
+					{tsumohai && (
+						<div>
+							<h3 className="text-base md:text-lg mb-2 text-yellow-300">
+								ツモ牌
+							</h3>
+							<Form method="post" action="/api/tsumogiri">
+								<button type="submit" aria-label="ツモ牌を切る">
 									<img
-										src={`/hai/${hai.kind}_${hai.value}.png`}
-										alt={`${hai.kind} ${hai.value}`}
-										className="w-12 h-16 cursor-pointer hover:scale-105 transition-transform"
+										src={`/hai/${tsumohai.kind}_${tsumohai.value}.png`}
+										alt={`${tsumohai.kind} ${tsumohai.value}`}
+										className="w-10 h-14 md:w-12 md:h-16 object-contain cursor-pointer hover:scale-105 transition-transform"
 									/>
 								</button>
-							</form>
-						))}
-					</div>
+							</Form>
+						</div>
+					)}
 				</div>
-
-				{tsumohai && (
-					<div>
-						<h3 className="text-lg mb-2">ツモ牌</h3>
-						<form method="post" action="/api/tsumogiri">
-							<button type="submit">
-								<img
-									src={`/hai/${tsumohai.kind}_${tsumohai.value}.png`}
-									alt={`${tsumohai.kind} ${tsumohai.value}`}
-									className="w-12 h-16 object-contain cursor-pointer hover:scale-105 transition-transform"
-								/>
-							</button>
-						</form>
-					</div>
-				)}
 			</div>
 		</div>
 	);
