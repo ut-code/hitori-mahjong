@@ -2,8 +2,7 @@ import { redirect } from "react-router";
 import { z } from "zod";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { kyoku } from "~/lib/db/schema";
-import { getGameState, restartGame } from "~/lib/game-service";
+import { getGameState, recordKyoku, restartGame } from "~/lib/game-service";
 import type { Route } from "./+types/api.agari";
 
 const agariSchema = z.object({
@@ -34,14 +33,21 @@ export async function action({ context, request }: Route.ActionArgs) {
 		return new Response("Game state not found", { status: 404 });
 	}
 
-	await db.insert(kyoku).values({
-		userId,
-		haiyamaId: gameStateRecord.haiyamaId ?? "",
+	const agariJunme = parsedData.data.junme ?? gameStateRecord.junme;
+
+	// Record win with +8000 points
+	await recordKyoku(db, userId, {
 		didAgari: true,
-		agariJunme: parsedData.data.junme ?? gameStateRecord.junme,
+		agariJunme,
+		shanten: 0,
+		scoreDelta: 8000,
 	});
 
-	await restartGame(db, userId);
+	const { isGameOver } = await restartGame(db, userId);
+
+	if (isGameOver) {
+		return redirect("/gameover");
+	}
 
 	return redirect("/play");
 }

@@ -2,7 +2,7 @@ import { redirect } from "react-router";
 import { z } from "zod";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { tedashi } from "~/lib/game-service";
+import { getGameState, tedashi } from "~/lib/game-service";
 import type { Route } from "./+types/api.tedashi";
 
 const tedashiSchema = z.object({
@@ -26,9 +26,17 @@ export async function action({ context, request }: Route.ActionArgs) {
 	}
 
 	const db = getDB(env);
+	const userId = session.user.id;
+
+	// Check if we have tsumo remaining
+	const gameStateRecord = await getGameState(db, userId);
+	if (gameStateRecord && gameStateRecord.remainTsumo <= 0) {
+		// No more tsumo - force ryukyoku
+		return redirect("/play?ryukyoku=1");
+	}
 
 	try {
-		await tedashi(db, session.user.id, parsedData.data.index);
+		await tedashi(db, userId, parsedData.data.index);
 	} catch {
 		return new Response("Invalid request", { status: 400 });
 	}
