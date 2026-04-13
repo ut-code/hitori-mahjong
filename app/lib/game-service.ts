@@ -1,6 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
-import { gameState, haiyama } from "~/lib/db/schema";
+import { gameState, haiyama, kyoku } from "~/lib/db/schema";
+import { calculateShanten } from "~/lib/hai/shanten";
 import type { Hai } from "~/lib/hai/types";
 import { sortTehai } from "~/lib/hai/types";
 import type { GameState } from "~/lib/types";
@@ -9,6 +10,8 @@ export interface GameStateRecord {
 	userId: string;
 	kyoku: number;
 	junme: number;
+	remainTsumo: number;
+	score: number;
 	haiyama: Hai[];
 	sutehai: Hai[];
 	tehai: Hai[];
@@ -45,6 +48,8 @@ export async function initGame(
 			userId,
 			kyoku: 1,
 			junme: 1,
+			remainTsumo: 18,
+			score: 25000,
 			haiyama: remainingHai,
 			sutehai: [],
 			tehai,
@@ -56,6 +61,8 @@ export async function initGame(
 			set: {
 				kyoku: 1,
 				junme: 1,
+				remainTsumo: 18,
+				score: 25000,
 				haiyama: remainingHai,
 				sutehai: [],
 				tehai,
@@ -87,6 +94,7 @@ export async function tedashi(
 	const remainingTehai = sortedTehai.filter((_, i) => i !== index);
 
 	const newJunme = state.junme + 1;
+	const newRemainTsumo = state.remainTsumo - 1;
 	const newHaiyama = state.haiyama.slice(1);
 	const newSutehai = [...state.sutehai, discardedHai];
 	const newTehai = sortTehai([...remainingTehai, tsumohai]);
@@ -96,6 +104,7 @@ export async function tedashi(
 		.update(gameState)
 		.set({
 			junme: newJunme,
+			remainTsumo: newRemainTsumo,
 			haiyama: newHaiyama,
 			sutehai: newSutehai,
 			tehai: newTehai,
@@ -115,6 +124,7 @@ export async function tsumogiri(db: DrizzleD1Database, userId: string) {
 
 	const tsumohai = state.tsumohai[0];
 	const newJunme = state.junme + 1;
+	const newRemainTsumo = state.remainTsumo - 1;
 	const newHaiyama = state.haiyama.slice(1);
 	const newSutehai = [...state.sutehai, tsumohai];
 	const newTsumohai = newHaiyama.length > 0 ? [newHaiyama[0]] : [];
@@ -123,6 +133,7 @@ export async function tsumogiri(db: DrizzleD1Database, userId: string) {
 		.update(gameState)
 		.set({
 			junme: newJunme,
+			remainTsumo: newRemainTsumo,
 			haiyama: newHaiyama,
 			sutehai: newSutehai,
 			tsumohai: newTsumohai,
@@ -147,10 +158,17 @@ export async function jikyoku(db: DrizzleD1Database, userId: string) {
 export async function restartGame(
 	db: DrizzleD1Database,
 	userId: string,
-): Promise<{ newKyoku: number }> {
+): Promise<{ newKyoku: number; isGameOver: boolean }> {
 	const state = await getGameState(db, userId);
 	if (!state) {
 		throw new Error("Game not found");
+	}
+
+	const newKyoku = state.kyoku + 1;
+	const isGameOver = newKyoku > 4;
+
+	if (isGameOver) {
+		return { newKyoku, isGameOver: true };
 	}
 
 	const randomHaiyama = await db
@@ -165,7 +183,6 @@ export async function restartGame(
 
 	const newHaiyama = randomHaiyama[0].tiles;
 	const newHaiyamaId = randomHaiyama[0].id;
-	const newKyoku = state.kyoku + 1;
 
 	await initGame(db, userId, newHaiyamaId, newHaiyama);
 
@@ -174,16 +191,57 @@ export async function restartGame(
 		.set({ kyoku: newKyoku })
 		.where(eq(gameState.userId, userId));
 
-	return { newKyoku };
+	return { newKyoku, isGameOver: false };
 }
 
 export function toGameState(record: GameStateRecord): GameState {
 	return {
 		kyoku: record.kyoku,
 		junme: record.junme,
+		remainTsumo: record.remainTsumo,
+		score: record.score,
 		haiyama: record.haiyama,
 		sutehai: record.sutehai,
 		tehai: record.tehai,
 		tsumohai: record.tsumohai.length > 0 ? record.tsumohai[0] : null,
 	};
+}
+
+/**
+ * Record a game result in the kyoku table
+ */
+export async function recordKyoku(
+	db: DrizzleD1Database,
+	userId: string,
+	options: {
+		didAgari: boolean;
+		agariJunme?: number;
+		shanten: number;
+		scoreDelta: number;
+	},
+): Promise<void> {
+	const state = await getGameState(db, userId);
+	if (!state) {
+		throw new Error("Game not found");
+	}
+
+	if (!state.haiyamaId) {
+		throw new Error("Haiyama ID not found");
+	}
+
+	// Insert into kyoku table
+	await db.insert(kyoku).values({
+		userId,
+		haiyamaId: state.haiyamaId,
+		didAgari: options.didAgari,
+		agariJunme: options.agariJunme ?? null,
+		shanten: options.shanten,
+		scoreDelta: options.scoreDelta,
+	});
+
+	// Update score in game state
+	await db
+		.update(gameState)
+		.set({ score: state.score + options.scoreDelta })
+		.where(eq(gameState.userId, userId));
 }
