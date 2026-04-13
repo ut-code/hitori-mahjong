@@ -4,7 +4,7 @@ import LocalRule from "~/lib/components/LocalRule";
 
 export default function Page() {
 	const location = useLocation();
-	const currentHash = location.hash || "#basic";
+	const currentHash = location.hash;
 	const contents = ["basic", "local"];
 	return (
 		<div className="drawer drawer-open bg-[#1A472A] font-serif">
