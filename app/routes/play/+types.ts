@@ -1,4 +1,4 @@
-import type { GameState } from "~/lib/do";
+import type { GameState } from "~/lib/types";
 
 export namespace Route {
 	export type ComponentProps = {

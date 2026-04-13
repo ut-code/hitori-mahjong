@@ -1,9 +1,9 @@
 import { eq, sql } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { gameState, haiyama } from "~/lib/db/schema";
-import type { GameState } from "~/lib/do";
-import type { Hai } from "~/lib/hai/utils";
-import { sortTehai } from "~/lib/hai/utils";
+import type { Hai } from "~/lib/hai/types";
+import { sortTehai } from "~/lib/hai/types";
+import type { GameState } from "~/lib/types";
 
 export interface GameStateRecord {
 	userId: string;

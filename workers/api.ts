@@ -4,7 +4,12 @@ import { z } from "zod";
 import { getAuth } from "../app/lib/auth";
 import { getDB } from "../app/lib/db";
 import { kyoku } from "../app/lib/db/schema";
-import { getGameState, restartGame, tedashi, tsumogiri } from "../app/lib/game";
+import {
+	getGameState,
+	restartGame,
+	tedashi,
+	tsumogiri,
+} from "../app/lib/game-service";
 
 const agariSchema = z.object({
 	junme: z.coerce.number().optional(),

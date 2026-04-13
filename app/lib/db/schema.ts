@@ -8,7 +8,7 @@ import {
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
-import type { Hai } from "../hai/utils";
+import type { Hai } from "../hai/types";
 
 export const haiArray = customType<{ data: Hai[]; driverData: string }>({
 	dataType() {

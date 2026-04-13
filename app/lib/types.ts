@@ -1,4 +1,4 @@
-import type { Hai } from "./hai/utils";
+import type { Hai } from "./hai/types";
 
 export interface GameState {
 	kyoku: number;

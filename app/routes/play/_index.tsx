@@ -2,11 +2,11 @@ import { sql } from "drizzle-orm";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
-import type { GameState } from "~/lib/do";
-import { getGameState, initGame, toGameState } from "~/lib/game";
-import judgeAgari from "~/lib/hai/judgeAgari";
-import type { Hai } from "~/lib/hai/utils";
-import { sortTehai } from "~/lib/hai/utils";
+import { getGameState, initGame, toGameState } from "~/lib/game-service";
+import judgeAgari from "~/lib/hai/agari";
+import type { Hai } from "~/lib/hai/types";
+import { sortTehai } from "~/lib/hai/types";
+import type { GameState } from "~/lib/types";
 import type { Route } from "./+types";
 
 export async function loader({
