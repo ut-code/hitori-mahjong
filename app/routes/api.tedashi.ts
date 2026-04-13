@@ -29,9 +29,8 @@ export async function action({ context, request }: Route.ActionArgs) {
 
 	try {
 		await tedashi(db, session.user.id, parsedData.data.index);
-	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		return new Response(errorMessage, { status: 400 });
+	} catch {
+		return new Response("Invalid request", { status: 400 });
 	}
 
 	return redirect("/play");

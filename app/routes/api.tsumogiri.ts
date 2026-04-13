@@ -16,9 +16,8 @@ export async function action({ context, request }: Route.ActionArgs) {
 
 	try {
 		await tsumogiri(db, session.user.id);
-	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		return new Response(errorMessage, { status: 400 });
+	} catch {
+		return new Response("Invalid request", { status: 400 });
 	}
 
 	return redirect("/play");
