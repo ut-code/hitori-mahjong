@@ -178,7 +178,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										<input type="hidden" name="index" value={hai.index} />
 										<button
 											type="submit"
-											aria-label={`手牌 ${hai.kind} ${hai.value} を切る`}
+											aria-label={`捨てる ${hai.kind} ${hai.value}`}
 										>
 											<img
 												src={`/hai/${hai.kind}_${hai.value}.png`}
@@ -198,7 +198,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								ツモ牌
 							</h3>
 							<Form method="post" action="/api/tsumogiri">
-								<button type="submit" aria-label="ツモ牌を切る">
+								<button
+									type="submit"
+									aria-label={`ツモ切り ${tsumohai.kind} ${tsumohai.value}`}
+								>
 									<img
 										src={`/hai/${tsumohai.kind}_${tsumohai.value}.png`}
 										alt={`${tsumohai.kind} ${tsumohai.value}`}
