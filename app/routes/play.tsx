@@ -7,7 +7,7 @@ import judgeAgari from "~/lib/hai/agari";
 import type { Hai } from "~/lib/hai/types";
 import { sortTehai } from "~/lib/hai/types";
 import type { GameState } from "~/lib/types";
-import type { Route } from "./+types";
+import type { Route } from "./+types/play";
 
 export async function loader({
 	context,

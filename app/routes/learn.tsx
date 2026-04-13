@@ -1,8 +1,8 @@
 "use client";
 
 import { Link, useLocation } from "react-router";
-import BasicRule from "./components/BasicRule";
-import LocalRule from "./components/LocalRule";
+import BasicRule from "~/lib/components/BasicRule";
+import LocalRule from "~/lib/components/LocalRule";
 
 export default function Page() {
 	const location = useLocation();
