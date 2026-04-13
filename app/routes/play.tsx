@@ -1,9 +1,12 @@
+import { sql } from "drizzle-orm";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
+import { haiyama } from "~/lib/db/schema";
 import {
 	getGameState,
 	getRandomHaiyamaOrCreate,
 	initGame,
+	seedHaiyama,
 	toGameState,
 } from "~/lib/game-service";
 import judgeAgari from "~/lib/hai/agari";
@@ -28,6 +31,15 @@ export async function loader({
 	const userId = session.user.id;
 
 	try {
+		// Auto-seed haiyama if empty
+		const haiCount = await db
+			.select({ count: sql<number>`count(*)` })
+			.from(haiyama)
+			.get();
+		if (!haiCount || haiCount.count === 0) {
+			await seedHaiyama(db, 20);
+		}
+
 		// Check if game state already exists in D1
 		const existingState = await getGameState(db, userId);
 

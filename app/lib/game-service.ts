@@ -81,7 +81,11 @@ const jihaiValues = [
 	"tyun",
 ] as const;
 
-function createShuffledHaiyama(): Hai[] {
+/**
+ * Create a shuffled haiyama with only suited tiles (no jihai)
+ * Each haiyama has exactly `tileCount` tiles (default 32)
+ */
+export function createShuffledHaiyama(tileCount = 32): Hai[] {
 	const tiles: Hai[] = [];
 
 	for (const kind of ["manzu", "pinzu", "souzu"] as const) {
@@ -92,18 +96,13 @@ function createShuffledHaiyama(): Hai[] {
 		}
 	}
 
-	for (const value of jihaiValues) {
-		for (let i = 0; i < 4; i += 1) {
-			tiles.push({ kind: "jihai", value });
-		}
-	}
-
+	// Shuffle
 	for (let i = tiles.length - 1; i > 0; i -= 1) {
 		const j = Math.floor(Math.random() * (i + 1));
 		[tiles[i], tiles[j]] = [tiles[j], tiles[i]];
 	}
 
-	return tiles;
+	return tiles.slice(0, tileCount);
 }
 
 export async function getRandomHaiyamaOrCreate(db: DrizzleD1Database) {
@@ -131,6 +130,14 @@ export async function getRandomHaiyamaOrCreate(db: DrizzleD1Database) {
 	}
 
 	return insertedHaiyama[0];
+}
+
+export async function seedHaiyama(db: DrizzleD1Database, count: number) {
+	const values = Array.from({ length: count }, () => ({
+		tiles: createShuffledHaiyama(32),
+	}));
+	await db.insert(haiyama).values(values);
+	return count;
 }
 
 export async function tedashi(
