@@ -1,3 +1,5 @@
+import { readdirSync } from "node:fs";
+import path from "node:path";
 import { defineConfig } from "drizzle-kit";
 
 const remoteConfig = defineConfig({
@@ -12,12 +14,29 @@ const remoteConfig = defineConfig({
 	},
 });
 
+function findLocalD1Path(): string {
+	const wranglerDir = path.resolve(".wrangler/state/v3/d1");
+	try {
+		const files = readdirSync(wranglerDir).filter((f) => f.endsWith(".sqlite"));
+		if (files.length === 0) {
+			throw new Error(
+				"No local D1 database found. Run `npm run dev` first to create one.",
+			);
+		}
+		return path.join(wranglerDir, files[0]);
+	} catch {
+		throw new Error(
+			`Local D1 directory not found at ${wranglerDir}. Run \`npm run dev\` first.`,
+		);
+	}
+}
+
 const localConfig = defineConfig({
 	schema: "./app/lib/db/schema.ts",
 	out: "./drizzle",
 	dialect: "sqlite",
 	dbCredentials: {
-		url: "./.wrangler/state/v3/d1/miniflare-D1DatabaseObject/25eabb7c53441872a4a4abb47c949949922819653bd1d5148f978d7d7562a7bf.sqlite ",
+		url: findLocalD1Path(),
 	},
 });
 
