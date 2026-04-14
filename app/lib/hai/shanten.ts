@@ -90,8 +90,8 @@ function checkStandardAgari(tehaiIndex: TehaiIndex): boolean {
 }
 
 function checkChiitoiAgari(tehaiIndex: TehaiIndex): boolean {
-	const chiitoiPairKinds = tehaiIndex.filter((count) => count >= 2).length;
-	return chiitoiPairKinds === 7;
+	const pairKindCount = tehaiIndex.filter((count) => count >= 2).length;
+	return pairKindCount === 7;
 }
 
 function deleteSyuntsu(remainingTehai: TehaiIndex): number {
