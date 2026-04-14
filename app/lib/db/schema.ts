@@ -4,6 +4,7 @@ import {
 	customType,
 	index,
 	integer,
+	real,
 	sqliteTable,
 	text,
 } from "drizzle-orm/sqlite-core";
@@ -30,6 +31,8 @@ export const haiyama = sqliteTable("haiyama", {
 		.$defaultFn(() => crypto.randomUUID()),
 	// D1だと1クエリあたり100パラメータまでなので、あえて正規化していない
 	tiles: haiArray("tiles").notNull(),
+	// 集計済みの平均和了巡目（0は未集計）
+	avgAgariJunme: real("avg_agari_junme").notNull().default(0),
 });
 
 // Game state (active game per user)
