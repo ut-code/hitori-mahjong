@@ -31,7 +31,8 @@ export function calculateShanten(tehai: Hai[]): ShantenResult {
 
 		let minShanten = 8;
 		for (let i = 0; i < tehai.length; i++) {
-			const tehai13 = tehai.filter((_, idx) => idx !== i);
+			const tehai13 = tehai.concat();
+			tehai13.splice(i, 1);
 			const standardShanten = calcStandardShanten(tehai13);
 			const chiitoiShanten = calcChiitoiShanten(tehai13);
 			minShanten = Math.min(minShanten, standardShanten, chiitoiShanten);
