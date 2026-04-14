@@ -39,15 +39,11 @@ async function seedAndRespond(env: Env, countInput: unknown) {
 	});
 }
 
-export async function loader({ context, request }: Route.LoaderArgs) {
-	const env = context.cloudflare.env;
-	const session = await ensureSession(request, env);
-	if (!session) {
-		return new Response("Unauthorized", { status: 401 });
-	}
-
-	const count = new URL(request.url).searchParams.get("count") ?? undefined;
-	return seedAndRespond(env, count);
+export async function loader(_: Route.LoaderArgs) {
+	return new Response("Method Not Allowed", {
+		status: 405,
+		headers: { Allow: "POST" },
+	});
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
