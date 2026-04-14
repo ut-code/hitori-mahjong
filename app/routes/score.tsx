@@ -2,7 +2,7 @@ import { desc, eq } from "drizzle-orm";
 import { Link } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { kyoku } from "~/lib/db/schema";
+import { haiyama, kyoku } from "~/lib/db/schema";
 import type { Route } from "./+types/score";
 
 export interface KyokuRecord {
@@ -12,6 +12,7 @@ export interface KyokuRecord {
 	shanten: number;
 	scoreDelta: number;
 	createdAt: Date;
+	avgAgariJunme: number;
 }
 
 export interface GameSession {
@@ -20,7 +21,6 @@ export interface GameSession {
 
 export interface ScoreData {
 	sessions: GameSession[];
-	avgAgariJunmeByKyoku: (number | null)[];
 	totalScore: number;
 }
 
@@ -47,8 +47,10 @@ export async function loader({
 			shanten: kyoku.shanten,
 			scoreDelta: kyoku.scoreDelta,
 			createdAt: kyoku.createdAt,
+			avgAgariJunme: haiyama.avgAgariJunme,
 		})
 		.from(kyoku)
+		.innerJoin(haiyama, eq(kyoku.haiyamaId, haiyama.id))
 		.where(eq(kyoku.userId, userId))
 		.orderBy(desc(kyoku.createdAt));
 
@@ -59,36 +61,17 @@ export async function loader({
 		sessions.push({ records: chunk });
 	}
 
-	// Calculate average agari junme per kyoku position across all sessions
-	const avgAgariJunmeByKyoku: (number | null)[] = [];
-	for (let ki = 0; ki < 4; ki++) {
-		const values: number[] = [];
-		for (const s of sessions) {
-			const r = s.records[ki];
-			if (r?.didAgari && r.agariJunme != null) {
-				values.push(r.agariJunme);
-			}
-		}
-		avgAgariJunmeByKyoku.push(
-			values.length > 0
-				? Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) /
-						10
-				: null,
-		);
-	}
-
 	const totalScore =
 		25000 + records.reduce((sum, r) => sum + (r.scoreDelta || 0), 0);
 
 	return {
 		sessions,
-		avgAgariJunmeByKyoku,
 		totalScore,
 	};
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-	const { sessions, avgAgariJunmeByKyoku, totalScore } = loaderData;
+	const { sessions, totalScore } = loaderData;
 
 	const kyokuNames = ["東1", "東2", "東3", "東4"];
 
@@ -134,6 +117,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 											<th className="p-3 text-left">局</th>
 											<th className="p-3 text-left">結果</th>
 											<th className="p-3 text-center">巡目</th>
+											<th className="p-3 text-center">牌山平均和了巡目</th>
 											<th className="p-3 text-center">シャンテン</th>
 											<th className="p-3 text-right">得点</th>
 										</tr>
@@ -158,6 +142,15 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 												<td className="p-3 text-center">
 													{record.didAgari ? (record.agariJunme ?? "-") : "-"}
 												</td>
+												<td className="p-3 text-center">
+													{record.avgAgariJunme > 0 ? (
+														<span className="text-green-400 font-bold">
+															{parseFloat(record.avgAgariJunme.toFixed(1))}
+														</span>
+													) : (
+														<span className="text-gray-400">-</span>
+													)}
+												</td>
 												<td className="p-3 text-center">{record.shanten}</td>
 												<td className="p-3 text-right">
 													<span
@@ -176,41 +169,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								</table>
 							</div>
 						))}
-
-						{/* Overall average per kyoku position */}
-						<div className="bg-[#0F2918] rounded-lg overflow-hidden">
-							<div className="p-4 bg-[#1A472A]">
-								<h2 className="text-lg font-bold text-yellow-400">
-									局別平均和了巡目
-								</h2>
-							</div>
-							<table className="w-full text-white">
-								<thead className="bg-[#143820]">
-									<tr>
-										{kyokuNames.map((name) => (
-											<th key={name} className="p-3 text-center font-bold">
-												{name}
-											</th>
-										))}
-									</tr>
-								</thead>
-								<tbody>
-									<tr className="border-t border-[#1A472A]">
-										{avgAgariJunmeByKyoku.map((avg, i) => (
-											<td key={kyokuNames[i]} className="p-3 text-center">
-												{avg != null ? (
-													<span className="text-green-400 font-bold">
-														{parseFloat(avg.toFixed(1))}
-													</span>
-												) : (
-													<span className="text-gray-400">-</span>
-												)}
-											</td>
-										))}
-									</tr>
-								</tbody>
-							</table>
-						</div>
 					</div>
 				)}
 			</div>
