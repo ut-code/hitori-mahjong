@@ -39,6 +39,14 @@ export function calculateShanten(tehai: Hai[]): ShantenResult {
 }
 
 function checkAgari(tehaiIndex: TehaiIndex): boolean {
+	if (checkStandardAgari(tehaiIndex)) {
+		return true;
+	}
+
+	return checkChiitoiAgari(tehaiIndex);
+}
+
+function checkStandardAgari(tehaiIndex: TehaiIndex): boolean {
 	// Check janto candidates
 	const jantoCandidates: number[] = [];
 	for (let i = 0; i < tehaiIndex.length; i++) {
@@ -74,13 +82,12 @@ function checkAgari(tehaiIndex: TehaiIndex): boolean {
 		}
 	}
 
-	// Chiitoitsu check
-	const chiitoiPairKinds = tehaiIndex.filter((count) => count >= 2).length;
-	if (chiitoiPairKinds === 7) {
-		return true;
-	}
-
 	return false;
+}
+
+function checkChiitoiAgari(tehaiIndex: TehaiIndex): boolean {
+	const chiitoiPairKinds = tehaiIndex.filter((count) => count >= 2).length;
+	return chiitoiPairKinds === 7;
 }
 
 function deleteSyuntsu(remainingTehai: TehaiIndex): number {
@@ -115,6 +122,10 @@ export function calcStandardShanten(tehai: Hai[]): number {
 	const tehaiIndex: TehaiIndex = Array(34).fill(0);
 	for (const hai of tehai) {
 		tehaiIndex[haiToIndex(hai) - 1] += 1;
+	}
+
+	if (tehai.length === 14 && checkStandardAgari(tehaiIndex)) {
+		return -1;
 	}
 
 	return calcShantenForTehai(tehaiIndex);

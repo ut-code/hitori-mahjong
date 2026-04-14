@@ -63,10 +63,10 @@ describe("calcStandardShanten", () => {
 			p(5),
 			p(6),
 			p(7),
-			s(7),
-			s(8),
 			z("ton"),
 			z("ton"),
+			z("nan"),
+			z("haku"),
 		];
 		expect(calcStandardShanten(tehai)).toBe(1);
 	});
