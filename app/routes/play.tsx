@@ -135,11 +135,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			)}
 
 			<div className="max-w-6xl mx-auto">
-				<div className="mb-2 md:mb-3">
-					<h1 className="text-xl md:text-2xl font-bold text-yellow-400">
-						対局中
-					</h1>
-				</div>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 mb-2 md:mb-3 text-sm md:text-base bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
 					<p>
 						東{kyoku}局 | 巡目: {junme} | 残りツモ: {remainTsumo}
