@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import BasicRule from "~/lib/components/BasicRule";
 import LocalRule from "~/lib/components/LocalRule";
@@ -5,7 +6,14 @@ import LocalRule from "~/lib/components/LocalRule";
 export default function Page() {
 	const location = useLocation();
 	const currentHash = location.hash;
-	const contents = ["basic", "local"];
+	const contents = ["basic", "local"] as const;
+
+	useEffect(() => {
+		if (!currentHash) return;
+		const el = document.querySelector(currentHash);
+		el?.scrollIntoView({ behavior: "smooth" });
+	}, [currentHash]);
+
 	return (
 		<div className="drawer drawer-open bg-[#1A472A] font-serif">
 			<input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -23,39 +31,28 @@ export default function Page() {
 					<LocalRule />
 				</div>
 			</div>
-
 			<div className="hidden md:block drawer-side is-drawer-close:overflow-visible">
 				<label
 					htmlFor="my-drawer-4"
 					aria-label="close sidebar"
 					className="drawer-overlay"
-				></label>
+				/>
 				<div className="is-drawer-close:w-14 is-drawer-open:w-48 bg-[#0F2918] flex flex-col items-start min-h-full">
 					<ul className="menu w-full grow">
-						{contents.map((content) => {
-							if (currentHash === `#${content}`) {
-								return (
-									<li key={content}>
-										<span className="is-drawer-close:hidden text-yellow-400">
-											<Link to={`#${content}`}>
-												{content === "basic" ? "基本ルール" : "ローカルルール"}
-											</Link>
-										</span>
-									</li>
-								);
-							} else {
-								return (
-									<li key={content}>
-										<span className="is-drawer-close:hidden">
-											<Link to={`#${content}`}>
-												{content === "basic" ? "基本ルール" : "ローカルルール"}
-											</Link>
-										</span>
-									</li>
-								);
-							}
-						})}
+						{contents.map((content) => (
+							<li key={content}>
+								<Link
+									to={`#${content}`}
+									className={`is-drawer-close:hidden ${
+										currentHash === `#${content}` ? "text-yellow-400" : ""
+									}`}
+								>
+									{content === "basic" ? "基本ルール" : "ローカルルール"}
+								</Link>
+							</li>
+						))}
 					</ul>
+
 					<div
 						className="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right"
 						data-tip="Open"
