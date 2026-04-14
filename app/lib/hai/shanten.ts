@@ -119,9 +119,8 @@ function checkAgari(tehaiIndex: TehaiIndex): boolean {
 	}
 
 	// Chiitoitsu check
-	if (new Set(jantoCandidates).size === 7) {
-		return true;
-	}
+	const pairKindCount = tehaiIndex.filter((count) => count >= 2).length;
+	if (pairKindCount === 7) return true;
 
 	return false;
 }
