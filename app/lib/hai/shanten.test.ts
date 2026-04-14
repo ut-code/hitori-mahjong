@@ -220,7 +220,7 @@ describe("calculateShanten", () => {
 	});
 
 	describe("13 tiles - Higher shanten numbers", () => {
-		it("should calculate 2-shanten", () => {
+		it("should calculate 4-shanten for scattered tiles", () => {
 			const tehai: Hai[] = [
 				manzu(1),
 				manzu(3),
@@ -238,11 +238,11 @@ describe("calculateShanten", () => {
 			];
 
 			const result = calculateShanten(tehai);
-			expect(result.shanten).toBeGreaterThanOrEqual(2);
+			expect(result.shanten).toBe(4);
 		});
 
-		it("should calculate shanten for all isolated tiles", () => {
-			// 13 completely different tiles (no pairs)
+		it("should calculate 4-shanten for isolated tiles with partial sequences", () => {
+			// 13 tiles with some adjacent tiles but no complete sequences or pairs
 			const tehai: Hai[] = [
 				manzu(1),
 				manzu(2),
@@ -260,13 +260,12 @@ describe("calculateShanten", () => {
 			];
 
 			const result = calculateShanten(tehai);
-			// This is 4-shanten (has some partial sequences)
-			expect(result.shanten).toBeGreaterThanOrEqual(3);
+			expect(result.shanten).toBe(4);
 		});
 	});
 
 	describe("14 tiles - Shanten calculation", () => {
-		it("should calculate shanten for non-winning 14 tile hand", () => {
+		it("should calculate 1-shanten for non-winning 14 tile hand", () => {
 			const tehai: Hai[] = [
 				manzu(1),
 				manzu(1),
@@ -286,7 +285,7 @@ describe("calculateShanten", () => {
 
 			const result = calculateShanten(tehai);
 			expect(result.isAgari).toBe(false);
-			expect(result.shanten).toBeGreaterThanOrEqual(0);
+			expect(result.shanten).toBe(1);
 		});
 
 		it("should return shanten 0 for 14 tiles one discard from tenpai", () => {
@@ -496,17 +495,15 @@ describe("calculateShanten", () => {
 			];
 
 			const result = calculateShanten(tehai);
-			// Should be able to use 3 as koutsu and 1 as part of another combination
-			// or use as koutsu + 1 extra tile
-			expect(result.shanten).toBeGreaterThanOrEqual(-1);
-			expect(result.shanten).toBeLessThanOrEqual(1);
+			// Can form 3 syuntsu + 1 koutsu + janto candidate = tenpai
+			expect(result.shanten).toBe(0);
 		});
 
 		it("should handle empty hand gracefully", () => {
 			const tehai: Hai[] = [];
 			const result = calculateShanten(tehai);
-			// Empty hand should have high shanten
-			expect(result.shanten).toBeGreaterThan(0);
+			// Empty hand has maximum shanten
+			expect(result.shanten).toBe(8);
 		});
 
 		it("should reject hands with more than 4 of the same tile", () => {
@@ -551,8 +548,7 @@ describe("calculateShanten", () => {
 			];
 
 			const result = calculateShanten(tehai);
-			expect(result.shanten).toBeGreaterThanOrEqual(-1);
-			expect(result.shanten).toBeLessThanOrEqual(8);
+			expect(result.shanten).toBe(0);
 		});
 		it("should handle closed waits correctly", () => {
 			// Penchan wait (edge wait)
@@ -623,7 +619,7 @@ describe("calculateShanten", () => {
 	});
 
 	describe("Known standard shanten values", () => {
-		it("should return correct shanten for 1-2-3-4-5-6-7-8-9 pattern", () => {
+		it("should return 1-shanten for 1-2-3-4-5-6-7-8-9 pattern", () => {
 			// Nine Gates wait pattern (13 tiles)
 			const tehai: Hai[] = [
 				manzu(1),
@@ -642,8 +638,7 @@ describe("calculateShanten", () => {
 			];
 
 			const result = calculateShanten(tehai);
-			// This is actually 1-shanten since we have extra tile breaking the pattern
-			expect(result.shanten).toBeGreaterThanOrEqual(0);
+			expect(result.shanten).toBe(1);
 		});
 
 		it("should handle repeated sequences correctly", () => {
