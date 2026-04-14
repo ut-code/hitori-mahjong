@@ -35,6 +35,9 @@ export function calculateShanten(tehai: Hai[]): ShantenResult {
 			const standardShanten = calcStandardShanten(tehai13);
 			const chiitoiShanten = calcChiitoiShanten(tehai13);
 			minShanten = Math.min(minShanten, standardShanten, chiitoiShanten);
+			if (minShanten === 0) {
+				break;
+			}
 		}
 
 		return {

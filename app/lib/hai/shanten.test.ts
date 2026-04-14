@@ -13,7 +13,7 @@ const s = (value: number): Hai => constructHai("souzu", value);
 const z = (value: JihaiValue): Hai => constructHai("jihai", value);
 
 describe("calcStandardShanten", () => {
-	it("14枚入力はシャンテン計算対象外で 8", () => {
+	it("内部関数は13枚以外を対象外として 8 を返す", () => {
 		const tehai: Hai[] = [
 			m(1),
 			m(1),
@@ -92,7 +92,7 @@ describe("calcStandardShanten", () => {
 });
 
 describe("calcChiitoiShanten", () => {
-	it("14枚入力はシャンテン計算対象外で 8", () => {
+	it("内部関数は13枚以外を対象外として 8 を返す", () => {
 		const tehai: Hai[] = [
 			m(1),
 			m(1),
