@@ -15,6 +15,10 @@ interface ShantenResult {
  * - Seven pairs (chiitoitsu)
  */
 export function calculateShanten(tehai: Hai[]): ShantenResult {
+	if (tehai.length !== 13 && tehai.length !== 14) {
+		return { shanten: 8, isTenpai: false, isAgari: false };
+	}
+
 	if (tehai.length === 14) {
 		// Check if already winning
 		const tehaiIndex: TehaiIndex = Array(34).fill(0);
@@ -119,6 +123,10 @@ function deleteSyuntsu(remainingTehai: TehaiIndex): number {
  * shanten = 8 - 2*mentsu - min(partialMentsu, 4-mentsu) - (jantoExists ? 1 : 0)
  */
 export function calcStandardShanten(tehai: Hai[]): number {
+	if (tehai.length !== 13 && tehai.length !== 14) {
+		return 8;
+	}
+
 	const tehaiIndex: TehaiIndex = Array(34).fill(0);
 	for (const hai of tehai) {
 		tehaiIndex[haiToIndex(hai) - 1] += 1;
