@@ -49,7 +49,7 @@ export async function loader({
 		}
 
 		// No existing game state, so initialize from haiyama
-		const randomHaiyama = await getRandomHaiyamaOrCreate(db);
+		const randomHaiyama = await getRandomHaiyamaOrCreate(db, userId);
 		const haiData = randomHaiyama.tiles;
 		const haiyamaId = randomHaiyama.id;
 

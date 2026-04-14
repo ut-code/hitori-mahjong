@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { eq, notInArray, sql } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { gameState, haiyama, kyoku } from "~/lib/db/schema";
 import type { Hai } from "~/lib/hai/types";
@@ -95,25 +95,45 @@ export function createShuffledHaiyama(tileCount = 32): Hai[] {
 	return tiles.slice(0, tileCount);
 }
 
-export async function getRandomHaiyamaOrCreate(db: DrizzleD1Database) {
-	const randomHaiyama = await db
-		.select()
-		.from(haiyama)
-		.orderBy(sql`RANDOM()`)
-		.limit(1);
+export async function getRandomHaiyamaOrCreate(
+	db: DrizzleD1Database,
+	userId: string,
+) {
+	// Get haiyama IDs the user has already played
+	const playedHaiyama = await db
+		.select({ haiyamaId: kyoku.haiyamaId })
+		.from(kyoku)
+		.where(eq(kyoku.userId, userId));
+
+	const playedIds = playedHaiyama.map((r) => r.haiyamaId);
+
+	// Select a random haiyama that the user hasn't played yet
+	let randomHaiyama: (typeof haiyama.$inferSelect)[];
+	if (playedIds.length > 0) {
+		randomHaiyama = await db
+			.select()
+			.from(haiyama)
+			.where(notInArray(haiyama.id, playedIds))
+			.orderBy(sql`RANDOM()`)
+			.limit(1);
+	} else {
+		randomHaiyama = await db
+			.select()
+			.from(haiyama)
+			.orderBy(sql`RANDOM()`)
+			.limit(1);
+	}
 
 	if (randomHaiyama.length > 0) {
 		return randomHaiyama[0];
 	}
 
+	// No unused haiyama available, create a new one
 	const generatedTiles = createShuffledHaiyama();
-	await db.insert(haiyama).values({ tiles: generatedTiles });
-
 	const insertedHaiyama = await db
-		.select()
-		.from(haiyama)
-		.orderBy(sql`RANDOM()`)
-		.limit(1);
+		.insert(haiyama)
+		.values({ tiles: generatedTiles })
+		.returning();
 
 	if (insertedHaiyama.length === 0) {
 		throw new Error("Failed to create haiyama");
@@ -229,7 +249,7 @@ export async function restartGame(
 		return { newKyoku, isGameOver: true };
 	}
 
-	const randomHaiyama = await getRandomHaiyamaOrCreate(db);
+	const randomHaiyama = await getRandomHaiyamaOrCreate(db, userId);
 
 	const newHaiyama = randomHaiyama.tiles;
 	const newHaiyamaId = randomHaiyama.id;
