@@ -294,4 +294,16 @@ export async function recordKyoku(
 		.update(gameState)
 		.set({ score: state.score + options.scoreDelta })
 		.where(eq(gameState.userId, userId));
+
+	// Recalculate average agari junme for this haiyama atomically
+	// Uses a subquery to compute AVG in a single UPDATE, avoiding race conditions
+	await db
+		.update(haiyama)
+		.set({
+			avgAgariJunme: sql`COALESCE(
+				(SELECT AVG(${kyoku.agariJunme}) FROM ${kyoku} WHERE ${kyoku.haiyamaId} = ${haiyama.id}),
+				0
+			)`,
+		})
+		.where(eq(haiyama.id, state.haiyamaId));
 }
