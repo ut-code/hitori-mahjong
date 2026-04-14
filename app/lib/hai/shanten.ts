@@ -28,6 +28,20 @@ export function calculateShanten(tehai: Hai[]): ShantenResult {
 		if (checkAgari(tehaiIndex)) {
 			return { shanten: -1, isTenpai: false, isAgari: true };
 		}
+
+		let minShanten = 8;
+		for (let i = 0; i < tehai.length; i++) {
+			const tehai13 = tehai.filter((_, idx) => idx !== i);
+			const standardShanten = calcStandardShanten(tehai13);
+			const chiitoiShanten = calcChiitoiShanten(tehai13);
+			minShanten = Math.min(minShanten, standardShanten, chiitoiShanten);
+		}
+
+		return {
+			shanten: minShanten,
+			isTenpai: minShanten === 0,
+			isAgari: false,
+		};
 	}
 
 	const standardShanten = calcStandardShanten(tehai);
@@ -123,17 +137,13 @@ function deleteSyuntsu(remainingTehai: TehaiIndex): number {
  * shanten = 8 - 2*mentsu - min(partialMentsu, 4-mentsu) - (jantoExists ? 1 : 0)
  */
 export function calcStandardShanten(tehai: Hai[]): number {
-	if (tehai.length !== 13 && tehai.length !== 14) {
+	if (tehai.length !== 13) {
 		return 8;
 	}
 
 	const tehaiIndex: TehaiIndex = Array(34).fill(0);
 	for (const hai of tehai) {
 		tehaiIndex[haiToIndex(hai) - 1] += 1;
-	}
-
-	if (tehai.length === 14 && checkStandardAgari(tehaiIndex)) {
-		return -1;
 	}
 
 	return calcShantenForTehai(tehaiIndex);
@@ -239,7 +249,7 @@ function calcShantenForTehai(tehaiIndex: TehaiIndex): number {
  * Special case: if 6 pairs + 1 tile, shanten = 0 (tenpai)
  */
 export function calcChiitoiShanten(tehai: Hai[]): number {
-	if (tehai.length !== 13 && tehai.length !== 14) {
+	if (tehai.length !== 13) {
 		return 8; // Invalid
 	}
 

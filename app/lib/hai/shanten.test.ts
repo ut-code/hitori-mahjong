@@ -13,7 +13,7 @@ const s = (value: number): Hai => constructHai("souzu", value);
 const z = (value: JihaiValue): Hai => constructHai("jihai", value);
 
 describe("calcStandardShanten", () => {
-	it("上がり形は -1", () => {
+	it("14枚入力はシャンテン計算対象外で 8", () => {
 		const tehai: Hai[] = [
 			m(1),
 			m(1),
@@ -30,7 +30,7 @@ describe("calcStandardShanten", () => {
 			z("ton"),
 			z("ton"),
 		];
-		expect(calcStandardShanten(tehai)).toBe(-1);
+		expect(calcStandardShanten(tehai)).toBe(8);
 	});
 
 	it("テンパイ形は 0", () => {
@@ -92,7 +92,7 @@ describe("calcStandardShanten", () => {
 });
 
 describe("calcChiitoiShanten", () => {
-	it("七対子の上がり形は -1", () => {
+	it("14枚入力はシャンテン計算対象外で 8", () => {
 		const tehai: Hai[] = [
 			m(1),
 			m(1),
@@ -109,7 +109,7 @@ describe("calcChiitoiShanten", () => {
 			z("ton"),
 			z("ton"),
 		];
-		expect(calcChiitoiShanten(tehai)).toBe(-1);
+		expect(calcChiitoiShanten(tehai)).toBe(8);
 	});
 
 	it("七対子のテンパイ形は 0", () => {
@@ -152,6 +152,30 @@ describe("calcChiitoiShanten", () => {
 });
 
 describe("calculateShanten", () => {
+	it("メンツ手上がりを正しく上がり判定する", () => {
+		const tehai: Hai[] = [
+			m(1),
+			m(1),
+			m(1),
+			m(2),
+			m(3),
+			m(4),
+			p(5),
+			p(6),
+			p(7),
+			s(7),
+			s(8),
+			s(9),
+			z("ton"),
+			z("ton"),
+		];
+		expect(calculateShanten(tehai)).toEqual({
+			shanten: -1,
+			isTenpai: false,
+			isAgari: true,
+		});
+	});
+
 	it("七対子上がりを正しく上がり判定する", () => {
 		const tehai: Hai[] = [
 			m(1),
@@ -173,6 +197,30 @@ describe("calculateShanten", () => {
 			shanten: -1,
 			isTenpai: false,
 			isAgari: true,
+		});
+	});
+
+	it("14枚非アガり時は13枚基準の最小シャンテンを返す", () => {
+		const tehai: Hai[] = [
+			m(1),
+			m(1),
+			m(1),
+			m(2),
+			m(3),
+			m(4),
+			p(5),
+			p(6),
+			p(7),
+			s(7),
+			s(8),
+			s(9),
+			z("ton"),
+			z("nan"),
+		];
+		expect(calculateShanten(tehai)).toEqual({
+			shanten: 0,
+			isTenpai: true,
+			isAgari: false,
 		});
 	});
 });
