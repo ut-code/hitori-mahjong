@@ -234,11 +234,22 @@ export async function restartGame(
 	const newHaiyama = randomHaiyama.tiles;
 	const newHaiyamaId = randomHaiyama.id;
 
-	await initGame(db, userId, newHaiyamaId, newHaiyama);
+	const tehai = newHaiyama.slice(0, 13);
+	const tsumohai = newHaiyama[13] ? [newHaiyama[13]] : [];
+	const remainingHai = newHaiyama.slice(14);
 
 	await db
 		.update(gameState)
-		.set({ kyoku: newKyoku })
+		.set({
+			kyoku: newKyoku,
+			junme: 1,
+			remainTsumo: 18,
+			haiyama: remainingHai,
+			sutehai: [],
+			tehai,
+			tsumohai,
+			haiyamaId: newHaiyamaId,
+		})
 		.where(eq(gameState.userId, userId));
 
 	return { newKyoku, isGameOver: false };
