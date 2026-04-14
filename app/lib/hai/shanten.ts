@@ -13,10 +13,19 @@ interface ShantenResult {
  * Returns the minimum shanten number considering:
  * - Standard form (4 mentsu + 1 janto)
  * - Seven pairs (chiitoitsu)
+ *
+ * Note:
+ * - Agari (win) check: based on 14 tiles
+ * - Shanten calculation: based on 13 tiles (if 14 tiles provided, tries all possible discards)
  */
 export function calculateShanten(tehai: Hai[]): ShantenResult {
+	// Validate tile counts (no more than 4 of the same tile)
+	if (!validateTehai(tehai)) {
+		throw new Error("Invalid hand: a tile appears more than 4 times");
+	}
+
 	if (tehai.length === 14) {
-		// Check if already winning
+		// Check if already winning (agari check is based on 14 tiles)
 		const tehaiIndex: TehaiIndex = Array(34).fill(0);
 		for (const hai of tehai) {
 			tehaiIndex[haiToIndex(hai) - 1] += 1;
@@ -24,8 +33,28 @@ export function calculateShanten(tehai: Hai[]): ShantenResult {
 		if (checkAgari(tehaiIndex)) {
 			return { shanten: -1, isTenpai: false, isAgari: true };
 		}
+
+		// For 14 tiles, try removing each tile and calculate shanten for the remaining 13
+		// Return the minimum shanten (best case after discard)
+		let minShanten = 13; // Maximum possible
+		for (let i = 0; i < 14; i++) {
+			const tehai13 = tehai.filter((_, idx) => idx !== i);
+			const standardShanten = calcStandardShanten(tehai13);
+			const chiitoiShanten = calcChiitoiShanten(tehai13);
+			const shanten = Math.min(standardShanten, chiitoiShanten);
+			if (shanten < minShanten) {
+				minShanten = shanten;
+			}
+		}
+
+		return {
+			shanten: minShanten,
+			isTenpai: minShanten === 0,
+			isAgari: false,
+		};
 	}
 
+	// For 13 tiles, calculate shanten normally
 	const standardShanten = calcStandardShanten(tehai);
 	const chiitoiShanten = calcChiitoiShanten(tehai);
 
@@ -36,6 +65,21 @@ export function calculateShanten(tehai: Hai[]): ShantenResult {
 		isTenpai: minShanten === 0,
 		isAgari: false,
 	};
+}
+
+/**
+ * Validate that no tile appears more than 4 times
+ */
+function validateTehai(tehai: Hai[]): boolean {
+	const count: Record<string, number> = {};
+	for (const hai of tehai) {
+		const key = `${hai.kind}_${hai.value}`;
+		count[key] = (count[key] || 0) + 1;
+		if (count[key] > 4) {
+			return false;
+		}
+	}
+	return true;
 }
 
 function checkAgari(tehaiIndex: TehaiIndex): boolean {
@@ -75,9 +119,8 @@ function checkAgari(tehaiIndex: TehaiIndex): boolean {
 	}
 
 	// Chiitoitsu check
-	if (new Set(jantoCandidates).size === 7) {
-		return true;
-	}
+	const pairKindCount = tehaiIndex.filter((count) => count >= 2).length;
+	if (pairKindCount === 7) return true;
 
 	return false;
 }
@@ -216,11 +259,12 @@ function calcShantenForTehai(tehaiIndex: TehaiIndex): number {
 /**
  * Calculate shanten for seven pairs (chiitoitsu)
  * shanten = 6 - (number of pairs)
- * Special case: if 6 pairs + 1 tile, shanten = 0 (tenpai)
+ * With 7 pairs, shanten = -1 (complete)
+ * Note: This function expects exactly 13 tiles
  */
 function calcChiitoiShanten(tehai: Hai[]): number {
-	if (tehai.length !== 13 && tehai.length !== 14) {
-		return 8; // Invalid
+	if (tehai.length !== 13) {
+		return 8; // Invalid - should only receive 13 tiles
 	}
 
 	const pairCount = countPairs(tehai);
