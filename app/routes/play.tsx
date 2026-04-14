@@ -165,7 +165,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<div>
 					<h3 className="text-sm md:text-base mb-1 text-yellow-300">手牌</h3>
 
-					<div className="hidden md:flex items-end gap-2 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
+					<div className="hidden md:flex items-end gap-0 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
 						{indexedTehai.map((hai) => (
 							<Form key={hai.index} method="post" action="/api/tedashi">
 								<input type="hidden" name="index" value={hai.index} />
