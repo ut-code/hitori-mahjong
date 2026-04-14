@@ -16,11 +16,11 @@ export interface KyokuRecord {
 
 export interface GameSession {
 	records: KyokuRecord[];
-	avgAgariJunme: number | null;
 }
 
 export interface ScoreData {
 	sessions: GameSession[];
+	avgAgariJunmeByKyoku: (number | null)[];
 	totalScore: number;
 }
 
@@ -56,21 +56,25 @@ export async function loader({
 	const sessions: GameSession[] = [];
 	for (let i = 0; i < records.length; i += 4) {
 		const chunk = records.slice(i, i + 4).reverse(); // East-1, 2, 3, 4 order
-		const agariJunmeValues = chunk
-			.filter((r) => r.didAgari && r.agariJunme != null)
-			.map((r) => r.agariJunme as number);
-		const avgAgariJunme =
-			agariJunmeValues.length > 0
-				? Math.round(
-						(agariJunmeValues.reduce((a, b) => a + b, 0) /
-							agariJunmeValues.length) *
-							10,
-					) / 10
-				: null;
-		sessions.push({
-			records: chunk,
-			avgAgariJunme,
-		});
+		sessions.push({ records: chunk });
+	}
+
+	// Calculate average agari junme per kyoku position across all sessions
+	const avgAgariJunmeByKyoku: (number | null)[] = [];
+	for (let ki = 0; ki < 4; ki++) {
+		const values: number[] = [];
+		for (const s of sessions) {
+			const r = s.records[ki];
+			if (r?.didAgari && r.agariJunme != null) {
+				values.push(r.agariJunme);
+			}
+		}
+		avgAgariJunmeByKyoku.push(
+			values.length > 0
+				? Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) /
+						10
+				: null,
+		);
 	}
 
 	const totalScore =
@@ -78,12 +82,13 @@ export async function loader({
 
 	return {
 		sessions,
+		avgAgariJunmeByKyoku,
 		totalScore,
 	};
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-	const { sessions, totalScore } = loaderData;
+	const { sessions, avgAgariJunmeByKyoku, totalScore } = loaderData;
 
 	const kyokuNames = ["東1", "東2", "東3", "東4"];
 
@@ -118,20 +123,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								key={session.records[0]?.id ?? si}
 								className="bg-[#0F2918] rounded-lg overflow-hidden"
 							>
-								<div className="flex items-center justify-between p-4 bg-[#1A472A]">
+								<div className="p-3 bg-[#1A472A]">
 									<h2 className="text-lg font-bold text-yellow-400">
 										第{sessions.length - si}局
 									</h2>
-									<div className="text-white text-sm">
-										平均和了巡目:{" "}
-										{session.avgAgariJunme != null ? (
-											<span className="text-green-400 font-bold">
-												{parseFloat(session.avgAgariJunme.toFixed(1))}
-											</span>
-										) : (
-											<span className="text-gray-400">-</span>
-										)}
-									</div>
 								</div>
 								<table className="w-full text-white">
 									<thead className="bg-[#143820]">
@@ -181,6 +176,41 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								</table>
 							</div>
 						))}
+
+						{/* Overall average per kyoku position */}
+						<div className="bg-[#0F2918] rounded-lg overflow-hidden">
+							<div className="p-4 bg-[#1A472A]">
+								<h2 className="text-lg font-bold text-yellow-400">
+									局別平均和了巡目
+								</h2>
+							</div>
+							<table className="w-full text-white">
+								<thead className="bg-[#143820]">
+									<tr>
+										{kyokuNames.map((name) => (
+											<th key={name} className="p-3 text-center font-bold">
+												{name}
+											</th>
+										))}
+									</tr>
+								</thead>
+								<tbody>
+									<tr className="border-t border-[#1A472A]">
+										{avgAgariJunmeByKyoku.map((avg, i) => (
+											<td key={kyokuNames[i]} className="p-3 text-center">
+												{avg != null ? (
+													<span className="text-green-400 font-bold">
+														{parseFloat(avg.toFixed(1))}
+													</span>
+												) : (
+													<span className="text-gray-400">-</span>
+												)}
+											</td>
+										))}
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				)}
 			</div>
