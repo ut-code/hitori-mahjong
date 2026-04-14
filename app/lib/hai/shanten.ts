@@ -75,7 +75,8 @@ function checkAgari(tehaiIndex: TehaiIndex): boolean {
 	}
 
 	// Chiitoitsu check
-	if (new Set(jantoCandidates).size === 7) {
+	const chiitoiPairKinds = tehaiIndex.filter((count) => count >= 2).length;
+	if (chiitoiPairKinds === 7) {
 		return true;
 	}
 
@@ -110,7 +111,7 @@ function deleteSyuntsu(remainingTehai: TehaiIndex): number {
  * Uses the general algorithm:
  * shanten = 8 - 2*mentsu - min(partialMentsu, 4-mentsu) - (jantoExists ? 1 : 0)
  */
-function calcStandardShanten(tehai: Hai[]): number {
+export function calcStandardShanten(tehai: Hai[]): number {
 	const tehaiIndex: TehaiIndex = Array(34).fill(0);
 	for (const hai of tehai) {
 		tehaiIndex[haiToIndex(hai) - 1] += 1;
@@ -218,7 +219,7 @@ function calcShantenForTehai(tehaiIndex: TehaiIndex): number {
  * shanten = 6 - (number of pairs)
  * Special case: if 6 pairs + 1 tile, shanten = 0 (tenpai)
  */
-function calcChiitoiShanten(tehai: Hai[]): number {
+export function calcChiitoiShanten(tehai: Hai[]): number {
 	if (tehai.length !== 13 && tehai.length !== 14) {
 		return 8; // Invalid
 	}
