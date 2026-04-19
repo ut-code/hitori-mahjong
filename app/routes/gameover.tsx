@@ -61,15 +61,13 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const { finalScore, totalKyoku, agariCount, ryukyokuCount, tenpaiCount } =
 		loaderData;
 	const scoreComment =
-		finalScore >= 40000
-			? "圧巻の好成績。今日はかなり乗っています。"
-			: finalScore >= 35000
-				? "かなりいい感じです。この調子で押し切れそうです。"
-				: finalScore >= 30000
-					? "安定してまとまった成績です。じゅうぶん立派。"
-					: finalScore >= 25000
-						? "まずまずの内容。次はもう一段上を狙えそうです。"
-						: "少し苦しい展開。ここからの巻き返しに期待です。";
+		finalScore === 57000
+			? "もうあなたが麻雀です"
+			: finalScore >= 40000
+				? "素晴らしい"
+				: finalScore >= 35000
+					? "まずまず"
+					: "まずは基本から";
 
 	return (
 		<div className="min-h-screen bg-[#1A472A] p-8 font-serif">
