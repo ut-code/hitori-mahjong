@@ -1,18 +1,20 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { Link } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { haiyama, kyoku } from "~/lib/db/schema";
+import { kyoku } from "~/lib/db/schema";
 import type { Route } from "./+types/score";
 
 export interface KyokuRecord {
 	id: string;
+	haiyamaId: string;
 	didAgari: boolean;
 	agariJunme: number | null;
 	shanten: number;
 	scoreDelta: number;
 	createdAt: Date;
-	avgAgariJunme: number;
+	playedCount: number;
+	agariCount: number;
 }
 
 export interface GameSession {
@@ -42,27 +44,47 @@ export async function loader({
 	const records = await db
 		.select({
 			id: kyoku.id,
+			haiyamaId: kyoku.haiyamaId,
 			didAgari: kyoku.didAgari,
 			agariJunme: kyoku.agariJunme,
 			shanten: kyoku.shanten,
 			scoreDelta: kyoku.scoreDelta,
 			createdAt: kyoku.createdAt,
-			avgAgariJunme: haiyama.avgAgariJunme,
 		})
 		.from(kyoku)
-		.innerJoin(haiyama, eq(kyoku.haiyamaId, haiyama.id))
 		.where(eq(kyoku.userId, userId))
 		.orderBy(desc(kyoku.createdAt));
 
+	const stats = await db
+		.select({
+			haiyamaId: kyoku.haiyamaId,
+			playedCount: sql<number>`count(*)`,
+			agariCount: sql<number>`coalesce(sum(case when ${kyoku.didAgari} then 1 else 0 end), 0)`,
+		})
+		.from(kyoku)
+		.groupBy(kyoku.haiyamaId);
+
+	const statsByHaiyamaId = new Map(stats.map((stat) => [stat.haiyamaId, stat]));
+
+	const recordsWithStats: KyokuRecord[] = records.map((record) => {
+		const stat = statsByHaiyamaId.get(record.haiyamaId);
+
+		return {
+			...record,
+			playedCount: stat?.playedCount ?? 0,
+			agariCount: stat?.agariCount ?? 0,
+		};
+	});
+
 	// Group records into game sessions (4 kyoku per session)
 	const sessions: GameSession[] = [];
-	for (let i = 0; i < records.length; i += 4) {
-		const chunk = records.slice(i, i + 4).reverse(); // East-1, 2, 3, 4 order
+	for (let i = 0; i < recordsWithStats.length; i += 4) {
+		const chunk = recordsWithStats.slice(i, i + 4).reverse(); // East-1, 2, 3, 4 order
 		sessions.push({ records: chunk });
 	}
 
 	const totalScore =
-		25000 + records.reduce((sum, r) => sum + (r.scoreDelta || 0), 0);
+		25000 + recordsWithStats.reduce((sum, r) => sum + (r.scoreDelta || 0), 0);
 
 	return {
 		sessions,
@@ -85,12 +107,20 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					</div>
 				</div>
 
-				<Link
-					to="/"
-					className="mb-4 bg-yellow-600 rounded text-xs w-24 h-7 flex items-center justify-center transition-transform duration-150 hover:scale-105"
-				>
-					ホームに戻る
-				</Link>
+				<div className="mb-4 flex flex-col gap-2">
+					<Link
+						to="/"
+						className="bg-yellow-600 rounded text-xs w-24 h-7 flex items-center justify-center transition-transform duration-150 hover:scale-105"
+					>
+						ホームに戻る
+					</Link>
+					<Link
+						to="/gameover"
+						className="bg-blue-600 rounded text-xs w-28 h-7 flex items-center justify-center transition-transform duration-150 hover:scale-105 text-white"
+					>
+						終局画面に戻る
+					</Link>
+				</div>
 
 				{sessions.length === 0 ? (
 					<div className="bg-[#0F2918] rounded-lg p-8 text-center">
@@ -117,7 +147,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 											<th className="p-3 text-left">局</th>
 											<th className="p-3 text-left">結果</th>
 											<th className="p-3 text-center">巡目</th>
-											<th className="p-3 text-center">牌山平均和了巡目</th>
+											<th className="p-3 text-center">和了確率</th>
 											<th className="p-3 text-center">シャンテン</th>
 											<th className="p-3 text-right">得点</th>
 										</tr>
@@ -143,9 +173,13 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 													{record.didAgari ? (record.agariJunme ?? "-") : "-"}
 												</td>
 												<td className="p-3 text-center">
-													{record.avgAgariJunme > 0 ? (
+													{record.playedCount > 0 ? (
 														<span className="text-green-400 font-bold">
-															{parseFloat(record.avgAgariJunme.toFixed(1))}
+															{(
+																(record.agariCount / record.playedCount) *
+																100
+															).toFixed(1)}
+															%
 														</span>
 													) : (
 														<span className="text-gray-400">-</span>
