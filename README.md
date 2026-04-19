@@ -1,11 +1,11 @@
-# Hitori Mahjong (一人麻雀)
+# 一人麻雀
 
-Solo mahjong puzzle game. Draw and discard tiles to complete a winning hand.
+五月祭・駒場祭用
 
 ## Tech Stack
 
 - **Frontend**: React Router v7 (SSR), TailwindCSS + DaisyUI
-- **Backend**: Cloudflare Workers, Hono + Zod
+- **Backend**: Cloudflare Workers
 - **Database**: Cloudflare D1 (SQLite), Drizzle ORM
 - **Auth**: Better-Auth (anonymous login)
 
@@ -46,8 +46,8 @@ This reads the generated SQL files from `drizzle/` and applies them to the remot
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
+- `npm run dev` - Start development server and **generate local D1 instance**
 - `npm run build` - Build for production
-- `npm run deploy` - Build and deploy to Cloudflare
+- `npm run deploy` - Build and deploy to Cloudflare (If you push the changes to the main branch, it will trigger a new deploy)
 - `npm run typecheck` - Type checking
 - `npm run format` - Format code with Biome
