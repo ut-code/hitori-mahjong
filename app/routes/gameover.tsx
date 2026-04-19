@@ -1,5 +1,7 @@
 import { desc, eq } from "drizzle-orm";
+import { useNavigate } from "react-router";
 import { getAuth } from "~/lib/auth";
+import { authClient } from "~/lib/auth-client";
 import { getDB } from "~/lib/db";
 import { kyoku } from "~/lib/db/schema";
 import type { Route } from "./+types/gameover";
@@ -60,6 +62,7 @@ export async function loader({
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const { finalScore, totalKyoku, agariCount, ryukyokuCount, tenpaiCount } =
 		loaderData;
+	const navigate = useNavigate();
 	const scoreComment =
 		finalScore === 57000
 			? "もうあなたが麻雀です"
@@ -68,6 +71,15 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				: finalScore >= 35000
 					? "まずまず"
 					: "まずは基本から";
+
+	const anonymousLoginAndStart = async () => {
+		const user = await authClient.getSession();
+		if (user.data) {
+			await authClient.signOut();
+		}
+		await authClient.signIn.anonymous();
+		navigate("/play");
+	};
 
 	return (
 		<div className="min-h-screen bg-[#1A472A] p-8 font-serif">
@@ -114,9 +126,13 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<a href="/score" className="btn bg-yellow-600 text-white">
 						成績詳細
 					</a>
-					<a href="/play" className="btn bg-blue-600 text-white">
+					<button
+						type="button"
+						onClick={anonymousLoginAndStart}
+						className="btn bg-blue-600 text-white"
+					>
 						もう一局
-					</a>
+					</button>
 				</div>
 			</div>
 		</div>
