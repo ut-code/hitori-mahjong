@@ -147,7 +147,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 
 				<div className="mb-3">
 					<h3 className="text-sm md:text-base mb-1 text-yellow-300">捨て牌</h3>
-					<div className="grid grid-cols-6 gap-0 min-h-36 md:min-h-44 content-start bg-[#0F2918] rounded-md p-1 md:p-2 border border-[#1A472A] w-fit">
+					<div className="grid grid-cols-6 gap-0 min-h-36 md:min-h-44 content-start bg-[#0F2918] rounded-md p-1 md:p-2 border border-[#1A472A] w-[13rem] md:w-[16rem]">
 						{indexedSutehai.map((hai) => (
 							<img
 								key={hai.index}
