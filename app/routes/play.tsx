@@ -38,7 +38,7 @@ export async function loader({
 			.from(haiyama)
 			.get();
 		if (!haiCount || haiCount.count === 0) {
-			await seedHaiyama(db, 20);
+			await seedHaiyama(db, 40);
 		}
 
 		// Check if game state already exists in D1

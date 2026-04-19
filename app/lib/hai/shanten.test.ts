@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateShanten } from "./shanten";
-import { constructHai, type Hai } from "./types";
+import { constructHai, type Hai, type JihaiValue } from "./types";
 
 // Helper to create suhai tiles
 function manzu(value: number): Hai {
@@ -15,7 +15,7 @@ function souzu(value: number): Hai {
 	return constructHai("souzu", value);
 }
 
-function jihai(value: string): Hai {
+function jihai(value: JihaiValue): Hai {
 	return constructHai("jihai", value);
 }
 
