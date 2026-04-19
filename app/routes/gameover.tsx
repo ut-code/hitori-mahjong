@@ -60,6 +60,16 @@ export async function loader({
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const { finalScore, totalKyoku, agariCount, ryukyokuCount, tenpaiCount } =
 		loaderData;
+	const scoreComment =
+		finalScore >= 40000
+			? "圧巻の好成績。今日はかなり乗っています。"
+			: finalScore >= 35000
+				? "かなりいい感じです。この調子で押し切れそうです。"
+				: finalScore >= 30000
+					? "安定してまとまった成績です。じゅうぶん立派。"
+					: finalScore >= 25000
+						? "まずまずの内容。次はもう一段上を狙えそうです。"
+						: "少し苦しい展開。ここからの巻き返しに期待です。";
 
 	return (
 		<div className="min-h-screen bg-[#1A472A] p-8 font-serif">
@@ -73,6 +83,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						<p className="text-4xl font-bold text-white mb-2">
 							最終スコア: {finalScore}点
 						</p>
+						<p className="text-sm text-yellow-300">{scoreComment}</p>
 					</div>
 
 					<div className="grid grid-cols-2 gap-4 text-white">
