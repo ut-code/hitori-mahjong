@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { Form } from "react-router";
+import { useFetcher } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
@@ -71,6 +71,7 @@ export async function loader({
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
+	const fetcher = useFetcher();
 	let { sutehai, tsumohai, junme, kyoku, tehai, remainTsumo, score } =
 		loaderData;
 	tehai = sortTehai(tehai);
@@ -103,7 +104,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">和了</h3>
 						<div className="modal-action">
-							<Form method="post" action="/api/agari">
+							<fetcher.Form method="post" action="/api/agari">
 								<input type="hidden" value={junme} name="junme" />
 								<button
 									className="btn bg-yellow-600 text-white border-none"
@@ -111,7 +112,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								>
 									確認
 								</button>
-							</Form>
+							</fetcher.Form>
 						</div>
 					</div>
 				</dialog>
@@ -121,14 +122,14 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">流局</h3>
 						<div className="modal-action">
-							<Form method="post" action="/api/ryukyoku">
+							<fetcher.Form method="post" action="/api/ryukyoku">
 								<button
 									className="btn bg-yellow-600 text-white border-none"
 									type="submit"
 								>
 									確認
 								</button>
-							</Form>
+							</fetcher.Form>
 						</div>
 					</div>
 				</dialog>
@@ -164,7 +165,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 
 					<div className="hidden md:flex items-end gap-0 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
 						{indexedTehai.map((hai) => (
-							<Form key={hai.index} method="post" action="/api/tedashi">
+							<fetcher.Form key={hai.index} method="post" action="/api/tedashi">
 								<input type="hidden" name="index" value={hai.index} />
 								<button
 									type="submit"
@@ -176,11 +177,11 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										className="w-10 h-14 cursor-pointer hover:scale-105 transition-transform"
 									/>
 								</button>
-							</Form>
+							</fetcher.Form>
 						))}
 						{tsumohai && (
 							<div className="ml-1">
-								<Form method="post" action="/api/tsumogiri">
+								<fetcher.Form method="post" action="/api/tsumogiri">
 									<button
 										type="submit"
 										aria-label={`ツモ切り ${tsumohai.kind} ${tsumohai.value}`}
@@ -191,7 +192,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 											className="w-10 h-14 object-contain cursor-pointer hover:scale-105 transition-transform"
 										/>
 									</button>
-								</Form>
+								</fetcher.Form>
 							</div>
 						)}
 					</div>
@@ -199,7 +200,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="md:hidden bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
 						<div className="grid grid-cols-7 gap-0">
 							{firstRowTehai.map((hai) => (
-								<Form key={hai.index} method="post" action="/api/tedashi">
+								<fetcher.Form key={hai.index} method="post" action="/api/tedashi">
 									<input type="hidden" name="index" value={hai.index} />
 									<button
 										type="submit"
@@ -208,16 +209,16 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										<img
 											src={`/hai/${hai.kind}_${hai.value}.png`}
 											alt={`${hai.kind} ${hai.value}`}
-											className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
-										/>
-									</button>
-								</Form>
+										className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
+									/>
+								</button>
+								</fetcher.Form>
 							))}
 						</div>
 
 						<div className="grid grid-cols-7 gap-0 mt-1">
 							{secondRowTehai.map((hai) => (
-								<Form key={hai.index} method="post" action="/api/tedashi">
+								<fetcher.Form key={hai.index} method="post" action="/api/tedashi">
 									<input type="hidden" name="index" value={hai.index} />
 									<button
 										type="submit"
@@ -226,13 +227,13 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										<img
 											src={`/hai/${hai.kind}_${hai.value}.png`}
 											alt={`${hai.kind} ${hai.value}`}
-											className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
-										/>
-									</button>
-								</Form>
+										className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
+									/>
+								</button>
+								</fetcher.Form>
 							))}
 							{tsumohai && (
-								<Form method="post" action="/api/tsumogiri">
+								<fetcher.Form method="post" action="/api/tsumogiri">
 									<button
 										type="submit"
 										aria-label={`ツモ切り ${tsumohai.kind} ${tsumohai.value}`}
@@ -243,7 +244,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 											className="w-8 h-11 object-contain cursor-pointer hover:scale-105 transition-transform"
 										/>
 									</button>
-								</Form>
+								</fetcher.Form>
 							)}
 						</div>
 					</div>
