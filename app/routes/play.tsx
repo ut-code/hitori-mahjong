@@ -302,10 +302,8 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		for (const discard of dedupedDiscardMap.values()) {
 			const current =
 				shantenAdvanceDiscardsByResult.get(discard.resultingShanten) ?? [];
-			if (current.length < 10) {
-				current.push(discard);
-				shantenAdvanceDiscardsByResult.set(discard.resultingShanten, current);
-			}
+			current.push(discard);
+			shantenAdvanceDiscardsByResult.set(discard.resultingShanten, current);
 		}
 
 		if (shantenAdvanceDiscardsByResult.size === 0) {
@@ -336,10 +334,8 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			for (const discard of dedupedKeepDiscardMap.values()) {
 				const current =
 					shantenKeepDiscardsByResult.get(discard.resultingShanten) ?? [];
-				if (current.length < 10) {
-					current.push(discard);
-					shantenKeepDiscardsByResult.set(discard.resultingShanten, current);
-				}
+				current.push(discard);
+				shantenKeepDiscardsByResult.set(discard.resultingShanten, current);
 			}
 
 			if (shantenKeepDiscardsByResult.size > 0) {
