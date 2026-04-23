@@ -155,7 +155,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										</thead>
 										<tbody>
 											{session.records.map((record, ri) => (
-												<tr key={record.id} className="border-t border-[#1A472A]">
+												<tr
+													key={record.id}
+													className="border-t border-[#1A472A]"
+												>
 													<td className="p-3 font-bold">{kyokuNames[ri]}</td>
 													<td className="p-3">
 														{record.didAgari ? (
@@ -165,7 +168,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 														) : record.shanten === 0 ? (
 															<span className="text-blue-400">テンパイ</span>
 														) : record.shanten === 1 ? (
-															<span className="text-yellow-400">1シャンテン</span>
+															<span className="text-yellow-400">
+																1シャンテン
+															</span>
 														) : (
 															<span className="text-gray-400">流局</span>
 														)}
