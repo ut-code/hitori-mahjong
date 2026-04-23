@@ -34,6 +34,21 @@ const TILE_IMAGE_PATHS = [
 	...JIHAI_VALUES.map((value) => `/hai/jihai_${value}.png`),
 ];
 
+type ShantenAdvanceDiscard = {
+	hai: Hai;
+	resultingShanten: number;
+};
+
+function getHaiKey(hai: Hai): string {
+	return `${hai.kind}-${hai.value}`;
+}
+
+function shantenLabel(shanten: number): string {
+	if (shanten === -1) return "和了";
+	if (shanten === 0) return "テンパイ";
+	return `${shanten}シャンテン`;
+}
+
 export const links: Route.LinksFunction = () =>
 	TILE_IMAGE_PATHS.map((href) => ({
 		rel: "preload",
@@ -145,6 +160,80 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		? calculateShanten(optimisticTehai)
 		: { shanten: 8, isTenpai: false };
 	const isRyukyoku = optimisticRemainTsumo <= 0;
+	const shantenAdvanceDiscardsByResult = new Map<
+		number,
+		ShantenAdvanceDiscard[]
+	>();
+	let isAdvanceHint = true;
+	let shantenHintDiscardsByResult = shantenAdvanceDiscardsByResult;
+
+	if (optimisticTsumohai) {
+		const currentShanten = shantenResult.shanten;
+		const evaluatedDiscards: ShantenAdvanceDiscard[] = optimisticTehai
+			.map((hai, index) => {
+				const remainingTehai = optimisticTehai.filter((_, i) => i !== index);
+				const nextTehai = sortTehai([...remainingTehai, optimisticTsumohai]);
+				return { hai, resultingShanten: calculateShanten(nextTehai).shanten };
+			})
+			.filter((discard) => discard.resultingShanten < currentShanten);
+
+		const dedupedDiscardMap = new Map<string, ShantenAdvanceDiscard>();
+		for (const discard of evaluatedDiscards) {
+			const key = `${getHaiKey(discard.hai)}-${discard.resultingShanten}`;
+			if (!dedupedDiscardMap.has(key)) {
+				dedupedDiscardMap.set(key, discard);
+			}
+		}
+
+		for (const discard of dedupedDiscardMap.values()) {
+			const current =
+				shantenAdvanceDiscardsByResult.get(discard.resultingShanten) ?? [];
+			if (current.length < 10) {
+				current.push(discard);
+				shantenAdvanceDiscardsByResult.set(discard.resultingShanten, current);
+			}
+		}
+
+		if (shantenAdvanceDiscardsByResult.size === 0) {
+			const shantenKeepDiscardsByResult = new Map<
+				number,
+				ShantenAdvanceDiscard[]
+			>();
+			const shantenKeepDiscards = optimisticTehai
+				.map((hai, index) => {
+					const remainingTehai = optimisticTehai.filter((_, i) => i !== index);
+					const nextTehai = sortTehai([...remainingTehai, optimisticTsumohai]);
+					return { hai, resultingShanten: calculateShanten(nextTehai).shanten };
+				})
+				.filter((discard) => discard.resultingShanten === currentShanten);
+			shantenKeepDiscards.push({
+				hai: optimisticTsumohai,
+				resultingShanten: currentShanten,
+			});
+
+			const dedupedKeepDiscardMap = new Map<string, ShantenAdvanceDiscard>();
+			for (const discard of shantenKeepDiscards) {
+				const key = `${getHaiKey(discard.hai)}-${discard.resultingShanten}`;
+				if (!dedupedKeepDiscardMap.has(key)) {
+					dedupedKeepDiscardMap.set(key, discard);
+				}
+			}
+
+			for (const discard of dedupedKeepDiscardMap.values()) {
+				const current =
+					shantenKeepDiscardsByResult.get(discard.resultingShanten) ?? [];
+				if (current.length < 10) {
+					current.push(discard);
+					shantenKeepDiscardsByResult.set(discard.resultingShanten, current);
+				}
+			}
+
+			if (shantenKeepDiscardsByResult.size > 0) {
+				isAdvanceHint = false;
+				shantenHintDiscardsByResult = shantenKeepDiscardsByResult;
+			}
+		}
+	}
 
 	type IndexedHai = Hai & { index: number };
 
@@ -213,17 +302,59 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					</p>
 				</div>
 
-				<div className="mb-3">
-					<h3 className="text-sm md:text-base mb-1 text-yellow-300">捨て牌</h3>
-					<div className="grid grid-cols-6 gap-0 min-h-36 md:min-h-44 content-start bg-[#0F2918] rounded-md p-1 md:p-2 border border-[#1A472A] w-[13rem] md:w-[16rem]">
-						{indexedSutehai.map((hai) => (
-							<img
-								key={hai.index}
-								src={`/hai/${hai.kind}_${hai.value}.png`}
-								alt={`${hai.kind} ${hai.value}`}
-								className="w-8 h-11 md:w-10 md:h-14"
-							/>
-						))}
+				<div className="mb-3 md:flex md:items-start md:gap-3">
+					<div>
+						<h3 className="text-sm md:text-base mb-1 text-yellow-300">
+							捨て牌
+						</h3>
+						<div className="grid grid-cols-6 gap-0 min-h-36 md:min-h-44 content-start bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-[13rem] md:w-[16rem]">
+							{indexedSutehai.map((hai) => (
+								<img
+									key={hai.index}
+									src={`/hai/${hai.kind}_${hai.value}.png`}
+									alt={`${hai.kind} ${hai.value}`}
+									className="w-8 h-11 md:w-10 md:h-14"
+								/>
+							))}
+						</div>
+					</div>
+					<div className="mt-2 md:mt-0 md:flex-1 text-sm md:text-base">
+						{shantenHintDiscardsByResult.size === 0 ? (
+							<p className="text-sm md:text-base mb-1 text-yellow-300">なし</p>
+						) : (
+							<div className="mb-1">
+								{[...shantenHintDiscardsByResult.entries()]
+									.sort(([a], [b]) => a - b)
+									.map(([resultingShanten]) => (
+										<p
+											key={resultingShanten}
+											className="text-sm md:text-base text-yellow-300"
+										>
+											{isAdvanceHint
+												? `${shantenLabel(resultingShanten)}に進む打牌`
+												: `${shantenLabel(resultingShanten)}を維持する打牌`}
+										</p>
+									))}
+							</div>
+						)}
+						<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] h-[3.875rem] md:h-auto md:min-h-44">
+							<div className="h-full min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-0">
+								{[...shantenHintDiscardsByResult.entries()]
+									.sort(([a], [b]) => a - b)
+									.map(([resultingShanten, discards]) => (
+										<div key={resultingShanten} className="flex gap-0 shrink-0">
+											{discards.map((discard) => (
+												<img
+													key={`${getHaiKey(discard.hai)}-${discard.resultingShanten}`}
+													src={`/hai/${discard.hai.kind}_${discard.hai.value}.png`}
+													alt={`${discard.hai.kind} ${discard.hai.value}`}
+													className="w-8 h-11 md:w-10 md:h-14"
+												/>
+											))}
+										</div>
+									))}
+							</div>
+						</div>
 					</div>
 				</div>
 
