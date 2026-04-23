@@ -160,6 +160,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		? calculateShanten(optimisticTehai)
 		: { shanten: 8, isTenpai: false };
 	const isRyukyoku = optimisticRemainTsumo <= 0;
+	const ryukyokuShanten = shantenResult.shanten;
+	const ryukyokuScoreDelta =
+		ryukyokuShanten === 0 ? 3000 : ryukyokuShanten === 1 ? 1000 : 0;
 	const shantenAdvanceDiscardsByResult = new Map<
 		number,
 		ShantenAdvanceDiscard[]
@@ -276,6 +279,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<dialog id="ryukyoku_modal" className="modal" open>
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">流局</h3>
+						<p className="mt-2">
+							シャンテン: {ryukyokuShanten} / 獲得スコア: +{ryukyokuScoreDelta}
+						</p>
 						<div className="modal-action">
 							<actionFetcher.Form method="post" action="/api/ryukyoku">
 								<button
