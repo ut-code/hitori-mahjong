@@ -12,7 +12,7 @@ export default function Page() {
 		navigate("/play");
 	};
 	return (
-		<div className="h-screen w-screen bg-[#1A472A] font-serif relative flex justify-center">
+		<div className="h-screen w-screen bg-[#1A472A] font-serif text-white relative flex justify-center">
 			<h1 className="absolute top-1/3 text-center font-bold text-4xl tracking-widest">
 				一人麻雀
 			</h1>
@@ -20,13 +20,13 @@ export default function Page() {
 				<button
 					onClick={anonymousLoginAndStart}
 					type="button"
-					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 transition-transform duration-150 hover:scale-105"
+					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 transition-transform duration-150 hover:scale-105 text-white"
 				>
 					プレイ
 				</button>
 				<Link
 					to="/learn"
-					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 flex items-center justify-center transition-transform duration-150 hover:scale-105"
+					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 flex items-center justify-center transition-transform duration-150 hover:scale-105 text-white"
 				>
 					チュートリアル
 				</Link>

@@ -98,7 +98,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const kyokuNames = ["東1", "東2", "東3", "東4"];
 
 	return (
-		<div className="min-h-screen bg-[#1A472A] p-8 font-serif">
+		<div className="min-h-screen bg-[#1A472A] p-8 font-serif text-white">
 			<div className="max-w-4xl mx-auto">
 				<div className="flex justify-between items-center mb-8">
 					<h1 className="text-3xl font-bold text-yellow-400">成績表</h1>
@@ -110,7 +110,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<div className="mb-4 flex flex-col gap-2">
 					<Link
 						to="/"
-						className="bg-yellow-600 rounded text-xs w-24 h-7 flex items-center justify-center transition-transform duration-150 hover:scale-105"
+						className="bg-yellow-600 rounded text-xs w-24 h-7 flex items-center justify-center transition-transform duration-150 hover:scale-105 text-white"
 					>
 						ホームに戻る
 					</Link>

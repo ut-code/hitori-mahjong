@@ -15,12 +15,12 @@ export default function Page() {
 	}, [currentHash]);
 
 	return (
-		<div className="drawer drawer-open bg-[#1A472A] font-serif">
+		<div className="drawer drawer-open bg-[#1A472A] font-serif text-white">
 			<input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 			<div className="drawer-content ml-4 mr-4 mt-4">
 				<Link
 					to="/"
-					className="mb-4 bg-yellow-600 rounded text-xs w-1/2 max-w-30 h-7 flex items-center justify-center transition-transform duration-150 hover:scale-105"
+					className="mb-4 bg-yellow-600 rounded text-xs w-1/2 max-w-30 h-7 flex items-center justify-center transition-transform duration-150 hover:scale-105 text-white"
 				>
 					ホームに戻る
 				</Link>
@@ -37,7 +37,7 @@ export default function Page() {
 					aria-label="close sidebar"
 					className="drawer-overlay"
 				/>
-				<div className="is-drawer-close:w-14 is-drawer-open:w-48 bg-[#0F2918] flex flex-col items-start min-h-full">
+				<div className="is-drawer-close:w-14 is-drawer-open:w-48 bg-[#0F2918] flex flex-col items-start min-h-full text-white">
 					<ul className="menu w-full grow">
 						{contents.map((content) => (
 							<li key={content}>
