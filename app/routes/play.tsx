@@ -17,6 +17,30 @@ import { sortTehai } from "~/lib/hai/types";
 import type { GameState } from "~/lib/types";
 import type { Route } from "./+types/play";
 
+const SUHAI_KINDS = ["manzu", "pinzu", "souzu"] as const;
+const JIHAI_VALUES = [
+	"ton",
+	"nan",
+	"sya",
+	"pei",
+	"haku",
+	"hatsu",
+	"tyun",
+] as const;
+const TILE_IMAGE_PATHS = [
+	...SUHAI_KINDS.flatMap((kind) =>
+		Array.from({ length: 9 }, (_, index) => `/hai/${kind}_${index + 1}.png`),
+	),
+	...JIHAI_VALUES.map((value) => `/hai/jihai_${value}.png`),
+];
+
+export const links: Route.LinksFunction = () =>
+	TILE_IMAGE_PATHS.map((href) => ({
+		rel: "preload",
+		as: "image",
+		href,
+	}));
+
 export async function loader({
 	context,
 	request,
@@ -132,8 +156,8 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	);
 	const indexedTehai: IndexedHai[] = optimisticTehai.map(
 		(hai: Hai, index: number) => ({
-		...hai,
-		index,
+			...hai,
+			index,
 		}),
 	);
 	const firstRowTehai = indexedTehai.slice(0, 7);
@@ -180,7 +204,8 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			<div className="max-w-6xl mx-auto">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 mb-2 md:mb-3 text-sm md:text-base bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
 					<p>
-						東{kyoku}局 | 巡目: {optimisticJunme} | 残りツモ: {optimisticRemainTsumo}
+						東{kyoku}局 | 巡目: {optimisticJunme} | 残りツモ:{" "}
+						{optimisticRemainTsumo}
 					</p>
 					<p className="md:text-right">
 						スコア: {score} | シャンテン:{" "}
@@ -262,9 +287,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										<img
 											src={`/hai/${hai.kind}_${hai.value}.png`}
 											alt={`${hai.kind} ${hai.value}`}
-										className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
-									/>
-								</button>
+											className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
+										/>
+									</button>
 								</discardFetcher.Form>
 							))}
 						</div>
@@ -285,9 +310,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										<img
 											src={`/hai/${hai.kind}_${hai.value}.png`}
 											alt={`${hai.kind} ${hai.value}`}
-										className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
-									/>
-								</button>
+											className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
+										/>
+									</button>
 								</discardFetcher.Form>
 							))}
 							{optimisticTsumohai && (
