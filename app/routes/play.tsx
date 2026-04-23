@@ -501,16 +501,28 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			)}
 
 			<div className="max-w-6xl mx-auto">
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 mb-2 md:mb-3 text-sm md:text-base bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
-					<p>
-						東{kyoku}局 | 巡目: {optimisticJunme} 残りツモ:{" "}
-						{optimisticRemainTsumo}
-					</p>
-					<p className="md:text-right">
-						スコア: {score} | シャンテン:{" "}
-						{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
-					</p>
-					<div className="md:col-span-2 mt-1">
+				<div className="mb-2 md:mb-3 bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
+					<div className="flex flex-col gap-2">
+						<p className="text-lg md:text-2xl font-bold text-yellow-300 leading-tight">
+							東{kyoku}局{" "}
+							<span className="text-white text-base md:text-lg font-semibold">
+								| 巡目: {optimisticJunme}
+							</span>
+						</p>
+						<div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base">
+							<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
+								スコア: {score}
+							</span>
+							<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
+								シャンテン:{" "}
+								{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
+							</span>
+							<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
+								残りツモ: {optimisticRemainTsumo}
+							</span>
+						</div>
+					</div>
+					<div className="mt-2">
 						<progress
 							className="progress progress-warning w-full h-2"
 							value={tsumoProgressValue}
