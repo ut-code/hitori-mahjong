@@ -71,29 +71,71 @@ export async function loader({
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-	const fetcher = useFetcher();
-	let { sutehai, tsumohai, junme, kyoku, tehai, remainTsumo, score } =
+	const actionFetcher = useFetcher();
+	const discardFetcher = useFetcher();
+	const { sutehai, tsumohai, junme, kyoku, tehai, remainTsumo, score } =
 		loaderData;
-	tehai = sortTehai(tehai);
+	const baseSortedTehai = sortTehai(tehai);
+	let optimisticSutehai = sutehai;
+	let optimisticTehai = baseSortedTehai;
+	let optimisticTsumohai = tsumohai;
+	let optimisticJunme = junme;
+	let optimisticRemainTsumo = remainTsumo;
+
+	if (
+		discardFetcher.state !== "idle" &&
+		discardFetcher.formData &&
+		tsumohai !== null
+	) {
+		const nextRemainTsumo = Math.max(0, remainTsumo - 1);
+		if (discardFetcher.formAction?.endsWith("/api/tedashi")) {
+			const index = Number(discardFetcher.formData.get("index"));
+			if (
+				Number.isInteger(index) &&
+				index >= 0 &&
+				index < baseSortedTehai.length
+			) {
+				const discardedHai = baseSortedTehai[index];
+				const remainingTehai = baseSortedTehai.filter((_, i) => i !== index);
+				optimisticSutehai = [...sutehai, discardedHai];
+				optimisticTehai = sortTehai([...remainingTehai, tsumohai]);
+				optimisticTsumohai = null;
+				optimisticJunme = junme + 1;
+				optimisticRemainTsumo = nextRemainTsumo;
+			}
+		}
+
+		if (discardFetcher.formAction?.endsWith("/api/tsumogiri")) {
+			optimisticSutehai = [...sutehai, tsumohai];
+			optimisticTsumohai = null;
+			optimisticJunme = junme + 1;
+			optimisticRemainTsumo = nextRemainTsumo;
+		}
+	}
+
 	const isAgari =
-		tehai && tsumohai ? judgeAgari(sortTehai([...tehai, tsumohai])) : false;
-	const shantenResult = tehai
-		? calculateShanten(tehai)
+		optimisticTehai && optimisticTsumohai
+			? judgeAgari(sortTehai([...optimisticTehai, optimisticTsumohai]))
+			: false;
+	const shantenResult = optimisticTehai
+		? calculateShanten(optimisticTehai)
 		: { shanten: 8, isTenpai: false };
-	const isRyukyoku = remainTsumo <= 0;
+	const isRyukyoku = optimisticRemainTsumo <= 0;
 
 	type IndexedHai = Hai & { index: number };
 
-	const indexedSutehai: IndexedHai[] = sutehai.map(
+	const indexedSutehai: IndexedHai[] = optimisticSutehai.map(
 		(hai: Hai, index: number) => ({
 			...hai,
 			index,
 		}),
 	);
-	const indexedTehai: IndexedHai[] = tehai.map((hai: Hai, index: number) => ({
+	const indexedTehai: IndexedHai[] = optimisticTehai.map(
+		(hai: Hai, index: number) => ({
 		...hai,
 		index,
-	}));
+		}),
+	);
 	const firstRowTehai = indexedTehai.slice(0, 7);
 	const secondRowTehai = indexedTehai.slice(7);
 
@@ -104,7 +146,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">和了</h3>
 						<div className="modal-action">
-							<fetcher.Form method="post" action="/api/agari">
+							<actionFetcher.Form method="post" action="/api/agari">
 								<input type="hidden" value={junme} name="junme" />
 								<button
 									className="btn bg-yellow-600 text-white border-none"
@@ -112,7 +154,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								>
 									確認
 								</button>
-							</fetcher.Form>
+							</actionFetcher.Form>
 						</div>
 					</div>
 				</dialog>
@@ -122,14 +164,14 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">流局</h3>
 						<div className="modal-action">
-							<fetcher.Form method="post" action="/api/ryukyoku">
+							<actionFetcher.Form method="post" action="/api/ryukyoku">
 								<button
 									className="btn bg-yellow-600 text-white border-none"
 									type="submit"
 								>
 									確認
 								</button>
-							</fetcher.Form>
+							</actionFetcher.Form>
 						</div>
 					</div>
 				</dialog>
@@ -138,7 +180,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			<div className="max-w-6xl mx-auto">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 mb-2 md:mb-3 text-sm md:text-base bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
 					<p>
-						東{kyoku}局 | 巡目: {junme} | 残りツモ: {remainTsumo}
+						東{kyoku}局 | 巡目: {optimisticJunme} | 残りツモ: {optimisticRemainTsumo}
 					</p>
 					<p className="md:text-right">
 						スコア: {score} | シャンテン:{" "}
@@ -165,11 +207,16 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 
 					<div className="hidden md:flex items-end gap-0 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
 						{indexedTehai.map((hai) => (
-							<fetcher.Form key={hai.index} method="post" action="/api/tedashi">
+							<discardFetcher.Form
+								key={hai.index}
+								method="post"
+								action="/api/tedashi"
+							>
 								<input type="hidden" name="index" value={hai.index} />
 								<button
 									type="submit"
 									aria-label={`捨てる ${hai.kind} ${hai.value}`}
+									disabled={discardFetcher.state !== "idle"}
 								>
 									<img
 										src={`/hai/${hai.kind}_${hai.value}.png`}
@@ -177,22 +224,23 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										className="w-10 h-14 cursor-pointer hover:scale-105 transition-transform"
 									/>
 								</button>
-							</fetcher.Form>
+							</discardFetcher.Form>
 						))}
-						{tsumohai && (
+						{optimisticTsumohai && (
 							<div className="ml-1">
-								<fetcher.Form method="post" action="/api/tsumogiri">
+								<discardFetcher.Form method="post" action="/api/tsumogiri">
 									<button
 										type="submit"
-										aria-label={`ツモ切り ${tsumohai.kind} ${tsumohai.value}`}
+										aria-label={`ツモ切り ${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
+										disabled={discardFetcher.state !== "idle"}
 									>
 										<img
-											src={`/hai/${tsumohai.kind}_${tsumohai.value}.png`}
-											alt={`${tsumohai.kind} ${tsumohai.value}`}
+											src={`/hai/${optimisticTsumohai.kind}_${optimisticTsumohai.value}.png`}
+											alt={`${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
 											className="w-10 h-14 object-contain cursor-pointer hover:scale-105 transition-transform"
 										/>
 									</button>
-								</fetcher.Form>
+								</discardFetcher.Form>
 							</div>
 						)}
 					</div>
@@ -200,11 +248,16 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="md:hidden bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
 						<div className="grid grid-cols-7 gap-0">
 							{firstRowTehai.map((hai) => (
-								<fetcher.Form key={hai.index} method="post" action="/api/tedashi">
+								<discardFetcher.Form
+									key={hai.index}
+									method="post"
+									action="/api/tedashi"
+								>
 									<input type="hidden" name="index" value={hai.index} />
 									<button
 										type="submit"
 										aria-label={`捨てる ${hai.kind} ${hai.value}`}
+										disabled={discardFetcher.state !== "idle"}
 									>
 										<img
 											src={`/hai/${hai.kind}_${hai.value}.png`}
@@ -212,17 +265,22 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
 									/>
 								</button>
-								</fetcher.Form>
+								</discardFetcher.Form>
 							))}
 						</div>
 
 						<div className="grid grid-cols-7 gap-0 mt-1">
 							{secondRowTehai.map((hai) => (
-								<fetcher.Form key={hai.index} method="post" action="/api/tedashi">
+								<discardFetcher.Form
+									key={hai.index}
+									method="post"
+									action="/api/tedashi"
+								>
 									<input type="hidden" name="index" value={hai.index} />
 									<button
 										type="submit"
 										aria-label={`捨てる ${hai.kind} ${hai.value}`}
+										disabled={discardFetcher.state !== "idle"}
 									>
 										<img
 											src={`/hai/${hai.kind}_${hai.value}.png`}
@@ -230,21 +288,22 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
 									/>
 								</button>
-								</fetcher.Form>
+								</discardFetcher.Form>
 							))}
-							{tsumohai && (
-								<fetcher.Form method="post" action="/api/tsumogiri">
+							{optimisticTsumohai && (
+								<discardFetcher.Form method="post" action="/api/tsumogiri">
 									<button
 										type="submit"
-										aria-label={`ツモ切り ${tsumohai.kind} ${tsumohai.value}`}
+										aria-label={`ツモ切り ${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
+										disabled={discardFetcher.state !== "idle"}
 									>
 										<img
-											src={`/hai/${tsumohai.kind}_${tsumohai.value}.png`}
-											alt={`${tsumohai.kind} ${tsumohai.value}`}
+											src={`/hai/${optimisticTsumohai.kind}_${optimisticTsumohai.value}.png`}
+											alt={`${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
 											className="w-8 h-11 object-contain cursor-pointer hover:scale-105 transition-transform"
 										/>
 									</button>
-								</fetcher.Form>
+								</discardFetcher.Form>
 							)}
 						</div>
 					</div>
