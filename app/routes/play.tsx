@@ -71,13 +71,13 @@ export async function loader({
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-	const fetcher = useFetcher();
+	const actionFetcher = useFetcher();
 	const discardFetcher = useFetcher();
 	const { sutehai, tsumohai, junme, kyoku, tehai, remainTsumo, score } =
 		loaderData;
-	const sortedTehai = sortTehai(tehai);
+	const baseSortedTehai = sortTehai(tehai);
 	let optimisticSutehai = sutehai;
-	let optimisticTehai = sortedTehai;
+	let optimisticTehai = baseSortedTehai;
 	let optimisticTsumohai = tsumohai;
 	let optimisticJunme = junme;
 	let optimisticRemainTsumo = remainTsumo;
@@ -87,16 +87,21 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		discardFetcher.formData &&
 		tsumohai !== null
 	) {
+		const nextRemainTsumo = Math.max(0, remainTsumo - 1);
 		if (discardFetcher.formAction?.endsWith("/api/tedashi")) {
 			const index = Number(discardFetcher.formData.get("index"));
-			if (Number.isInteger(index) && index >= 0 && index < sortedTehai.length) {
-				const discardedHai = sortedTehai[index];
-				const remainingTehai = sortedTehai.filter((_, i) => i !== index);
+			if (
+				Number.isInteger(index) &&
+				index >= 0 &&
+				index < baseSortedTehai.length
+			) {
+				const discardedHai = baseSortedTehai[index];
+				const remainingTehai = baseSortedTehai.filter((_, i) => i !== index);
 				optimisticSutehai = [...sutehai, discardedHai];
 				optimisticTehai = sortTehai([...remainingTehai, tsumohai]);
 				optimisticTsumohai = null;
 				optimisticJunme = junme + 1;
-				optimisticRemainTsumo = Math.max(0, remainTsumo - 1);
+				optimisticRemainTsumo = nextRemainTsumo;
 			}
 		}
 
@@ -104,7 +109,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			optimisticSutehai = [...sutehai, tsumohai];
 			optimisticTsumohai = null;
 			optimisticJunme = junme + 1;
-			optimisticRemainTsumo = Math.max(0, remainTsumo - 1);
+			optimisticRemainTsumo = nextRemainTsumo;
 		}
 	}
 
@@ -141,7 +146,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">和了</h3>
 						<div className="modal-action">
-							<fetcher.Form method="post" action="/api/agari">
+							<actionFetcher.Form method="post" action="/api/agari">
 								<input type="hidden" value={junme} name="junme" />
 								<button
 									className="btn bg-yellow-600 text-white border-none"
@@ -149,7 +154,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								>
 									確認
 								</button>
-							</fetcher.Form>
+							</actionFetcher.Form>
 						</div>
 					</div>
 				</dialog>
@@ -159,14 +164,14 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">流局</h3>
 						<div className="modal-action">
-							<fetcher.Form method="post" action="/api/ryukyoku">
+							<actionFetcher.Form method="post" action="/api/ryukyoku">
 								<button
 									className="btn bg-yellow-600 text-white border-none"
 									type="submit"
 								>
 									確認
 								</button>
-							</fetcher.Form>
+							</actionFetcher.Form>
 						</div>
 					</div>
 				</dialog>
