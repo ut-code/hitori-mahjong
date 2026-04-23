@@ -141,66 +141,68 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										第{sessions.length - si}局
 									</h2>
 								</div>
-								<table className="w-full text-white">
-									<thead className="bg-[#143820]">
-										<tr>
-											<th className="p-3 text-left">局</th>
-											<th className="p-3 text-left">結果</th>
-											<th className="p-3 text-center">巡目</th>
-											<th className="p-3 text-center">和了確率</th>
-											<th className="p-3 text-center">シャンテン</th>
-											<th className="p-3 text-right">得点</th>
-										</tr>
-									</thead>
-									<tbody>
-										{session.records.map((record, ri) => (
-											<tr key={record.id} className="border-t border-[#1A472A]">
-												<td className="p-3 font-bold">{kyokuNames[ri]}</td>
-												<td className="p-3">
-													{record.didAgari ? (
-														<span className="text-green-400 font-bold">
-															和了
-														</span>
-													) : record.shanten === 0 ? (
-														<span className="text-blue-400">テンパイ</span>
-													) : record.shanten === 1 ? (
-														<span className="text-yellow-400">1シャンテン</span>
-													) : (
-														<span className="text-gray-400">流局</span>
-													)}
-												</td>
-												<td className="p-3 text-center">
-													{record.didAgari ? (record.agariJunme ?? "-") : "-"}
-												</td>
-												<td className="p-3 text-center">
-													{record.playedCount > 0 ? (
-														<span className="text-green-400 font-bold">
-															{(
-																(record.agariCount / record.playedCount) *
-																100
-															).toFixed(1)}
-															%
-														</span>
-													) : (
-														<span className="text-gray-400">-</span>
-													)}
-												</td>
-												<td className="p-3 text-center">{record.shanten}</td>
-												<td className="p-3 text-right">
-													<span
-														className={
-															record.scoreDelta > 0
-																? "text-green-400 font-bold"
-																: "text-gray-400"
-														}
-													>
-														+{record.scoreDelta}
-													</span>
-												</td>
+								<div className="overflow-x-auto">
+									<table className="min-w-[40rem] w-full text-white">
+										<thead className="bg-[#143820]">
+											<tr>
+												<th className="p-3 text-left">局</th>
+												<th className="p-3 text-left">結果</th>
+												<th className="p-3 text-center">巡目</th>
+												<th className="p-3 text-center">和了確率</th>
+												<th className="p-3 text-center">シャンテン</th>
+												<th className="p-3 text-right">得点</th>
 											</tr>
-										))}
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+											{session.records.map((record, ri) => (
+												<tr key={record.id} className="border-t border-[#1A472A]">
+													<td className="p-3 font-bold">{kyokuNames[ri]}</td>
+													<td className="p-3">
+														{record.didAgari ? (
+															<span className="text-green-400 font-bold">
+																和了
+															</span>
+														) : record.shanten === 0 ? (
+															<span className="text-blue-400">テンパイ</span>
+														) : record.shanten === 1 ? (
+															<span className="text-yellow-400">1シャンテン</span>
+														) : (
+															<span className="text-gray-400">流局</span>
+														)}
+													</td>
+													<td className="p-3 text-center">
+														{record.didAgari ? (record.agariJunme ?? "-") : "-"}
+													</td>
+													<td className="p-3 text-center">
+														{record.playedCount > 0 ? (
+															<span className="text-green-400 font-bold">
+																{(
+																	(record.agariCount / record.playedCount) *
+																	100
+																).toFixed(1)}
+																%
+															</span>
+														) : (
+															<span className="text-gray-400">-</span>
+														)}
+													</td>
+													<td className="p-3 text-center">{record.shanten}</td>
+													<td className="p-3 text-right">
+														<span
+															className={
+																record.scoreDelta > 0
+																	? "text-green-400 font-bold"
+																	: "text-gray-400"
+															}
+														>
+															+{record.scoreDelta}
+														</span>
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
 							</div>
 						))}
 					</div>
