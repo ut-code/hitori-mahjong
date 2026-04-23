@@ -33,6 +33,7 @@ const TILE_IMAGE_PATHS = [
 	),
 	...JIHAI_VALUES.map((value) => `/hai/jihai_${value}.png`),
 ];
+const TOTAL_TSUMO_PER_KYOKU = 18;
 
 type ShantenAdvanceDiscard = {
 	hai: Hai;
@@ -151,6 +152,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			optimisticRemainTsumo = nextRemainTsumo;
 		}
 	}
+	const tsumoProgressValue = Math.min(
+		TOTAL_TSUMO_PER_KYOKU,
+		Math.max(0, TOTAL_TSUMO_PER_KYOKU - optimisticRemainTsumo),
+	);
 
 	const isAgari =
 		optimisticTehai && optimisticTsumohai
@@ -299,13 +304,20 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			<div className="max-w-6xl mx-auto">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-2 mb-2 md:mb-3 text-sm md:text-base bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
 					<p>
-						東{kyoku}局 | 巡目: {optimisticJunme} | 残りツモ:{" "}
+						東{kyoku}局 | 巡目: {optimisticJunme} 残りツモ:{" "}
 						{optimisticRemainTsumo}
 					</p>
 					<p className="md:text-right">
 						スコア: {score} | シャンテン:{" "}
 						{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
 					</p>
+					<div className="md:col-span-2 mt-1">
+						<progress
+							className="progress progress-warning w-full h-2"
+							value={tsumoProgressValue}
+							max={TOTAL_TSUMO_PER_KYOKU}
+						/>
+					</div>
 				</div>
 
 				<div className="mb-3 md:flex md:items-start md:gap-3">
