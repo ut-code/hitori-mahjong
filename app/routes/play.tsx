@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { useEffect, useState } from "react";
-import { useFetcher } from "react-router";
+import { type ShouldRevalidateFunctionArgs, useFetcher } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
@@ -215,7 +215,7 @@ export async function loader({
 
 export function shouldRevalidate({
 	actionResult,
-}: Route.ShouldRevalidateArgs) {
+}: ShouldRevalidateFunctionArgs) {
 	return actionResult?.revalidate === true;
 }
 
