@@ -1,7 +1,7 @@
 import { redirect } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { getGameState, tsumogiri } from "~/lib/game-service";
+import { getGameState, toGameState, tsumogiri } from "~/lib/game-service";
 import type { Route } from "./+types/api.tsumogiri";
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -28,5 +28,10 @@ export async function action({ context, request }: Route.ActionArgs) {
 		return new Response("Invalid request", { status: 400 });
 	}
 
-	return redirect("/play");
+	const latestGameState = await getGameState(db, userId);
+	if (!latestGameState) {
+		return new Response("Game state not found", { status: 404 });
+	}
+
+	return toGameState(latestGameState);
 }
