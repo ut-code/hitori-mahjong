@@ -492,6 +492,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								<button
 									className="btn bg-yellow-600 text-white border-none"
 									type="submit"
+									disabled={actionFetcher.state !== "idle"}
 								>
 									確認
 								</button>
@@ -512,6 +513,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								<button
 									className="btn bg-yellow-600 text-white border-none"
 									type="submit"
+									disabled={actionFetcher.state !== "idle"}
 								>
 									確認
 								</button>
