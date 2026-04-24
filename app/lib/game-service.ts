@@ -281,7 +281,7 @@ export function toGameState(record: GameStateRecord): GameState {
 		junme: record.junme,
 		remainTsumo: record.remainTsumo,
 		score: record.score,
-		haiyama: record.haiyama,
+		nextTsumohai: record.haiyama.length > 0 ? record.haiyama[0] : null,
 		sutehai: record.sutehai,
 		tehai: record.tehai,
 		tsumohai: record.tsumohai.length > 0 ? record.tsumohai[0] : null,

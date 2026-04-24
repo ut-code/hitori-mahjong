@@ -5,7 +5,7 @@ export interface GameState {
 	junme: number;
 	remainTsumo: number;
 	score: number;
-	haiyama: Hai[];
+	nextTsumohai: Hai | null;
 	sutehai: Hai[];
 	tehai: Hai[];
 	tsumohai: Hai | null;
