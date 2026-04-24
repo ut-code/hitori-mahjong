@@ -212,16 +212,24 @@ export async function loader({
 	}
 }
 
-export function shouldRevalidate({
-	actionResult,
-}: ShouldRevalidateFunctionArgs) {
-	return actionResult?.revalidate === true;
+export function shouldRevalidate({ formAction }: ShouldRevalidateFunctionArgs) {
+	if (formAction?.endsWith("/api/tedashi")) return false;
+	if (formAction?.endsWith("/api/tsumogiri")) return false;
+	return true;
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const actionFetcher = useFetcher();
 	const discardFetcher = useFetcher<GameState>();
-	const currentGameState = discardFetcher.data ?? loaderData;
+	const fetcherGameState =
+		discardFetcher.data && "tehai" in discardFetcher.data
+			? (discardFetcher.data as GameState)
+			: null;
+
+	const currentGameState =
+		fetcherGameState?.kyoku === loaderData.kyoku
+			? fetcherGameState
+			: loaderData;
 
 	const {
 		sutehai,
@@ -593,7 +601,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 									[...shantenHintDiscardsByResult.entries()]
 										.sort(([a], [b]) => a - b)
 										.map(([resultingShanten, discards]) => (
-											<div key={resultingShanten} className="flex gap-0 shrink-0">
+											<div
+												key={resultingShanten}
+												className="flex gap-0 shrink-0"
+											>
 												{discards.map((discard) => (
 													<img
 														key={`${getHaiKey(discard.hai)}-${discard.resultingShanten}`}
