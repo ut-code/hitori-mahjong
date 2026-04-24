@@ -215,8 +215,16 @@ export async function loader({
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const actionFetcher = useFetcher();
 	const discardFetcher = useFetcher();
-	const { sutehai, tsumohai, junme, kyoku, tehai, remainTsumo, score } =
-		loaderData;
+	const {
+		sutehai,
+		tsumohai,
+		nextTsumohai,
+		junme,
+		kyoku,
+		tehai,
+		remainTsumo,
+		score,
+	} = loaderData;
 	const baseSortedTehai = sortTehai(tehai);
 	let optimisticSutehai = sutehai;
 	let optimisticTehai = baseSortedTehai;
@@ -241,7 +249,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				const remainingTehai = baseSortedTehai.filter((_, i) => i !== index);
 				optimisticSutehai = [...sutehai, discardedHai];
 				optimisticTehai = sortTehai([...remainingTehai, tsumohai]);
-				optimisticTsumohai = null;
+				optimisticTsumohai = nextTsumohai;
 				optimisticJunme = junme + 1;
 				optimisticRemainTsumo = nextRemainTsumo;
 			}
@@ -249,7 +257,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 
 		if (discardFetcher.formAction?.endsWith("/api/tsumogiri")) {
 			optimisticSutehai = [...sutehai, tsumohai];
-			optimisticTsumohai = null;
+			optimisticTsumohai = nextTsumohai;
 			optimisticJunme = junme + 1;
 			optimisticRemainTsumo = nextRemainTsumo;
 		}
