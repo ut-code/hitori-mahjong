@@ -2,7 +2,7 @@ import { redirect } from "react-router";
 import { z } from "zod";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
-import { getGameState, tedashi } from "~/lib/game-service";
+import { getGameState, tedashi, toGameState } from "~/lib/game-service";
 import type { Route } from "./+types/api.tedashi";
 
 const tedashiSchema = z.object({
@@ -41,5 +41,10 @@ export async function action({ context, request }: Route.ActionArgs) {
 		return new Response("Invalid request", { status: 400 });
 	}
 
-	return redirect("/play");
+	const latestGameState = await getGameState(db, userId);
+	if (!latestGameState) {
+		return new Response("Game state not found", { status: 404 });
+	}
+
+	return toGameState(latestGameState);
 }

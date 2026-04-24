@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
-import { useFetcher } from "react-router";
+import { useEffect, useState } from "react";
+import { type ShouldRevalidateFunctionArgs, useFetcher } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import { haiyama } from "~/lib/db/schema";
@@ -212,9 +213,27 @@ export async function loader({
 	}
 }
 
+export function shouldRevalidate({
+	actionResult,
+}: ShouldRevalidateFunctionArgs) {
+	return actionResult?.revalidate === true;
+}
+
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const actionFetcher = useFetcher();
-	const discardFetcher = useFetcher();
+	const discardFetcher = useFetcher<GameState>();
+	const [gameState, setGameState] = useState(loaderData);
+
+	useEffect(() => {
+		setGameState(loaderData);
+	}, [loaderData]);
+
+	useEffect(() => {
+		if (discardFetcher.data) {
+			setGameState(discardFetcher.data);
+		}
+	}, [discardFetcher.data]);
+
 	const {
 		sutehai,
 		tsumohai,
@@ -224,7 +243,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		tehai,
 		remainTsumo,
 		score,
-	} = loaderData;
+	} = gameState;
 	const baseSortedTehai = sortTehai(tehai);
 	let optimisticSutehai = sutehai;
 	let optimisticTehai = baseSortedTehai;
