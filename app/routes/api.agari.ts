@@ -46,5 +46,5 @@ export async function action({ context, request }: Route.ActionArgs) {
 		return redirect("/gameover");
 	}
 
-	return { revalidate: true };
+	return null;
 }
