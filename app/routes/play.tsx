@@ -1,5 +1,4 @@
 import { sql } from "drizzle-orm";
-import { useEffect, useState } from "react";
 import { type ShouldRevalidateFunctionArgs, useFetcher } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
@@ -222,17 +221,7 @@ export function shouldRevalidate({
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const actionFetcher = useFetcher();
 	const discardFetcher = useFetcher<GameState>();
-	const [gameState, setGameState] = useState(loaderData);
-
-	useEffect(() => {
-		setGameState(loaderData);
-	}, [loaderData]);
-
-	useEffect(() => {
-		if (discardFetcher.data) {
-			setGameState(discardFetcher.data);
-		}
-	}, [discardFetcher.data]);
+	const currentGameState = discardFetcher.data ?? loaderData;
 
 	const {
 		sutehai,
@@ -243,7 +232,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		tehai,
 		remainTsumo,
 		score,
-	} = gameState;
+	} = currentGameState;
 	const baseSortedTehai = sortTehai(tehai);
 	let optimisticSutehai = sutehai;
 	let optimisticTehai = baseSortedTehai;
