@@ -307,6 +307,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	>();
 	let isAdvanceHint = true;
 	let shantenHintDiscardsByResult = shantenAdvanceDiscardsByResult;
+	const isHintCalculating = discardFetcher.state !== "idle";
 
 	if (optimisticTsumohai) {
 		const currentShanten = shantenResult.shanten;
@@ -571,7 +572,11 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						</div>
 					</div>
 					<div className="mt-2 md:mt-0 md:flex-1 text-sm md:text-base">
-						{shantenHintDiscardsByResult.size === 0 ? (
+						{isHintCalculating ? (
+							<p className="text-sm md:text-base mb-1 text-yellow-300">
+								計算中...
+							</p>
+						) : shantenHintDiscardsByResult.size === 0 ? (
 							<p className="text-sm md:text-base mb-1 text-yellow-300">なし</p>
 						) : (
 							<div className="mb-1">
@@ -591,20 +596,26 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						)}
 						<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] h-[3.875rem] md:h-auto md:min-h-44">
 							<div className="h-full min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-0">
-								{[...shantenHintDiscardsByResult.entries()]
-									.sort(([a], [b]) => a - b)
-									.map(([resultingShanten, discards]) => (
-										<div key={resultingShanten} className="flex gap-0 shrink-0">
-											{discards.map((discard) => (
-												<img
-													key={`${getHaiKey(discard.hai)}-${discard.resultingShanten}`}
-													src={`/hai/${discard.hai.kind}_${discard.hai.value}.png`}
-													alt={`${discard.hai.kind} ${discard.hai.value}`}
-													className="w-8 h-11 md:w-10 md:h-14"
-												/>
-											))}
-										</div>
-									))}
+								{isHintCalculating ? (
+									<p className="text-sm md:text-base text-yellow-300">
+										計算中...
+									</p>
+								) : (
+									[...shantenHintDiscardsByResult.entries()]
+										.sort(([a], [b]) => a - b)
+										.map(([resultingShanten, discards]) => (
+											<div key={resultingShanten} className="flex gap-0 shrink-0">
+												{discards.map((discard) => (
+													<img
+														key={`${getHaiKey(discard.hai)}-${discard.resultingShanten}`}
+														src={`/hai/${discard.hai.kind}_${discard.hai.value}.png`}
+														alt={`${discard.hai.kind} ${discard.hai.value}`}
+														className="w-8 h-11 md:w-10 md:h-14"
+													/>
+												))}
+											</div>
+										))
+								)}
 							</div>
 						</div>
 					</div>
