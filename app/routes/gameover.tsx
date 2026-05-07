@@ -82,8 +82,8 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	};
 
 	return (
-		<div className="min-h-screen bg-[#1A472A] p-8 font-serif">
-			<div className="max-w-2xl mx-auto">
+		<div className="min-h-screen bg-[#1A472A] p-8 font-serif flex items-center justify-center">
+			<div className="w-full max-w-2xl">
 				<h1 className="text-3xl font-bold text-yellow-400 mb-8 text-center">
 					終局
 				</h1>
