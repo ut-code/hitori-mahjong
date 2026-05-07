@@ -1,4 +1,5 @@
 import { sql } from "drizzle-orm";
+import { useEffect, useState } from "react";
 import { type ShouldRevalidateFunctionArgs, useFetcher } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
@@ -221,6 +222,7 @@ export function shouldRevalidate({ formAction }: ShouldRevalidateFunctionArgs) {
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const actionFetcher = useFetcher();
 	const discardFetcher = useFetcher<GameState>();
+	const [showHints, setShowHints] = useState(false);
 	const fetcherGameState =
 		discardFetcher.data && "tehai" in discardFetcher.data
 			? (discardFetcher.data as GameState)
@@ -282,6 +284,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		TOTAL_TSUMO_PER_KYOKU,
 		Math.max(0, TOTAL_TSUMO_PER_KYOKU - optimisticRemainTsumo),
 	);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: reset hints on each junme change
+	useEffect(() => {
+		setShowHints(false);
+	}, [optimisticJunme]);
 
 	const isAgari =
 		optimisticTehai && optimisticTsumohai
@@ -302,8 +308,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		number,
 		ShantenAdvanceDiscard[]
 	>();
-	let isAdvanceHint = true;
-	let shantenHintDiscardsByResult = shantenAdvanceDiscardsByResult;
+	const shantenKeepDiscardsByResult = new Map<
+		number,
+		ShantenAdvanceDiscard[]
+	>();
 	const isHintCalculating = discardFetcher.state !== "idle";
 
 	if (optimisticTsumohai) {
@@ -332,10 +340,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		}
 
 		if (shantenAdvanceDiscardsByResult.size === 0) {
-			const shantenKeepDiscardsByResult = new Map<
-				number,
-				ShantenAdvanceDiscard[]
-			>();
 			const shantenKeepDiscards = optimisticTehai
 				.map((hai, index) => {
 					const remainingTehai = optimisticTehai.filter((_, i) => i !== index);
@@ -362,13 +366,17 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				current.push(discard);
 				shantenKeepDiscardsByResult.set(discard.resultingShanten, current);
 			}
-
-			if (shantenKeepDiscardsByResult.size > 0) {
-				isAdvanceHint = false;
-				shantenHintDiscardsByResult = shantenKeepDiscardsByResult;
-			}
 		}
 	}
+	const hasAdvanceHints = shantenAdvanceDiscardsByResult.size > 0;
+	const hasKeepHints = shantenKeepDiscardsByResult.size > 0;
+	const hasAnyHints = hasAdvanceHints || hasKeepHints;
+	const shantenHintDiscardsByResult = showHints
+		? hasAdvanceHints
+			? shantenAdvanceDiscardsByResult
+			: shantenKeepDiscardsByResult
+		: new Map<number, ShantenAdvanceDiscard[]>();
+	const isAdvanceHint = hasAdvanceHints;
 
 	type IndexedHai = Hai & { index: number };
 
@@ -388,7 +396,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const secondRowTehai = indexedTehai.slice(7);
 
 	return (
-		<div className="min-h-screen bg-[#1A472A] p-3 md:p-4 font-serif text-white">
+		<div className="min-h-screen bg-[#1A472A] p-3 md:p-4 font-serif text-white flex flex-col">
 			{isAgari && (
 				<dialog id="agari_modal" className="modal" open>
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
@@ -523,172 +531,133 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				</dialog>
 			)}
 
-			<div className="max-w-6xl mx-auto">
-				<div className="mb-2 md:mb-3 bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
-					<div className="flex flex-col gap-2">
-						<p className="text-lg md:text-2xl font-bold text-yellow-300 leading-tight">
-							東{kyoku}局
-							<span className="text-white text-base md:text-lg font-semibold">
-								（全4局）巡目: {optimisticJunme} / 18
-							</span>
-						</p>
-						<div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base">
-							<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
-								スコア: {score}
-							</span>
-							<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
-								シャンテン:{" "}
-								{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
-							</span>
-						</div>
-					</div>
-					<div className="mt-2">
-						<progress
-							className="progress progress-warning w-full h-2"
-							value={tsumoProgressValue}
-							max={TOTAL_TSUMO_PER_KYOKU}
-						/>
-					</div>
-				</div>
-
-				<div className="mb-3 md:flex md:items-start md:gap-3">
-					<div>
-						<h3 className="text-sm md:text-base mb-1 text-yellow-300">
-							捨て牌
-						</h3>
-						<div className="grid grid-cols-6 gap-0 min-h-36 md:min-h-44 content-start bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-[13rem] md:w-[16rem]">
-							{indexedSutehai.map((hai) => (
-								<img
-									key={hai.index}
-									src={`/hai/${hai.kind}_${hai.value}.png`}
-									alt={`${hai.kind} ${hai.value}`}
-									className="w-8 h-11 md:w-10 md:h-14"
-								/>
-							))}
-						</div>
-					</div>
-					<div className="mt-2 md:mt-0 md:flex-1 text-sm md:text-base">
-						{isHintCalculating ? (
-							<p className="text-sm md:text-base mb-1 text-yellow-300">
-								計算中...
+			<div className="flex flex-1 items-center justify-center">
+				<div className="w-full max-w-6xl">
+					<div className="mb-2 md:mb-3 bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
+						<div className="flex flex-col gap-2">
+							<p className="text-lg md:text-2xl font-bold text-yellow-300 leading-tight">
+								東{kyoku}局
+								<span className="text-white text-base md:text-lg font-semibold">
+									（全4局）巡目: {optimisticJunme} / 18
+								</span>
 							</p>
-						) : shantenHintDiscardsByResult.size === 0 ? (
-							<p className="text-sm md:text-base mb-1 text-yellow-300">なし</p>
-						) : (
-							<div className="mb-1">
-								{[...shantenHintDiscardsByResult.entries()]
-									.sort(([a], [b]) => a - b)
-									.map(([resultingShanten]) => (
-										<p
-											key={resultingShanten}
-											className="text-sm md:text-base text-yellow-300"
-										>
-											{isAdvanceHint
-												? `${shantenLabel(resultingShanten)}に進む打牌`
-												: `${shantenLabel(resultingShanten)}を維持する打牌`}
-										</p>
-									))}
-							</div>
-						)}
-						<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] h-[3.875rem] md:h-auto md:min-h-44">
-							<div className="h-full min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-0">
-								{isHintCalculating ? (
-									<p className="text-sm md:text-base text-yellow-300">
-										計算中...
-									</p>
-								) : (
-									[...shantenHintDiscardsByResult.entries()]
-										.sort(([a], [b]) => a - b)
-										.map(([resultingShanten, discards]) => (
-											<div
-												key={resultingShanten}
-												className="flex gap-0 shrink-0"
-											>
-												{discards.map((discard) => (
-													<img
-														key={`${getHaiKey(discard.hai)}-${discard.resultingShanten}`}
-														src={`/hai/${discard.hai.kind}_${discard.hai.value}.png`}
-														alt={`${discard.hai.kind} ${discard.hai.value}`}
-														className="w-8 h-11 md:w-10 md:h-14"
-													/>
-												))}
-											</div>
-										))
-								)}
+							<div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base">
+								<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
+									スコア: {score}
+								</span>
+								<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
+									シャンテン:{" "}
+									{shantenResult.shanten === -1
+										? "和了"
+										: shantenResult.shanten}
+								</span>
 							</div>
 						</div>
+						<div className="mt-2">
+							<progress
+								className="progress progress-warning w-full h-2"
+								value={tsumoProgressValue}
+								max={TOTAL_TSUMO_PER_KYOKU}
+							/>
+						</div>
 					</div>
-				</div>
 
-				<div>
-					<h3 className="text-sm md:text-base mb-1 text-yellow-300">手牌</h3>
-
-					<div className="hidden md:flex items-end gap-0 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
-						{indexedTehai.map((hai) => (
-							<discardFetcher.Form
-								key={hai.index}
-								method="post"
-								action="/api/tedashi"
-							>
-								<input type="hidden" name="index" value={hai.index} />
-								<button
-									type="submit"
-									aria-label={`捨てる ${hai.kind} ${hai.value}`}
-									disabled={discardFetcher.state !== "idle"}
-								>
+					<div className="mb-3 md:flex md:items-start md:gap-3">
+						<div>
+							<h3 className="text-sm md:text-base mb-1 text-yellow-300">
+								捨て牌
+							</h3>
+							<div className="grid grid-cols-6 gap-0 min-h-36 md:min-h-44 content-start bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-[13rem] md:w-[16rem]">
+								{indexedSutehai.map((hai) => (
 									<img
+										key={hai.index}
 										src={`/hai/${hai.kind}_${hai.value}.png`}
 										alt={`${hai.kind} ${hai.value}`}
-										className="w-10 h-14 cursor-pointer hover:scale-105 transition-transform"
+										className="w-8 h-11 md:w-10 md:h-14"
 									/>
-								</button>
-							</discardFetcher.Form>
-						))}
-						{optimisticTsumohai && (
-							<div className="ml-1">
-								<discardFetcher.Form method="post" action="/api/tsumogiri">
-									<button
-										type="submit"
-										aria-label={`ツモ切り ${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
-										disabled={discardFetcher.state !== "idle"}
-									>
-										<img
-											src={`/hai/${optimisticTsumohai.kind}_${optimisticTsumohai.value}.png`}
-											alt={`${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
-											className="w-10 h-14 object-contain cursor-pointer hover:scale-105 transition-transform"
-										/>
-									</button>
-								</discardFetcher.Form>
+								))}
 							</div>
-						)}
+						</div>
+						<div className="mt-2 md:mt-0 md:flex-1 text-sm md:text-base">
+							{(!isHintCalculating && hasAnyHints) ||
+							(showHints && shantenHintDiscardsByResult.size > 0) ? (
+								<div className="flex flex-wrap items-center gap-2 mb-1">
+									{!isHintCalculating && hasAnyHints && (
+										<button
+											type="button"
+											onClick={() => setShowHints((current) => !current)}
+											className="btn btn-xs bg-yellow-600 text-white border-none h-6 min-h-0 px-3"
+										>
+											{showHints ? "ヒントを隠す" : "ヒントを表示"}
+										</button>
+									)}
+									{showHints &&
+										[...shantenHintDiscardsByResult.entries()]
+											.sort(([a], [b]) => a - b)
+											.map(([resultingShanten]) => (
+												<span
+													key={resultingShanten}
+													className="text-sm md:text-base text-yellow-300"
+												>
+													{isAdvanceHint
+														? `${shantenLabel(resultingShanten)}に進む打牌`
+														: `${shantenLabel(resultingShanten)}を維持する打牌`}
+												</span>
+											))}
+								</div>
+							) : null}
+							{isHintCalculating ? (
+								<p className="text-sm md:text-base mb-1 text-yellow-300">
+									計算中...
+								</p>
+							) : shantenHintDiscardsByResult.size === 0 ? (
+								!hasAnyHints ? (
+									<p className="text-sm md:text-base mb-1 text-yellow-300">
+										なし
+									</p>
+								) : null
+							) : null}
+							<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] h-[3.875rem] md:h-auto md:min-h-44">
+								<div className="h-full min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-0">
+									{isHintCalculating ? (
+										<p className="text-sm md:text-base text-yellow-300">
+											計算中...
+										</p>
+									) : shantenHintDiscardsByResult.size === 0 ? (
+										!hasAnyHints ? (
+											<p className="text-sm md:text-base text-yellow-300">
+												なし
+											</p>
+										) : null
+									) : (
+										[...shantenHintDiscardsByResult.entries()]
+											.sort(([a], [b]) => a - b)
+											.map(([resultingShanten, discards]) => (
+												<div
+													key={resultingShanten}
+													className="flex gap-0 shrink-0"
+												>
+													{discards.map((discard) => (
+														<img
+															key={`${getHaiKey(discard.hai)}-${discard.resultingShanten}`}
+															src={`/hai/${discard.hai.kind}_${discard.hai.value}.png`}
+															alt={`${discard.hai.kind} ${discard.hai.value}`}
+															className="w-8 h-11 md:w-10 md:h-14"
+														/>
+													))}
+												</div>
+											))
+									)}
+								</div>
+							</div>
+						</div>
 					</div>
 
-					<div className="md:hidden bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
-						<div className="grid grid-cols-7 gap-0">
-							{firstRowTehai.map((hai) => (
-								<discardFetcher.Form
-									key={hai.index}
-									method="post"
-									action="/api/tedashi"
-								>
-									<input type="hidden" name="index" value={hai.index} />
-									<button
-										type="submit"
-										aria-label={`捨てる ${hai.kind} ${hai.value}`}
-										disabled={discardFetcher.state !== "idle"}
-									>
-										<img
-											src={`/hai/${hai.kind}_${hai.value}.png`}
-											alt={`${hai.kind} ${hai.value}`}
-											className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
-										/>
-									</button>
-								</discardFetcher.Form>
-							))}
-						</div>
+					<div>
+						<h3 className="text-sm md:text-base mb-1 text-yellow-300">手牌</h3>
 
-						<div className="grid grid-cols-7 gap-0 mt-1">
-							{secondRowTehai.map((hai) => (
+						<div className="hidden md:flex items-end gap-0 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
+							{indexedTehai.map((hai) => (
 								<discardFetcher.Form
 									key={hai.index}
 									method="post"
@@ -703,26 +672,91 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										<img
 											src={`/hai/${hai.kind}_${hai.value}.png`}
 											alt={`${hai.kind} ${hai.value}`}
-											className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
+											className="w-10 h-14 cursor-pointer hover:scale-105 transition-transform"
 										/>
 									</button>
 								</discardFetcher.Form>
 							))}
 							{optimisticTsumohai && (
-								<discardFetcher.Form method="post" action="/api/tsumogiri">
-									<button
-										type="submit"
-										aria-label={`ツモ切り ${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
-										disabled={discardFetcher.state !== "idle"}
-									>
-										<img
-											src={`/hai/${optimisticTsumohai.kind}_${optimisticTsumohai.value}.png`}
-											alt={`${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
-											className="w-8 h-11 object-contain cursor-pointer hover:scale-105 transition-transform"
-										/>
-									</button>
-								</discardFetcher.Form>
+								<div className="ml-1">
+									<discardFetcher.Form method="post" action="/api/tsumogiri">
+										<button
+											type="submit"
+											aria-label={`ツモ切り ${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
+											disabled={discardFetcher.state !== "idle"}
+										>
+											<img
+												src={`/hai/${optimisticTsumohai.kind}_${optimisticTsumohai.value}.png`}
+												alt={`${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
+												className="w-10 h-14 object-contain cursor-pointer hover:scale-105 transition-transform"
+											/>
+										</button>
+									</discardFetcher.Form>
+								</div>
 							)}
+						</div>
+
+						<div className="md:hidden bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
+							<div className="grid grid-cols-7 gap-0">
+								{firstRowTehai.map((hai) => (
+									<discardFetcher.Form
+										key={hai.index}
+										method="post"
+										action="/api/tedashi"
+									>
+										<input type="hidden" name="index" value={hai.index} />
+										<button
+											type="submit"
+											aria-label={`捨てる ${hai.kind} ${hai.value}`}
+											disabled={discardFetcher.state !== "idle"}
+										>
+											<img
+												src={`/hai/${hai.kind}_${hai.value}.png`}
+												alt={`${hai.kind} ${hai.value}`}
+												className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
+											/>
+										</button>
+									</discardFetcher.Form>
+								))}
+							</div>
+
+							<div className="grid grid-cols-7 gap-0 mt-1">
+								{secondRowTehai.map((hai) => (
+									<discardFetcher.Form
+										key={hai.index}
+										method="post"
+										action="/api/tedashi"
+									>
+										<input type="hidden" name="index" value={hai.index} />
+										<button
+											type="submit"
+											aria-label={`捨てる ${hai.kind} ${hai.value}`}
+											disabled={discardFetcher.state !== "idle"}
+										>
+											<img
+												src={`/hai/${hai.kind}_${hai.value}.png`}
+												alt={`${hai.kind} ${hai.value}`}
+												className="w-8 h-11 cursor-pointer hover:scale-105 transition-transform"
+											/>
+										</button>
+									</discardFetcher.Form>
+								))}
+								{optimisticTsumohai && (
+									<discardFetcher.Form method="post" action="/api/tsumogiri">
+										<button
+											type="submit"
+											aria-label={`ツモ切り ${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
+											disabled={discardFetcher.state !== "idle"}
+										>
+											<img
+												src={`/hai/${optimisticTsumohai.kind}_${optimisticTsumohai.value}.png`}
+												alt={`${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
+												className="w-8 h-11 object-contain cursor-pointer hover:scale-105 transition-transform"
+											/>
+										</button>
+									</discardFetcher.Form>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
