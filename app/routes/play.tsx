@@ -223,6 +223,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const actionFetcher = useFetcher();
 	const discardFetcher = useFetcher<GameState>();
 	const [showHints, setShowHints] = useState(false);
+	const [hintDiscardsByResult, setHintDiscardsByResult] = useState(
+		new Map<number, ShantenAdvanceDiscard[]>(),
+	);
+	const [isAdvanceHint, setIsAdvanceHint] = useState(true);
 	const fetcherGameState =
 		discardFetcher.data && "tehai" in discardFetcher.data
 			? (discardFetcher.data as GameState)
@@ -287,6 +291,8 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: reset hints on each junme change
 	useEffect(() => {
 		setShowHints(false);
+		setHintDiscardsByResult(new Map());
+		setIsAdvanceHint(true);
 	}, [optimisticJunme]);
 
 	const isAgari =
@@ -304,17 +310,25 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const ryukyokuShanten = shantenResult.shanten;
 	const ryukyokuScoreDelta =
 		ryukyokuShanten === 0 ? 3000 : ryukyokuShanten === 1 ? 1000 : 0;
-	const shantenAdvanceDiscardsByResult = new Map<
-		number,
-		ShantenAdvanceDiscard[]
-	>();
-	const shantenKeepDiscardsByResult = new Map<
-		number,
-		ShantenAdvanceDiscard[]
-	>();
 	const isHintCalculating = discardFetcher.state !== "idle";
 
-	if (optimisticTsumohai) {
+	const buildHintDiscards = () => {
+		const shantenAdvanceDiscardsByResult = new Map<
+			number,
+			ShantenAdvanceDiscard[]
+		>();
+		const shantenKeepDiscardsByResult = new Map<
+			number,
+			ShantenAdvanceDiscard[]
+		>();
+
+		if (!optimisticTsumohai) {
+			return {
+				hintDiscardsByResult: shantenAdvanceDiscardsByResult,
+				isAdvanceHint: true,
+			};
+		}
+
 		const currentShanten = shantenResult.shanten;
 		const evaluatedDiscards: ShantenAdvanceDiscard[] = optimisticTehai
 			.map((hai, index) => {
@@ -339,44 +353,59 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			shantenAdvanceDiscardsByResult.set(discard.resultingShanten, current);
 		}
 
-		if (shantenAdvanceDiscardsByResult.size === 0) {
-			const shantenKeepDiscards = optimisticTehai
-				.map((hai, index) => {
-					const remainingTehai = optimisticTehai.filter((_, i) => i !== index);
-					const nextTehai = sortTehai([...remainingTehai, optimisticTsumohai]);
-					return { hai, resultingShanten: calculateShanten(nextTehai).shanten };
-				})
-				.filter((discard) => discard.resultingShanten === currentShanten);
-			shantenKeepDiscards.push({
-				hai: optimisticTsumohai,
-				resultingShanten: currentShanten,
-			});
+		if (shantenAdvanceDiscardsByResult.size > 0) {
+			return {
+				hintDiscardsByResult: shantenAdvanceDiscardsByResult,
+				isAdvanceHint: true,
+			};
+		}
 
-			const dedupedKeepDiscardMap = new Map<string, ShantenAdvanceDiscard>();
-			for (const discard of shantenKeepDiscards) {
-				const key = `${getHaiKey(discard.hai)}-${discard.resultingShanten}`;
-				if (!dedupedKeepDiscardMap.has(key)) {
-					dedupedKeepDiscardMap.set(key, discard);
-				}
-			}
+		const shantenKeepDiscards = optimisticTehai
+			.map((hai, index) => {
+				const remainingTehai = optimisticTehai.filter((_, i) => i !== index);
+				const nextTehai = sortTehai([...remainingTehai, optimisticTsumohai]);
+				return { hai, resultingShanten: calculateShanten(nextTehai).shanten };
+			})
+			.filter((discard) => discard.resultingShanten === currentShanten);
+		shantenKeepDiscards.push({
+			hai: optimisticTsumohai,
+			resultingShanten: currentShanten,
+		});
 
-			for (const discard of dedupedKeepDiscardMap.values()) {
-				const current =
-					shantenKeepDiscardsByResult.get(discard.resultingShanten) ?? [];
-				current.push(discard);
-				shantenKeepDiscardsByResult.set(discard.resultingShanten, current);
+		const dedupedKeepDiscardMap = new Map<string, ShantenAdvanceDiscard>();
+		for (const discard of shantenKeepDiscards) {
+			const key = `${getHaiKey(discard.hai)}-${discard.resultingShanten}`;
+			if (!dedupedKeepDiscardMap.has(key)) {
+				dedupedKeepDiscardMap.set(key, discard);
 			}
 		}
-	}
-	const hasAdvanceHints = shantenAdvanceDiscardsByResult.size > 0;
-	const hasKeepHints = shantenKeepDiscardsByResult.size > 0;
-	const hasAnyHints = hasAdvanceHints || hasKeepHints;
-	const shantenHintDiscardsByResult = showHints
-		? hasAdvanceHints
-			? shantenAdvanceDiscardsByResult
-			: shantenKeepDiscardsByResult
-		: new Map<number, ShantenAdvanceDiscard[]>();
-	const isAdvanceHint = hasAdvanceHints;
+
+		for (const discard of dedupedKeepDiscardMap.values()) {
+			const current =
+				shantenKeepDiscardsByResult.get(discard.resultingShanten) ?? [];
+			current.push(discard);
+			shantenKeepDiscardsByResult.set(discard.resultingShanten, current);
+		}
+
+		return {
+			hintDiscardsByResult: shantenKeepDiscardsByResult,
+			isAdvanceHint: false,
+		};
+	};
+
+	const handleHintToggle = () => {
+		if (showHints) {
+			setShowHints(false);
+			return;
+		}
+
+		const { hintDiscardsByResult, isAdvanceHint } = buildHintDiscards();
+		setHintDiscardsByResult(hintDiscardsByResult);
+		setIsAdvanceHint(isAdvanceHint);
+		setShowHints(true);
+	};
+
+	const hasAnyHints = hintDiscardsByResult.size > 0;
 
 	type IndexedHai = Hai & { index: number };
 
@@ -402,6 +431,16 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">和了</h3>
 						<p className="mt-2">獲得スコア: +{AGARI_SCORE_DELTA}</p>
+						{optimisticTsumohai && (
+							<div className="mt-2">
+								<p className="text-sm mb-1">ツモ牌</p>
+								<img
+									src={`/hai/${optimisticTsumohai.kind}_${optimisticTsumohai.value}.png`}
+									alt={`${optimisticTsumohai.kind} ${optimisticTsumohai.value}`}
+									className="w-8 h-11 md:w-10 md:h-14"
+								/>
+							</div>
+						)}
 						{agariDetail?.type === "standard" && (
 							<div className="mt-2">
 								<p className="text-sm mb-1">雀頭</p>
@@ -579,58 +618,50 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 							</div>
 						</div>
 						<div className="mt-2 md:mt-0 md:flex-1 text-sm md:text-base">
-							{(!isHintCalculating && hasAnyHints) ||
-							(showHints && shantenHintDiscardsByResult.size > 0) ? (
-								<div className="flex flex-wrap items-center gap-2 mb-1">
-									{!isHintCalculating && hasAnyHints && (
-										<button
-											type="button"
-											onClick={() => setShowHints((current) => !current)}
-											className="btn btn-xs bg-yellow-600 text-white border-none h-6 min-h-0 px-3"
-										>
-											{showHints ? "ヒントを隠す" : "ヒントを表示"}
-										</button>
-									)}
-									{showHints &&
-										[...shantenHintDiscardsByResult.entries()]
-											.sort(([a], [b]) => a - b)
-											.map(([resultingShanten]) => (
-												<span
-													key={resultingShanten}
-													className="text-sm md:text-base text-yellow-300"
-												>
-													{isAdvanceHint
-														? `${shantenLabel(resultingShanten)}に進む打牌`
-														: `${shantenLabel(resultingShanten)}を維持する打牌`}
-												</span>
-											))}
-								</div>
-							) : null}
-							{isHintCalculating ? (
+							<div className="flex flex-wrap items-center gap-2 mb-1">
+								<button
+									type="button"
+									onClick={handleHintToggle}
+									className="btn btn-xs bg-yellow-600 text-white border-none h-6 min-h-0 px-3"
+									disabled={isHintCalculating}
+								>
+									{showHints ? "ヒントを隠す" : "ヒントを表示"}
+								</button>
+								{showHints &&
+									!isHintCalculating &&
+									hasAnyHints &&
+									[...hintDiscardsByResult.entries()]
+										.sort(([a], [b]) => a - b)
+										.map(([resultingShanten]) => (
+											<span
+												key={resultingShanten}
+												className="text-sm md:text-base text-yellow-300"
+											>
+												{isAdvanceHint
+													? `${shantenLabel(resultingShanten)}に進む打牌`
+													: `${shantenLabel(resultingShanten)}を維持する打牌`}
+											</span>
+										))}
+							</div>
+							{showHints && isHintCalculating ? (
 								<p className="text-sm md:text-base mb-1 text-yellow-300">
 									計算中...
 								</p>
-							) : shantenHintDiscardsByResult.size === 0 ? (
-								!hasAnyHints ? (
-									<p className="text-sm md:text-base mb-1 text-yellow-300">
-										なし
-									</p>
-								) : null
+							) : showHints && !hasAnyHints ? (
+								<p className="text-sm md:text-base mb-1 text-yellow-300">
+									なし
+								</p>
 							) : null}
 							<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] h-[3.875rem] md:h-auto md:min-h-44">
 								<div className="h-full min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-0">
-									{isHintCalculating ? (
+									{showHints && isHintCalculating ? (
 										<p className="text-sm md:text-base text-yellow-300">
 											計算中...
 										</p>
-									) : shantenHintDiscardsByResult.size === 0 ? (
-										!hasAnyHints ? (
-											<p className="text-sm md:text-base text-yellow-300">
-												なし
-											</p>
-										) : null
-									) : (
-										[...shantenHintDiscardsByResult.entries()]
+									) : showHints && !hasAnyHints ? (
+										<p className="text-sm md:text-base text-yellow-300">なし</p>
+									) : showHints ? (
+										[...hintDiscardsByResult.entries()]
 											.sort(([a], [b]) => a - b)
 											.map(([resultingShanten, discards]) => (
 												<div
@@ -647,7 +678,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 													))}
 												</div>
 											))
-									)}
+									) : null}
 								</div>
 							</div>
 						</div>
