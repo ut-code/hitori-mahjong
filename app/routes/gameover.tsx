@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { useNavigate } from "react-router";
 import { getAuth } from "~/lib/auth";
 import { authClient } from "~/lib/auth-client";
@@ -8,6 +8,9 @@ import type { Route } from "./+types/gameover";
 
 export interface GameOverData {
 	finalScore: number;
+	rank: number;
+	totalPlayers: number;
+	gapToTop: number;
 	totalKyoku: number;
 	agariCount: number;
 	ryukyokuCount: number;
@@ -49,9 +52,25 @@ export async function loader({
 		0,
 	);
 	const finalScore = 25000 + totalScoreDelta;
+	const totals = await db
+		.select({
+			userId: kyoku.userId,
+			totalScore: sql<number>`25000 + coalesce(sum(${kyoku.scoreDelta}), 0)`,
+		})
+		.from(kyoku)
+		.groupBy(kyoku.userId)
+		.orderBy(desc(sql<number>`25000 + coalesce(sum(${kyoku.scoreDelta}), 0)`));
+	const topScore = totals[0]?.totalScore ?? finalScore;
+	const userIndex = totals.findIndex((total) => total.userId === userId);
+	const userTotalScore = totals[userIndex]?.totalScore ?? finalScore;
+	const rank = userIndex === -1 ? totals.length + 1 : userIndex + 1;
+	const gapToTop = Math.max(0, topScore - userTotalScore);
 
 	return {
 		finalScore,
+		rank,
+		totalPlayers: totals.length,
+		gapToTop,
 		totalKyoku,
 		agariCount,
 		ryukyokuCount,
@@ -60,17 +79,18 @@ export async function loader({
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-	const { finalScore, totalKyoku, agariCount, ryukyokuCount, tenpaiCount } =
-		loaderData;
+	const {
+		finalScore,
+		totalKyoku,
+		agariCount,
+		ryukyokuCount,
+		tenpaiCount,
+		rank,
+		totalPlayers,
+		gapToTop,
+	} = loaderData;
 	const navigate = useNavigate();
-	const scoreComment =
-		finalScore === 57000
-			? "もうあなたが麻雀です"
-			: finalScore >= 40000
-				? "素晴らしい"
-				: finalScore >= 35000
-					? "まずまず"
-					: "まずは基本から";
+	const rankMessage = `${totalPlayers}人中${rank}位: 1位まで${gapToTop}点差`;
 
 	const anonymousLoginAndStart = async () => {
 		const user = await authClient.getSession();
@@ -93,7 +113,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						<p className="text-4xl font-bold text-white mb-2">
 							最終スコア: {finalScore}点
 						</p>
-						<p className="text-sm text-yellow-300">{scoreComment}</p>
+						<p className="text-sm text-yellow-300">{rankMessage}</p>
 					</div>
 
 					<div className="grid grid-cols-2 gap-4 text-white">
