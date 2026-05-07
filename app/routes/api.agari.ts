@@ -4,6 +4,7 @@ import { getDB } from "~/lib/db";
 import { getGameState, recordKyoku, restartGame } from "~/lib/game-service";
 import judgeAgari from "~/lib/hai/agari";
 import { sortTehai } from "~/lib/hai/types";
+import { getAgariScoreDelta } from "~/lib/score";
 import type { Route } from "./+types/api.agari";
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -32,12 +33,14 @@ export async function action({ context, request }: Route.ActionArgs) {
 		});
 	}
 
-	// Record win with +8000 points
+	const scoreDelta = getAgariScoreDelta(gameStateRecord.junme);
+
+	// Record win with score based on junme
 	await recordKyoku(db, userId, {
 		didAgari: true,
 		agariJunme: gameStateRecord.junme,
 		shanten: 0,
-		scoreDelta: 8000,
+		scoreDelta,
 	});
 
 	const { isGameOver } = await restartGame(db, userId);

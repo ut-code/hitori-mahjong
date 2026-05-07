@@ -15,6 +15,7 @@ import judgeAgari from "~/lib/hai/agari";
 import { calculateShanten } from "~/lib/hai/shanten";
 import type { Hai } from "~/lib/hai/types";
 import { haiToIndex, indexToHai, sortTehai } from "~/lib/hai/types";
+import { getAgariScoreDelta } from "~/lib/score";
 import type { GameState } from "~/lib/types";
 import type { Route } from "./+types/play";
 
@@ -35,7 +36,6 @@ const TILE_IMAGE_PATHS = [
 	...JIHAI_VALUES.map((value) => `/hai/jihai_${value}.png`),
 ];
 const TOTAL_TSUMO_PER_KYOKU = 18;
-const AGARI_SCORE_DELTA = 8000;
 
 type ShantenAdvanceDiscard = {
 	hai: Hai;
@@ -306,6 +306,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const shantenResult = optimisticTehai
 		? calculateShanten(optimisticTehai)
 		: { shanten: 8, isTenpai: false };
+	const agariScoreDelta = getAgariScoreDelta(optimisticJunme);
 	const isRyukyoku = optimisticRemainTsumo <= 0;
 	const ryukyokuShanten = shantenResult.shanten;
 	const ryukyokuScoreDelta =
@@ -430,7 +431,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<dialog id="agari_modal" className="modal" open>
 					<div className="modal-box bg-[#0F2918] border border-yellow-700 text-white">
 						<h3 className="font-bold text-2xl text-yellow-400">和了</h3>
-						<p className="mt-2">獲得スコア: +{AGARI_SCORE_DELTA}</p>
+						<p className="mt-2">獲得スコア: +{agariScoreDelta}</p>
 						{optimisticTsumohai && (
 							<div className="mt-2">
 								<p className="text-sm mb-1">ツモ牌</p>
