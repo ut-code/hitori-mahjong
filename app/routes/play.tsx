@@ -529,7 +529,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						<p className="text-lg md:text-2xl font-bold text-yellow-300 leading-tight">
 							東{kyoku}局{" "}
 							<span className="text-white text-base md:text-lg font-semibold">
-								| 巡目: {optimisticJunme}
+								| 巡目: {optimisticJunme} / 18
 							</span>
 						</p>
 						<div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base">
@@ -539,9 +539,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 							<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
 								シャンテン:{" "}
 								{shantenResult.shanten === -1 ? "和了" : shantenResult.shanten}
-							</span>
-							<span className="bg-[#1A472A] border border-[#2E6A47] rounded px-2 py-1">
-								残りツモ: {optimisticRemainTsumo}
 							</span>
 						</div>
 					</div>
