@@ -573,7 +573,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 
 			<div className="flex flex-1 items-center justify-center">
 				<div className="w-full max-w-6xl">
-					<div className="mb-2 md:mb-3 bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
+					<div className="mb-2 md:mb-3 bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A] w-full md:w-[50.25rem] mx-auto">
 						<div className="flex flex-col gap-2">
 							<p className="text-lg md:text-2xl font-bold text-yellow-300 leading-tight">
 								東{kyoku}局
@@ -602,7 +602,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						</div>
 					</div>
 
-					<div className="mb-3 md:flex md:items-start md:gap-3">
+					<div className="mb-3 md:flex md:items-start md:gap-3 w-full md:w-[50.25rem] mx-auto">
 						<div>
 							<h3 className="text-sm md:text-base mb-1 text-yellow-300">
 								捨て牌
@@ -618,7 +618,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 								))}
 							</div>
 						</div>
-						<div className="mt-2 md:mt-0 md:flex-1 text-sm md:text-base">
+						<div className="mt-2 md:mt-0 w-full md:w-[33.5rem] md:flex-none text-sm md:text-base">
 							<div className="flex flex-wrap items-center gap-2 mb-1">
 								<button
 									type="button"
@@ -653,7 +653,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 									なし
 								</p>
 							) : null}
-							<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] h-[3.875rem] md:h-auto md:min-h-44">
+							<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] w-full h-[3.875rem] md:h-auto md:min-h-44">
 								<div className="h-full min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-0">
 									{showHints && isHintCalculating ? (
 										<p className="text-sm md:text-base text-yellow-300">
@@ -685,7 +685,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 						</div>
 					</div>
 
-					<div>
+					<div className="w-full md:w-[50.25rem] mx-auto">
 						<h3 className="text-sm md:text-base mb-1 text-yellow-300">手牌</h3>
 
 						<div className="hidden md:flex items-end gap-0 bg-[#0F2918] rounded-md p-2 border border-[#1A472A] w-fit">
