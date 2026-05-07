@@ -527,9 +527,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<div className="mb-2 md:mb-3 bg-[#0F2918] rounded-lg p-2 md:p-3 border border-[#1A472A]">
 					<div className="flex flex-col gap-2">
 						<p className="text-lg md:text-2xl font-bold text-yellow-300 leading-tight">
-							東{kyoku}局{" "}
+							東{kyoku}局
 							<span className="text-white text-base md:text-lg font-semibold">
-								| 巡目: {optimisticJunme} / 18
+								（全4局）巡目: {optimisticJunme} / 18
 							</span>
 						</p>
 						<div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm md:text-base">
