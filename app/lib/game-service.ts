@@ -128,18 +128,7 @@ export async function getRandomHaiyamaOrCreate(
 		return randomHaiyama[0];
 	}
 
-	// No unused haiyama available, create a new one
-	const generatedTiles = createShuffledHaiyama();
-	const insertedHaiyama = await db
-		.insert(haiyama)
-		.values({ tiles: generatedTiles })
-		.returning();
-
-	if (insertedHaiyama.length === 0) {
-		throw new Error("Failed to create haiyama");
-	}
-
-	return insertedHaiyama[0];
+	throw new Error("No haiyama available; seed the database first");
 }
 
 export async function seedHaiyama(db: DrizzleD1Database, count: number) {
