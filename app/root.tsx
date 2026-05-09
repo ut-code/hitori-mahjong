@@ -1,5 +1,6 @@
 import {
 	isRouteErrorResponse,
+	Link,
 	Links,
 	Meta,
 	Outlet,
@@ -29,6 +30,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<style>{`
+					html,
+					body {
+						margin: 0;
+						background: #1A472A;
+						color: white;
+						font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+					}
+				`}</style>
 				<Meta />
 				<Links />
 			</head>
@@ -46,30 +56,27 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	let message = "Oops!";
-	let details = "An unexpected error occurred.";
-	let stack: string | undefined;
+	let details = "エラーが発生しました。";
 
 	if (isRouteErrorResponse(error)) {
-		message = error.status === 404 ? "404" : "Error";
 		details =
 			error.status === 404
-				? "The requested page could not be found."
+				? "ページが見つかりませんでした。"
 				: error.statusText || details;
-	} else if (import.meta.env.DEV && error && error instanceof Error) {
-		details = error.message;
-		stack = error.stack;
 	}
-
 	return (
-		<main className="pt-16 p-4 container mx-auto">
-			<h1>{message}</h1>
-			<p>{details}</p>
-			{stack && (
-				<pre className="w-full p-4 overflow-x-auto">
-					<code>{stack}</code>
-				</pre>
-			)}
-		</main>
+		<div className="h-screen w-screen bg-[#1A472A] font-serif text-white relative flex justify-center">
+			<h1 className="absolute top-1/3 text-center font-bold text-4xl tracking-widest">
+				{details}
+			</h1>
+			<div className="absolute top-1/2">
+				<Link
+					to="/"
+					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 flex items-center justify-center transition-transform duration-150 hover:scale-105 text-white"
+				>
+					ホームへ戻る
+				</Link>
+			</div>
+		</div>
 	);
 }
