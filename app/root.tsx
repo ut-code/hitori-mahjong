@@ -11,7 +11,10 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 
+export const meta: Route.MetaFunction = () => [{ title: "一人麻雀" }];
+
 export const links: Route.LinksFunction = () => [
+	{ rel: "icon", href: "/logo.svg", type: "image/svg+xml" },
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
 	{
 		rel: "preconnect",
