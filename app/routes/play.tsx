@@ -4,7 +4,7 @@ import { getAuth } from "~/lib/auth";
 import { getDB } from "~/lib/db";
 import {
 	getGameState,
-	getRandomHaiyamaOrCreate,
+	getRandomHaiyama,
 	initGame,
 	toGameState,
 } from "~/lib/game-service";
@@ -180,9 +180,8 @@ export async function loader({
 		}
 
 		// No existing game state, so initialize from haiyama
-		const randomHaiyama = await getRandomHaiyamaOrCreate(db, userId);
-		const haiData = randomHaiyama.tiles;
-		const haiyamaId = randomHaiyama.id;
+		const randomHaiyama = await getRandomHaiyama(db, userId);
+		const { id: haiyamaId, tiles: haiData } = randomHaiyama[0];
 
 		// Initialize game state in D1
 		await initGame(db, userId, haiyamaId, haiData);

@@ -27,6 +27,7 @@ export async function initGame(
 	const tehai = tiles.slice(0, 13);
 	const tsumohai = tiles[13] ? [tiles[13]] : [];
 	const remainingHai = tiles.slice(14);
+	await db.delete(kyoku).where(eq(kyoku.userId, userId));
 
 	await db
 		.insert(gameState)
