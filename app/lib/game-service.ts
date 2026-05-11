@@ -3,20 +3,7 @@ import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { gameState, haiyama, kyoku } from "~/lib/db/schema";
 import type { Hai } from "~/lib/hai/types";
 import { sortTehai } from "~/lib/hai/types";
-import type { GameState } from "~/lib/types";
-
-export interface GameStateRecord {
-	userId: string;
-	kyoku: number;
-	junme: number;
-	remainTsumo: number;
-	score: number;
-	haiyama: Hai[];
-	sutehai: Hai[];
-	tehai: Hai[];
-	tsumohai: Hai[];
-	haiyamaId: string | null;
-}
+import type { GameState, GameStateRecord } from "~/lib/types";
 
 export async function getGameState(
 	db: DrizzleD1Database,
@@ -40,6 +27,7 @@ export async function initGame(
 	const tehai = tiles.slice(0, 13);
 	const tsumohai = tiles[13] ? [tiles[13]] : [];
 	const remainingHai = tiles.slice(14);
+	await db.delete(kyoku).where(eq(kyoku.userId, userId));
 
 	await db
 		.insert(gameState)
@@ -71,35 +59,7 @@ export async function initGame(
 		});
 }
 
-/**
- * Create a shuffled haiyama with only suited tiles (no jihai)
- * Each haiyama has exactly `tileCount` tiles (default 32)
- */
-export function createShuffledHaiyama(tileCount = 32): Hai[] {
-	const tiles: Hai[] = [];
-
-	for (const kind of ["manzu", "pinzu", "souzu"] as const) {
-		for (let value = 1; value <= 9; value += 1) {
-			for (let i = 0; i < 4; i += 1) {
-				tiles.push({ kind, value });
-			}
-		}
-	}
-
-	// Shuffle
-	for (let i = tiles.length - 1; i > 0; i -= 1) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[tiles[i], tiles[j]] = [tiles[j], tiles[i]];
-	}
-
-	return tiles.slice(0, tileCount);
-}
-
-export async function getRandomHaiyamaOrCreate(
-	db: DrizzleD1Database,
-	userId: string,
-) {
-	// Get haiyama IDs the user has already played
+export async function getRandomHaiyama(db: DrizzleD1Database, userId: string) {
 	const playedHaiyama = await db
 		.select({ haiyamaId: kyoku.haiyamaId })
 		.from(kyoku)
@@ -107,36 +67,15 @@ export async function getRandomHaiyamaOrCreate(
 
 	const playedIds = playedHaiyama.map((r) => r.haiyamaId);
 
-	// Select a random haiyama that the user hasn't played yet
-	let randomHaiyama: (typeof haiyama.$inferSelect)[];
 	if (playedIds.length > 0) {
-		randomHaiyama = await db
+		return await db
 			.select()
 			.from(haiyama)
 			.where(notInArray(haiyama.id, playedIds))
 			.orderBy(sql`RANDOM()`)
 			.limit(1);
-	} else {
-		randomHaiyama = await db
-			.select()
-			.from(haiyama)
-			.orderBy(sql`RANDOM()`)
-			.limit(1);
 	}
-
-	if (randomHaiyama.length > 0) {
-		return randomHaiyama[0];
-	}
-
-	throw new Error("No haiyama available; seed the database first");
-}
-
-export async function seedHaiyama(db: DrizzleD1Database, count: number) {
-	const values = Array.from({ length: count }, () => ({
-		tiles: createShuffledHaiyama(32),
-	}));
-	await db.insert(haiyama).values(values);
-	return count;
+	return await db.select().from(haiyama).orderBy(sql`RANDOM()`).limit(1);
 }
 
 export async function tedashi(
@@ -238,10 +177,10 @@ export async function restartGame(
 		return { newKyoku, isGameOver: true };
 	}
 
-	const randomHaiyama = await getRandomHaiyamaOrCreate(db, userId);
+	const randomHaiyama = await getRandomHaiyama(db, userId);
 
-	const newHaiyama = randomHaiyama.tiles;
-	const newHaiyamaId = randomHaiyama.id;
+	const newHaiyama = randomHaiyama[0].tiles;
+	const newHaiyamaId = randomHaiyama[0].id;
 
 	const tehai = newHaiyama.slice(0, 13);
 	const tsumohai = newHaiyama[13] ? [newHaiyama[13]] : [];
