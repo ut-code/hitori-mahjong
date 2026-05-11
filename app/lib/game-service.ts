@@ -1,9 +1,9 @@
 import { eq, notInArray, sql } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
-import { gameState, haiyama, kyoku } from "~/lib/db/schema";
-import type { Hai } from "~/lib/hai/types";
-import { sortTehai } from "~/lib/hai/types";
-import type { GameState, GameStateRecord } from "~/lib/types";
+import { gameState, haiyama, kyoku } from "@/lib/db/schema";
+import type { Hai } from "@/lib/hai/types";
+import { sortTehai } from "@/lib/hai/types";
+import type { GameState, GameStateRecord } from "@/lib/types";
 
 export async function getGameState(
 	db: DrizzleD1Database,

@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
-import { getAuth } from "~/lib/auth";
-import { getDB } from "~/lib/db";
-import { gameState } from "~/lib/db/schema";
-import { getGameState, recordKyoku, restartGame } from "~/lib/game-service";
-import { calculateShanten } from "~/lib/hai/shanten";
+import { getAuth } from "@/lib/auth";
+import { getDB } from "@/lib/db";
+import { gameState } from "@/lib/db/schema";
+import { getGameState, recordKyoku, restartGame } from "@/lib/game-service";
+import { calculateShanten } from "@/lib/hai/shanten";
 import type { Route } from "./+types/api.ryukyoku";
 
 export async function action({ context, request }: Route.ActionArgs) {

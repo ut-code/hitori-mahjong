@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { calculateShanten } from "~/lib/hai/shanten";
-import type { Hai } from "~/lib/hai/types";
-import { sortTehai } from "~/lib/hai/types";
+import { calculateShanten } from "@/lib/hai/shanten";
+import type { Hai } from "@/lib/hai/types";
+import { sortTehai } from "@/lib/hai/types";
 import { getHaiKey } from "./utils";
 
 export type ShantenAdvanceDiscard = {

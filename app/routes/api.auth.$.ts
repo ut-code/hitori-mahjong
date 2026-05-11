@@ -1,4 +1,4 @@
-import { getAuth } from "~/lib/auth";
+import { getAuth } from "@/lib/auth";
 import type { Route } from "./+types/api.auth.$";
 
 async function handleAuth(

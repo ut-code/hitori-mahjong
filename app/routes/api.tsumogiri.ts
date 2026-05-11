@@ -1,7 +1,7 @@
 import { redirect } from "react-router";
-import { getAuth } from "~/lib/auth";
-import { getDB } from "~/lib/db";
-import { getGameState, toGameState, tsumogiri } from "~/lib/game-service";
+import { getAuth } from "@/lib/auth";
+import { getDB } from "@/lib/db";
+import { getGameState, toGameState, tsumogiri } from "@/lib/game-service";
 import type { Route } from "./+types/api.tsumogiri";
 
 export async function action({ context, request }: Route.ActionArgs) {

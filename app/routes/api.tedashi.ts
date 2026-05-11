@@ -1,8 +1,8 @@
 import { redirect } from "react-router";
 import { z } from "zod";
-import { getAuth } from "~/lib/auth";
-import { getDB } from "~/lib/db";
-import { getGameState, tedashi, toGameState } from "~/lib/game-service";
+import { getAuth } from "@/lib/auth";
+import { getDB } from "@/lib/db";
+import { getGameState, tedashi, toGameState } from "@/lib/game-service";
 import type { Route } from "./+types/api.tedashi";
 
 const tedashiSchema = z.object({

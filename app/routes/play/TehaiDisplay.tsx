@@ -1,7 +1,7 @@
 // app/routes/play/TehaiDisplay.tsx
 import type { FetcherWithComponents } from "react-router";
-import type { Hai } from "~/lib/hai/types";
-import type { GameState } from "~/lib/types";
+import type { Hai } from "@/lib/hai/types";
+import type { GameState } from "@/lib/types";
 import type { IndexedHai } from "../play";
 
 type TehaiButtonProps = {

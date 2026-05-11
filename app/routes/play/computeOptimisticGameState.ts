@@ -1,6 +1,6 @@
 import type { Fetcher } from "react-router";
-import { sortTehai } from "~/lib/hai/types";
-import type { GameState } from "~/lib/types";
+import { sortTehai } from "@/lib/hai/types";
+import type { GameState } from "@/lib/types";
 import { TOTAL_TSUMO_PER_KYOKU } from "./constants";
 
 export function computeOptimisticGameState(

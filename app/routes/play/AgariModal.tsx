@@ -1,6 +1,6 @@
 import type { FetcherWithComponents } from "react-router";
-import type { Hai } from "~/lib/hai/types";
-import { haiToIndex, indexToHai } from "~/lib/hai/types";
+import type { Hai } from "@/lib/hai/types";
+import { haiToIndex, indexToHai } from "@/lib/hai/types";
 import { getHaiKey } from "./utils";
 
 type AgariDetail =

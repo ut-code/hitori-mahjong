@@ -1,9 +1,9 @@
 import { desc, eq, sql } from "drizzle-orm";
 import { useNavigate } from "react-router";
-import { getAuth } from "~/lib/auth";
-import { authClient } from "~/lib/auth-client";
-import { getDB } from "~/lib/db";
-import { kyoku } from "~/lib/db/schema";
+import { getAuth } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
+import { getDB } from "@/lib/db";
+import { kyoku } from "@/lib/db/schema";
 import type { Route } from "./+types/gameover";
 
 export interface GameOverData {

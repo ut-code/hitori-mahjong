@@ -1,8 +1,8 @@
 import { desc, eq, sql } from "drizzle-orm";
 import { Link } from "react-router";
-import { getAuth } from "~/lib/auth";
-import { getDB } from "~/lib/db";
-import { kyoku } from "~/lib/db/schema";
+import { getAuth } from "@/lib/auth";
+import { getDB } from "@/lib/db";
+import { kyoku } from "@/lib/db/schema";
 import type { Route } from "./+types/score";
 
 export interface KyokuRecord {

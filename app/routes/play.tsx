@@ -1,18 +1,18 @@
 import { type ShouldRevalidateFunctionArgs, useFetcher } from "react-router";
-import { getAuth } from "~/lib/auth";
-import { getDB } from "~/lib/db";
+import { getAuth } from "@/lib/auth";
+import { getDB } from "@/lib/db";
 import {
 	getGameState,
 	getRandomHaiyama,
 	initGame,
 	toGameState,
-} from "~/lib/game-service";
-import judgeAgari from "~/lib/hai/agari";
-import { calculateShanten } from "~/lib/hai/shanten";
-import type { Hai } from "~/lib/hai/types";
-import { sortTehai } from "~/lib/hai/types";
-import { getAgariScoreDelta } from "~/lib/score";
-import type { GameState } from "~/lib/types";
+} from "@/lib/game-service";
+import judgeAgari from "@/lib/hai/agari";
+import { calculateShanten } from "@/lib/hai/shanten";
+import type { Hai } from "@/lib/hai/types";
+import { sortTehai } from "@/lib/hai/types";
+import { getAgariScoreDelta } from "@/lib/score";
+import type { GameState } from "@/lib/types";
 import type { Route } from "./+types/play";
 import { AgariModal } from "./play/AgariModal";
 import { computeOptimisticGameState } from "./play/computeOptimisticGameState";

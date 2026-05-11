@@ -1,4 +1,4 @@
-import type { Hai } from "~/lib/hai/types";
+import type { Hai } from "@/lib/hai/types";
 
 export function getHaiKey(hai: Hai): string {
 	return `${hai.kind}-${hai.value}`;

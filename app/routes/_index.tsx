@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { authClient } from "~/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import github from "/github.svg";
 import logo from "/logo.svg";
 

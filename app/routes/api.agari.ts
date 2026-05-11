@@ -1,12 +1,12 @@
 import { eq } from "drizzle-orm";
 import { redirect } from "react-router";
-import { getAuth } from "~/lib/auth";
-import { getDB } from "~/lib/db";
-import { gameState } from "~/lib/db/schema";
-import { getGameState, recordKyoku, restartGame } from "~/lib/game-service";
-import judgeAgari from "~/lib/hai/agari";
-import { sortTehai } from "~/lib/hai/types";
-import { getAgariScoreDelta } from "~/lib/score";
+import { getAuth } from "@/lib/auth";
+import { getDB } from "@/lib/db";
+import { gameState } from "@/lib/db/schema";
+import { getGameState, recordKyoku, restartGame } from "@/lib/game-service";
+import judgeAgari from "@/lib/hai/agari";
+import { sortTehai } from "@/lib/hai/types";
+import { getAgariScoreDelta } from "@/lib/score";
 import type { Route } from "./+types/api.agari";
 
 export async function action({ context, request }: Route.ActionArgs) {
