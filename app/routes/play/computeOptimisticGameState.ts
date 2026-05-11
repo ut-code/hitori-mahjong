@@ -58,7 +58,7 @@ export function computeOptimisticGameState(
 				optimisticJunme = junme + 1;
 				optimisticRemainTsumo = nextRemainTsumo;
 			}
-		} else if (discardFetcher.formAction?.endsWith("/api/tsumogii")) {
+		} else if (discardFetcher.formAction?.endsWith("/api/tsumogiri")) {
 			optimisticSutehai = [...sutehai, tsumohai];
 			optimisticTsumohai = nextTsumohai;
 			optimisticJunme = junme + 1;
