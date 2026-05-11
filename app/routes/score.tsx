@@ -5,7 +5,7 @@ import { getDB } from "@/lib/db";
 import { kyoku } from "@/lib/db/schema";
 import type { Route } from "./+types/score";
 
-export interface KyokuRecord {
+export type KyokuRecord = {
 	id: string;
 	haiyamaId: string;
 	didAgari: boolean;
@@ -15,16 +15,16 @@ export interface KyokuRecord {
 	createdAt: Date;
 	playedCount: number;
 	agariCount: number;
-}
+};
 
-export interface GameSession {
+export type GameSession = {
 	records: KyokuRecord[];
-}
+};
 
-export interface ScoreData {
+export type ScoreData = {
 	sessions: GameSession[];
 	totalScore: number;
-}
+};
 
 export async function loader({
 	context,

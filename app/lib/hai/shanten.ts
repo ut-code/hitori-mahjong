@@ -2,11 +2,11 @@ import { type Hai, haiToIndex } from "./types";
 
 type TehaiIndex = number[];
 
-interface ShantenResult {
+type ShantenResult = {
 	shanten: number;
 	isTenpai: boolean;
 	isAgari: boolean;
-}
+};
 
 /**
  * Calculate shanten number for a hand (13 or 14 tiles)

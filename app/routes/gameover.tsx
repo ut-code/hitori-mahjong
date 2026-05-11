@@ -6,7 +6,7 @@ import { getDB } from "@/lib/db";
 import { kyoku } from "@/lib/db/schema";
 import type { Route } from "./+types/gameover";
 
-export interface GameOverData {
+export type GameOverData = {
 	finalScore: number;
 	rank: number;
 	totalPlayers: number;
@@ -15,7 +15,7 @@ export interface GameOverData {
 	agariCount: number;
 	ryukyokuCount: number;
 	tenpaiCount: number;
-}
+};
 
 export async function loader({
 	context,
