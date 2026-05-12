@@ -9,6 +9,7 @@ import { getDB } from "./db";
 
 export function getAuth(env: Env) {
 	const auth = betterAuth({
+		baseURL: env.BETTER_AUTH_URL,
 		database: drizzleAdapter(getDB(env), {
 			provider: "sqlite",
 			schema: schema,

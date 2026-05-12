@@ -10,7 +10,7 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./workers/app.ts",
 	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
+		"BETTER_AUTH_URL": "https://mahjong.utcode.net"
 	},
 	"observability": {
 		"enabled": true
