@@ -1,7 +1,6 @@
 import { desc, eq, sql } from "drizzle-orm";
-import { useNavigate } from "react-router";
+import { Form } from "react-router";
 import { getAuth } from "@/lib/auth";
-import { authClient } from "@/lib/auth-client";
 import { getDB } from "@/lib/db";
 import { kyoku } from "@/lib/db/schema";
 import type { Route } from "./+types/gameover";
@@ -89,17 +88,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 		totalPlayers,
 		gapToTop,
 	} = loaderData;
-	const navigate = useNavigate();
 	const rankMessage = `${totalPlayers}人中${rank}位: 1位まで${gapToTop}点差`;
-
-	const anonymousLoginAndStart = async () => {
-		const user = await authClient.getSession();
-		if (user.data) {
-			await authClient.signOut();
-		}
-		await authClient.signIn.anonymous();
-		navigate("/play");
-	};
 
 	return (
 		<div className="min-h-screen bg-[#1A472A] p-8 font-serif flex items-center justify-center">
@@ -146,13 +135,11 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					<a href="/score" className="btn bg-yellow-600 text-white">
 						成績詳細
 					</a>
-					<button
-						type="button"
-						onClick={anonymousLoginAndStart}
-						className="btn bg-blue-600 text-white"
-					>
-						もう一局
-					</button>
+					<Form method="post" action="/api/games">
+						<button type="submit" className="btn bg-blue-600 text-white">
+							もう一局
+						</button>
+					</Form>
 				</div>
 			</div>
 		</div>

@@ -1,30 +1,22 @@
-import { Link, useNavigate } from "react-router";
-import { authClient } from "@/lib/auth-client";
+import { Form, Link } from "react-router";
 import github from "/github.svg";
 import logo from "/logo.svg";
 
 export default function Page() {
-	const navigate = useNavigate();
-	const anonymousLoginAndStart = async () => {
-		const user = await authClient.getSession();
-		if (!user.data) {
-			await authClient.signIn.anonymous();
-		}
-		navigate("/play");
-	};
 	return (
 		<div className="h-screen w-screen bg-[#1A472A] font-serif text-white relative flex justify-center">
 			<h1 className="absolute top-1/3 text-center font-bold text-4xl tracking-widest">
 				一人麻雀
 			</h1>
 			<div className="absolute top-1/2 flex flex-col md:flex-row items-center space-y-4 md:space-x-4 md:space-y-0">
-				<button
-					onClick={anonymousLoginAndStart}
-					type="button"
-					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 transition-transform duration-150 hover:scale-105 text-white"
-				>
-					プレイ
-				</button>
+				<Form method="post" action="/api/games" className="w-full md:w-30">
+					<button
+						type="submit"
+						className="bg-yellow-600 rounded text-sm w-full h-10 transition-transform duration-150 hover:scale-105 text-white"
+					>
+						プレイ
+					</button>
+				</Form>
 				<Link
 					to="/learn"
 					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 flex items-center justify-center transition-transform duration-150 hover:scale-105 text-white"

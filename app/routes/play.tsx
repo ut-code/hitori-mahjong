@@ -1,12 +1,11 @@
-import { type ShouldRevalidateFunctionArgs, useFetcher } from "react-router";
+import {
+	redirect,
+	type ShouldRevalidateFunctionArgs,
+	useFetcher,
+} from "react-router";
 import { getAuth } from "@/lib/auth";
 import { getDB } from "@/lib/db";
-import {
-	getGameState,
-	getRandomHaiyama,
-	initGame,
-	toGameState,
-} from "@/lib/game-service";
+import { getGameState, toGameState } from "@/lib/game-service";
 import judgeAgari from "@/lib/hai/agari";
 import { calculateShanten } from "@/lib/hai/shanten";
 import type { Hai } from "@/lib/hai/types";
@@ -33,49 +32,22 @@ export const links: Route.LinksFunction = () =>
 		href,
 	}));
 
-export async function loader({
-	context,
-	request,
-}: Route.LoaderArgs): Promise<GameState> {
+export async function loader({ context, request }: Route.LoaderArgs) {
 	const { env } = context.cloudflare;
 	const db = getDB(env);
 	const auth = getAuth(env);
 	const session = await auth.api.getSession({ headers: request.headers });
-
-	if (!session?.user?.id) {
-		throw new Response("Unauthorized", { status: 401 });
+	if (!session?.user.id) {
+		throw redirect("/");
 	}
+
 	const userId = session.user.id;
-
-	try {
-		const existingState = await getGameState(db, userId);
-		if (existingState) {
-			return toGameState(existingState);
-		}
-
-		const randomHaiyama = await getRandomHaiyama(db, userId);
-		const { id: haiyamaId, tiles: haiData } = randomHaiyama[0];
-		await initGame(db, userId, haiyamaId, haiData);
-
-		const gameStateRecord = await getGameState(db, userId);
-		if (!gameStateRecord) {
-			throw new Error("Failed to get current game state");
-		}
-		return toGameState(gameStateRecord);
-	} catch (error) {
-		if (error instanceof Response) {
-			throw error;
-		}
-		if (
-			error instanceof Error &&
-			error.message === "No haiyama available; seed the database first"
-		) {
-			throw new Response("No haiyama available; seed the database first", {
-				status: 503,
-			});
-		}
-		throw error instanceof Error ? error : new Error(String(error));
+	const existingGame = await getGameState(db, userId);
+	if (!existingGame) {
+		throw redirect("/");
 	}
+
+	return toGameState(existingGame);
 }
 
 export function shouldRevalidate({ formAction }: ShouldRevalidateFunctionArgs) {
