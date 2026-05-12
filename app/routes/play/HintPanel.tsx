@@ -42,7 +42,7 @@ export function HintPanel({
 			) : showHints && !hasAnyHints ? (
 				<p className="text-sm md:text-base mb-1 text-yellow-300">なし</p>
 			) : null}
-			<div className="bg-[#0F2918] rounded-lg p-2 border border-[#1A472A] w-full h-[3.875rem] md:h-auto md:min-h-44">
+			<div className="bg-[#0F2918] rounded-lg p-1 border border-[#1A472A] w-full h-[3.875rem] md:h-auto md:min-h-44">
 				<div className="h-full min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-0">
 					{showHints && isHintCalculating ? (
 						<p className="text-sm md:text-base text-yellow-300">計算中...</p>
