@@ -8,14 +8,9 @@ export async function action({ context, request }: Route.LoaderArgs) {
 	const { env } = context.cloudflare;
 	const db = getDB(env);
 	const auth = getAuth(env);
-
-	let session = await auth.api.getSession({ headers: request.headers });
+	const session = await auth.api.getSession({ headers: request.headers });
 	if (!session?.user.id) {
-		await auth.api.signInAnonymous({ headers: request.headers });
-		session = await auth.api.getSession({ headers: request.headers });
-		if (!session?.user.id) {
-			throw new Response("Unauthorized", { status: 401 });
-		}
+		throw new Response("Unauthorized", { status: 401 });
 	}
 	const userId = session.user.id;
 	const randomHaiyama = await getRandomHaiyama(db, userId);
