@@ -21,7 +21,7 @@ export default function Page() {
 				<button
 					onClick={handlePlay}
 					type="button"
-					className="bg-yellow-600 rounded text-sm w-full h-10 transition-transform duration-150 hover:scale-105 text-white"
+					className="bg-yellow-600 rounded text-sm w-full md:w-30 h-10 transition-transform duration-150 hover:scale-105 text-white"
 				>
 					プレイ
 				</button>
