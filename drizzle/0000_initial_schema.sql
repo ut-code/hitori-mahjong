@@ -13,7 +13,8 @@ CREATE TABLE `game_state` (
 --> statement-breakpoint
 CREATE TABLE `haiyama` (
 	`id` text PRIMARY KEY NOT NULL,
-	`tiles` text NOT NULL
+	`tiles` text NOT NULL,
+	`avg_agari_junme` real DEFAULT 0 NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `kyoku` (

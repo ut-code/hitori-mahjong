@@ -1,7 +1,7 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "25890843-f1f5-4768-a7d8-2e5aef7bdb59",
+	"id": "92a7db71-e48e-4619-a676-370530e6e241",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"game_state": {
@@ -104,6 +104,14 @@
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
+				},
+				"avg_agari_junme": {
+					"name": "avg_agari_junme",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": 0
 				}
 			},
 			"indexes": {},
