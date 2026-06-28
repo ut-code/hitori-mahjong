@@ -60,6 +60,7 @@ export async function initGame(
 
 export async function startNewGame(db: DrizzleD1Database, userId: string) {
 	const randomHaiyama = await getRandomHaiyama(db, userId);
+	if (!randomHaiyama[0]) throw new GameError("No haiyama available", 404);
 	const { id: haiyamaId, tiles: haiData } = randomHaiyama[0];
 	await initGame(db, userId, haiyamaId, haiData);
 }
@@ -70,10 +71,11 @@ export async function tedashi(
 	index: number,
 ) {
 	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new Error("Game not found");
-	if (state.tsumohai.length === 0) throw new Error("No tsumohai to discard");
+	if (!state) throw new GameError("Game not found", 404);
+	if (state.tsumohai.length === 0)
+		throw new GameError("No tsumohai to discard");
 	if (index < 0 || index >= state.tehai.length)
-		throw new Error("Invalid tile index");
+		throw new GameError("Invalid tile index");
 
 	const tsumohai = state.tsumohai[0];
 	const sortedTehai = sortTehai(state.tehai);
@@ -93,8 +95,9 @@ export async function tedashi(
 
 export async function tsumogiri(db: DrizzleD1Database, userId: string) {
 	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new Error("Game not found");
-	if (state.tsumohai.length === 0) throw new Error("No tsumohai to discard");
+	if (!state) throw new GameError("Game not found", 404);
+	if (state.tsumohai.length === 0)
+		throw new GameError("No tsumohai to discard");
 
 	const newHaiyama = state.haiyama.slice(1);
 
@@ -109,7 +112,7 @@ export async function tsumogiri(db: DrizzleD1Database, userId: string) {
 
 export async function jikyoku(db: DrizzleD1Database, userId: string) {
 	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new Error("Game not found");
+	if (!state) throw new GameError("Game not found", 404);
 	await repo.patchGameState(db, userId, { kyoku: state.kyoku + 1 });
 }
 
@@ -118,12 +121,13 @@ async function restartGame(
 	userId: string,
 ): Promise<{ isGameOver: boolean }> {
 	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new Error("Game not found");
+	if (!state) throw new GameError("Game not found", 404);
 
 	const newKyoku = state.kyoku + 1;
 	if (newKyoku > 4) return { isGameOver: true };
 
 	const randomHaiyama = await getRandomHaiyama(db, userId);
+	if (!randomHaiyama[0]) throw new GameError("No haiyama available", 404);
 	const { id: newHaiyamaId, tiles } = randomHaiyama[0];
 	const tehai = tiles.slice(0, 13);
 	const tsumohai = tiles[13] ? [tiles[13]] : [];
@@ -154,8 +158,8 @@ async function recordKyoku(
 	},
 ) {
 	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new Error("Game not found");
-	if (!state.haiyamaId) throw new Error("Haiyama ID not found");
+	if (!state) throw new GameError("Game not found", 404);
+	if (!state.haiyamaId) throw new GameError("Haiyama ID not found");
 
 	await repo.insertKyokuRecord(db, {
 		userId,
