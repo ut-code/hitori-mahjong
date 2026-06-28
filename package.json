@@ -10,7 +10,7 @@
 		"postinstall": "npm run cf-typegen",
 		"preview": "npm run build && vite preview",
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
-		"format": "npx @biomejs/biome check . --write"
+		"check": "npx @biomejs/biome check . --write"
 	},
 	"dependencies": {
 		"@react-router/fs-routes": "^7.12.0",
