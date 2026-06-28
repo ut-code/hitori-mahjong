@@ -1,20 +1,7 @@
-import { Link, redirect, useFetcher } from "react-router";
-import { getDB } from "@/db";
-import { getAuth } from "@/features/auth";
-import { authClient } from "@/features/auth/client";
-import { startNewGame } from "@/features/game";
+import { Link, useFetcher } from "react-router";
+import { authClient } from "@/lib/auth-client";
 import github from "/github.svg";
 import logo from "/logo.svg";
-import type { Route } from "./+types/_index";
-
-export async function action({ context, request }: Route.ActionArgs) {
-	const { env } = context.cloudflare;
-	const auth = getAuth(env);
-	const session = await auth.api.getSession({ headers: request.headers });
-	if (!session?.user.id) throw new Response("Unauthorized", { status: 401 });
-	await startNewGame(getDB(env), session.user.id);
-	return redirect("/play");
-}
 
 export default function Page() {
 	const fetcher = useFetcher();
@@ -23,7 +10,7 @@ export default function Page() {
 		if (!session?.data?.user) {
 			await authClient.signIn.anonymous();
 		}
-		fetcher.submit(null, { method: "post", action: "/?index" });
+		fetcher.submit(null, { method: "post", action: "/api/games" });
 	}
 	return (
 		<div className="h-screen w-screen bg-[#1A472A] font-serif text-white relative flex justify-center">
@@ -50,6 +37,7 @@ export default function Page() {
 				<a href="https://utcode.net" target="_blank" rel="noopener noreferrer">
 					<img src={logo} alt="Logo" className="w-10" />
 				</a>
+
 				<a
 					href="https://github.com/ut-code/hitori-mahjong"
 					target="_blank"
