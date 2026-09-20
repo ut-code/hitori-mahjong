@@ -14,7 +14,7 @@ import "./app.css";
 const SITE_URL = "https://mahjong.utcode.net";
 const SITE_TITLE = "一人麻雀";
 const SITE_DESCRIPTION =
-	"ひとりで遊べるブラウザ麻雀。ルールを学べるチュートリアル付き。";
+	"一人麻雀で麻雀の基礎が学べる！ランキングで他のプレイヤーと競おう！";
 const OGP_IMAGE_URL = `${SITE_URL}/ogp.jpg`;
 
 export const meta: Route.MetaFunction = () => [
