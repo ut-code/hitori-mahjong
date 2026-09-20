@@ -11,7 +11,29 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 
-export const meta: Route.MetaFunction = () => [{ title: "一人麻雀" }];
+const SITE_URL = "https://mahjong.utcode.net";
+const SITE_TITLE = "一人麻雀";
+const SITE_DESCRIPTION =
+	"ひとりで遊べるブラウザ麻雀。ルールを学べるチュートリアル付き。";
+const OGP_IMAGE_URL = `${SITE_URL}/ogp.jpg`;
+
+export const meta: Route.MetaFunction = () => [
+	{ title: SITE_TITLE },
+	{ name: "description", content: SITE_DESCRIPTION },
+	{ property: "og:type", content: "website" },
+	{ property: "og:url", content: SITE_URL },
+	{ property: "og:title", content: SITE_TITLE },
+	{ property: "og:description", content: SITE_DESCRIPTION },
+	{ property: "og:image", content: OGP_IMAGE_URL },
+	{ property: "og:image:width", content: "1200" },
+	{ property: "og:image:height", content: "630" },
+	{ property: "og:locale", content: "ja_JP" },
+	{ property: "og:site_name", content: SITE_TITLE },
+	{ name: "twitter:card", content: "summary_large_image" },
+	{ name: "twitter:title", content: SITE_TITLE },
+	{ name: "twitter:description", content: SITE_DESCRIPTION },
+	{ name: "twitter:image", content: OGP_IMAGE_URL },
+];
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "icon", href: "/logo.svg", type: "image/svg+xml" },
