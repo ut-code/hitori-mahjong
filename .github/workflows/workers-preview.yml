@@ -1,0 +1,149 @@
+name: Cloudflare Workers Preview
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/workers-preview.yml"
+      - "app/**"
+      - "workers/**"
+      - "public/**"
+      - "drizzle/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "wrangler.jsonc"
+      - "react-router.config.ts"
+      - "vite.config.ts"
+  pull_request:
+    paths:
+      - ".github/workflows/workers-preview.yml"
+      - "app/**"
+      - "workers/**"
+      - "public/**"
+      - "drizzle/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "wrangler.jsonc"
+      - "react-router.config.ts"
+      - "vite.config.ts"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm run build
+
+      - name: Deploy Workers preview
+        id: deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          packageManager: pnpm
+          command: versions upload --message "GitHub Actions ${{ github.event_name }} ${{ github.sha }}"${{ github.event_name == 'pull_request' && format(' --preview-alias pr-{0}', github.event.pull_request.number) || '' }}
+
+      - name: Resolve preview URLs
+        id: urls
+        env:
+          COMMAND_OUTPUT: ${{ steps.deploy.outputs.command-output }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+          PREVIEW_ALIAS: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || '' }}
+        run: |
+          set -euo pipefail
+
+          strip_ansi() {
+            sed $'s/\033\[[0-9;]*[a-zA-Z]//g'
+          }
+
+          clean=$(printf '%s\n' "${COMMAND_OUTPUT}" | strip_ansi)
+          preview=$(printf '%s\n' "$clean" | sed -n 's/.*Version Preview URL:[[:space:]]*//p' | tail -n1 | tr -d '\r')
+          alias_url=$(printf '%s\n' "$clean" | sed -n 's/.*Version Preview Alias URL:[[:space:]]*//p' | tail -n1 | tr -d '\r')
+
+          if [ -z "$preview" ]; then
+            preview="${DEPLOYMENT_URL:-}"
+          fi
+
+          if [ -z "$preview" ]; then
+            preview=$(printf '%s\n' "$clean" | grep -oE 'https://[a-zA-Z0-9._-]+\.workers\.dev' | head -n1 || true)
+          fi
+
+          if [ -z "$preview" ]; then
+            echo "Failed to resolve preview URL" >&2
+            printf '%s\n' "$clean" >&2
+            exit 1
+          fi
+
+          if [ -z "$alias_url" ] && [ -n "${PREVIEW_ALIAS}" ]; then
+            suffix="${preview##*hitori-mahjong}"
+            alias_url="https://${PREVIEW_ALIAS}-hitori-mahjong${suffix}"
+          fi
+
+          {
+            echo "preview=${preview}"
+            echo "alias=${alias_url}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Comment preview URL
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PREVIEW_URL: ${{ steps.urls.outputs.preview }}
+          ALIAS_URL: ${{ steps.urls.outputs.alias }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          marker="<!-- workers-preview -->"
+          {
+            echo "$marker"
+            echo "## Cloudflare Workers Preview"
+            echo
+            echo "The changes in this PR have been deployed to a preview."
+            echo
+            echo "| | URL |"
+            echo "| --- | --- |"
+            echo "| Preview | [${PREVIEW_URL}](${PREVIEW_URL}) |"
+            if [ -n "${ALIAS_URL}" ]; then
+              echo "| Alias | [${ALIAS_URL}](${ALIAS_URL}) |"
+            fi
+            echo
+            echo "commit: \`${COMMIT_SHA}\`"
+          } > comment.md
+
+          comment_ids=$(
+            gh api --paginate "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" \
+              --jq '.[] | select(.body | contains("<!-- workers-preview -->")) | .id'
+          )
+          comment_id=$(printf '%s\n' "${comment_ids}" | awk 'NR==1')
+
+          if [ -n "${comment_id}" ]; then
+            gh api --method PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${comment_id}" \
+              -F body=@comment.md
+          else
+            gh pr comment "${PR_NUMBER}" --body-file comment.md
+          fi
