@@ -30,6 +30,24 @@
 			"migrations_dir": "drizzle"
 		}
 	],
+	"env": {
+		"preview": {
+			"workers_dev": true,
+			"preview_urls": true,
+			"routes": [],
+			"vars": {
+				"BETTER_AUTH_URL": "https://hitori-mahjong-preview.ut-code.workers.dev"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "hitori-mahjong-preview",
+					"database_id": "0573dbba-7de9-4ffe-8f5e-6e48dbba45e4",
+					"migrations_dir": "drizzle"
+				}
+			]
+		}
+	},
 	"rules": [
 		{
 			"type": "Text",
