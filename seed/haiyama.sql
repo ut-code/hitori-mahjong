@@ -1,5 +1,3 @@
-BEGIN;
-
 WITH RECURSIVE
 	nums(n) AS (
 		VALUES (1)
@@ -49,5 +47,3 @@ WITH RECURSIVE
 INSERT INTO haiyama (id, tiles)
 SELECT lower(hex(randomblob(16))), tiles_json
 FROM picked;
-
-COMMIT;
