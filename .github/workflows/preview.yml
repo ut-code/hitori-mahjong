@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 20
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      WRANGLER_LOG: ${{ runner.temp }}/wrangler.log
+      WRANGLER_LOG: wrangler.log
     steps:
       - uses: actions/checkout@v7
 
