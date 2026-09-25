@@ -19,7 +19,7 @@ worker-configuration.d.ts
 
 .direnv
 
-# Terraform
+# Local Terraform state and variables may contain sensitive data.
 /terraform/.terraform/
 /terraform/*.tfstate
 /terraform/*.tfstate.*
