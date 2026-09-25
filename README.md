@@ -38,3 +38,11 @@ pnpx auth generate --output ./app/db/auth-schema.ts --adapter drizzle --dialect 
 ```bash
 pnpm wrangler d1 migrations apply hitori-mahjong-db --remote
 ```
+
+## 牌山の seed
+
+`seed/haiyama.sql` は開発・検証用の牌山データです。D1 ではトランザクション文が使えないため、`BEGIN` / `COMMIT` は含めていません。
+
+```bash
+pnpm wrangler d1 execute hitori-mahjong-db --remote --file seed/haiyama.sql
+```
