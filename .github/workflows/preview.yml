@@ -1,0 +1,89 @@
+name: Workers Preview
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/preview.yml"
+      - "app/**"
+      - "workers/**"
+      - "public/**"
+      - "drizzle/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "wrangler.jsonc"
+      - "react-router.config.ts"
+      - "vite.config.ts"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: workers-preview-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    # Preview deployments need secrets, which are not available to forks.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      WRANGLER_LOG: ${{ runner.temp }}/wrangler.log
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm run build
+
+      - name: Upload Worker version
+        run: |
+          set -euo pipefail
+          pnpm exec wrangler versions upload \
+            --message "GitHub Actions ${{ github.sha }}" 2>&1 | tee "$WRANGLER_LOG"
+
+      - name: Extract preview URL
+        id: preview
+        run: |
+          set -euo pipefail
+
+          log=$(sed -E $'s/\033\\[[0-9;]*m//g' "$WRANGLER_LOG")
+          url=$(awk -F': ' '/^Version Preview URL:/{value=$2} END{print value}' <<< "$log")
+
+          if [ -z "$url" ]; then
+            printf '%s\n' "$log" >&2
+            echo "::error::Could not find the version preview URL in the Wrangler output"
+            exit 1
+          fi
+
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on pull request
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PREVIEW_URL: ${{ steps.preview.outputs.url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          printf 'A preview of `%s` is available at %s\n' "${COMMIT_SHA:0:7}" "$PREVIEW_URL" \
+            > "$RUNNER_TEMP/comment.md"
+
+          gh pr comment "$PR_NUMBER" --body-file "$RUNNER_TEMP/comment.md" \
+            --edit-last --create-if-none
