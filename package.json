@@ -10,7 +10,8 @@
 		"postinstall": "pnpm run cf-typegen",
 		"preview": "pnpm run build && vite preview",
 		"typecheck": "pnpm run cf-typegen && react-router typegen && tsc -b",
-		"check": "biome check . --write"
+		"check": "biome check . --write",
+		"deploy:proxy": "wrangler deploy -c proxy/wrangler.jsonc"
 	},
 	"dependencies": {
 		"@react-router/fs-routes": "^7.12.0",
