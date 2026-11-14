@@ -5,7 +5,8 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "hitori-mahjong",
-	"account_id": "df6c3acd32f66bd1eb95e50607684297",
+	// ut-code の D1 が無料プランの上限に達したため個人アカウントで動かす。mahjong.utcode.net からは proxy/ の Worker 経由で届く
+	"account_id": "4bd6f8a7a6ae9e00fa2d32eb8c65ad97",
 	"compatibility_date": "2025-04-04",
 	"compatibility_flags": ["nodejs_compat"],
 	"main": "./workers/app.ts",
@@ -16,17 +17,12 @@
 		"enabled": true
 	},
 	"preview_urls": true,
-	"routes": [
-		{
-			"pattern": "mahjong.utcode.net",
-			"custom_domain": true
-		}
-	],
+	"workers_dev": true,
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "hitori-mahjong-db",
-			"database_id": "8998e522-2477-4b58-b0d1-214c530c5d40",
+			"database_id": "123c937c-ccce-4855-8bef-da96fd76e8b9",
 			"migrations_dir": "drizzle"
 		}
 	],
