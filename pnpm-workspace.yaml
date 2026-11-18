@@ -1,7 +1,6 @@
 allowBuilds:
   better-sqlite3: true
   esbuild: true
-  lefthook: true
   workerd: true
 # Solid 2 の正式版は公開直後で既定の 1 日待ちに引っかかり CI のインストールが止まるため、このバージョンに限って除外する。
 # バージョンまで固定しているので、今後の更新は通常どおり待ち期間の対象になる
@@ -18,3 +17,17 @@ minimumReleaseAgeExclude:
   - "@solidjs/compiler-wasm32-wasi@2.0.0"
   - "@solidjs/compiler-win32-x64-msvc@2.0.0"
   - "@cloudflare/vite-plugin@1.70.0"
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@1.6.0
+  vitest: 5.1.0
+  vite-plus: 1.6.0
+overrides:
+  vite@*: "catalog:"
+  vitest@*: "catalog:"
+peerDependencyRules:
+  allowAny:
+    - vite
+    - vitest
+  allowedVersions:
+    vite: "*"
+    vitest: "*"

@@ -1,21 +1,21 @@
 {
-	"include": ["app/**/*", "proxy/**/*", "*.ts", "worker-configuration.d.ts"],
-	"compilerOptions": {
-		"strict": true,
-		"noEmit": true,
-		"skipLibCheck": true,
-		"verbatimModuleSyntax": true,
-		"esModuleInterop": true,
-		"resolveJsonModule": true,
-		"lib": ["DOM", "DOM.Iterable", "ES2022"],
-		"types": ["vite/client", "node", "vitest/globals"],
-		"target": "ES2022",
-		"module": "ESNext",
-		"moduleResolution": "bundler",
-		"jsx": "preserve",
-		"jsxImportSource": "@solidjs/web",
-		"paths": {
-			"@/*": ["./app/*"]
-		}
-	}
+  "include": ["app/**/*", "proxy/**/*", "*.ts", "worker-configuration.d.ts"],
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["vite/client", "node", "vitest/globals"],
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "jsxImportSource": "@solidjs/web",
+    "paths": {
+      "@/*": ["./app/*"]
+    }
+  }
 }

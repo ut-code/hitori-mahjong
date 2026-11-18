@@ -3,64 +3,64 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "hitori-mahjong",
-	// ut-code の D1 が無料プランの上限に達したため個人アカウントで動かす。mahjong.utcode.net からは proxy/ の Worker 経由で届く
-	"account_id": "4bd6f8a7a6ae9e00fa2d32eb8c65ad97",
-	"compatibility_date": "2025-04-04",
-	"compatibility_flags": ["nodejs_compat"],
-	"main": "@tanstack/solid-start/server-entry",
-	"vars": {
-		"BETTER_AUTH_URL": "https://mahjong.utcode.net"
-	},
-	"observability": {
-		"enabled": true
-	},
-	"preview_urls": true,
-	"workers_dev": true,
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_name": "hitori-mahjong-db",
-			"database_id": "123c937c-ccce-4855-8bef-da96fd76e8b9",
-			"migrations_dir": "drizzle"
-		}
-	],
-	"rules": [
-		{
-			"type": "Text",
-			"globs": ["**/*.sql"],
-			"fallthrough": true
-		}
-	]
-	/**
-	 * Smart Placement
-	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-	 */
-	// "placement": { "mode": "smart" }
-	/**
-	 * Bindings
-	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
-	 * databases, object storage, AI inference, real-time communication and more.
-	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-	 */
-	/**
-	 * Environment Variables
-	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-	 */
-	// "vars": { "MY_VARIABLE": "production_value" }
-	/**
-	 * Note: Use secrets to store sensitive data.
-	 * https://developers.cloudflare.com/workers/configuration/secrets/
-	 */
-	/**
-	 * Static Assets
-	 * https://developers.cloudflare.com/workers/static-assets/binding/
-	 */
-	// "assets": { "directory": "./public/", "binding": "ASSETS" }
-	/**
-	 * Service Bindings (communicate between multiple Workers)
-	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
-	 */
-	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hitori-mahjong",
+  // ut-code の D1 が無料プランの上限に達したため個人アカウントで動かす。mahjong.utcode.net からは proxy/ の Worker 経由で届く
+  "account_id": "4bd6f8a7a6ae9e00fa2d32eb8c65ad97",
+  "compatibility_date": "2025-04-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/solid-start/server-entry",
+  "vars": {
+    "BETTER_AUTH_URL": "https://mahjong.utcode.net",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "preview_urls": true,
+  "workers_dev": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hitori-mahjong-db",
+      "database_id": "123c937c-ccce-4855-8bef-da96fd76e8b9",
+      "migrations_dir": "drizzle",
+    },
+  ],
+  "rules": [
+    {
+      "type": "Text",
+      "globs": ["**/*.sql"],
+      "fallthrough": true,
+    },
+  ],
+  /**
+   * Smart Placement
+   * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+   */
+  // "placement": { "mode": "smart" }
+  /**
+   * Bindings
+   * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
+   * databases, object storage, AI inference, real-time communication and more.
+   * https://developers.cloudflare.com/workers/runtime-apis/bindings/
+   */
+  /**
+   * Environment Variables
+   * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+   */
+  // "vars": { "MY_VARIABLE": "production_value" }
+  /**
+   * Note: Use secrets to store sensitive data.
+   * https://developers.cloudflare.com/workers/configuration/secrets/
+   */
+  /**
+   * Static Assets
+   * https://developers.cloudflare.com/workers/static-assets/binding/
+   */
+  // "assets": { "directory": "./public/", "binding": "ASSETS" }
+  /**
+   * Service Bindings (communicate between multiple Workers)
+   * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
+   */
+  // "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
 }

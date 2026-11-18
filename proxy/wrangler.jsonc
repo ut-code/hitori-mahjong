@@ -1,21 +1,21 @@
 // mahjong.utcode.net を個人アカウントの本体 Worker に中継する。ut-code アカウントにデプロイする
 {
-	"$schema": "../node_modules/wrangler/config-schema.json",
-	"name": "hitori-mahjong",
-	"account_id": "df6c3acd32f66bd1eb95e50607684297",
-	"compatibility_date": "2025-04-04",
-	"main": "./index.ts",
-	"vars": {
-		"UPSTREAM_ORIGIN": "https://hitori-mahjong.tknkaa.workers.dev"
-	},
-	"observability": {
-		"enabled": true
-	},
-	"workers_dev": false,
-	"routes": [
-		{
-			"pattern": "mahjong.utcode.net",
-			"custom_domain": true
-		}
-	]
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "hitori-mahjong",
+  "account_id": "df6c3acd32f66bd1eb95e50607684297",
+  "compatibility_date": "2025-04-04",
+  "main": "./index.ts",
+  "vars": {
+    "UPSTREAM_ORIGIN": "https://hitori-mahjong.tknkaa.workers.dev",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "mahjong.utcode.net",
+      "custom_domain": true,
+    },
+  ],
 }
