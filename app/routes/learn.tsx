@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useLocation } from "@tanstack/solid-router";
 import { createEffect, For } from "solid-js";
-import BasicRule from "./-components/learn/BasicRule";
-import LocalRule from "./-components/learn/LocalRule";
+import BasicRule from "@/lib/components/learn/BasicRule";
+import LocalRule from "@/lib/components/learn/LocalRule";
 
 export const Route = createFileRoute("/learn")({
 	component: Page,

@@ -4,6 +4,12 @@ import {
 	useRouter,
 } from "@tanstack/solid-router";
 import { createMemo, createSignal, Show } from "solid-js";
+import { AgariModal } from "@/lib/components/play/AgariModal";
+import { GameHeader } from "@/lib/components/play/GameHeader";
+import { HintPanel } from "@/lib/components/play/HintPanel";
+import { RyukyokuModal } from "@/lib/components/play/RyukyokuModal";
+import { SutehaiDisplay } from "@/lib/components/play/SutehaiDisplay";
+import { TehaiDisplay } from "@/lib/components/play/TehaiDisplay";
 import judgeAgari from "@/lib/core/agari";
 import { TILE_IMAGE_PATHS, TOTAL_TSUMO_PER_KYOKU } from "@/lib/core/constants";
 import { applyDiscard, type Discard } from "@/lib/core/discard";
@@ -20,12 +26,6 @@ import {
 	finishKyokuFn,
 	getPlayStateFn,
 } from "@/lib/service/game/server";
-import { AgariModal } from "./-components/play/AgariModal";
-import { GameHeader } from "./-components/play/GameHeader";
-import { HintPanel } from "./-components/play/HintPanel";
-import { RyukyokuModal } from "./-components/play/RyukyokuModal";
-import { SutehaiDisplay } from "./-components/play/SutehaiDisplay";
-import { TehaiDisplay } from "./-components/play/TehaiDisplay";
 
 export const Route = createFileRoute("/play")({
 	loader: () => getPlayStateFn(),

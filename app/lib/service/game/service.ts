@@ -1,3 +1,4 @@
+import { desc, eq, notInArray, sql } from "drizzle-orm";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 import judgeAgari from "@/lib/core/agari";
 import { sortTehai } from "@/lib/core/hai";
@@ -11,7 +12,9 @@ import type {
 	ScoreData,
 } from "@/lib/core/types/game";
 import type { Hai } from "@/lib/core/types/hai";
-import * as repo from "./repository";
+import { gameState, haiyama, kyoku } from "@/lib/service/db/schema";
+
+type DB = DrizzleD1Database;
 
 export class GameError extends Error {
 	constructor(
@@ -24,84 +27,99 @@ export class GameError extends Error {
 }
 
 export async function getGameState(
-	db: DrizzleD1Database,
+	db: DB,
 	userId: string,
 ): Promise<GameStateRecord | null> {
-	return repo.fetchGameState(db, userId);
+	const result = await db
+		.select()
+		.from(gameState)
+		.where(eq(gameState.userId, userId))
+		.get();
+	return result ?? null;
 }
 
-export async function getRandomHaiyama(db: DrizzleD1Database, userId: string) {
-	const playedIds = await repo.fetchPlayedHaiyamaIds(db, userId);
-	return repo.fetchRandomHaiyama(db, playedIds);
+async function requireGameState(db: DB, userId: string) {
+	const state = await getGameState(db, userId);
+	if (!state) throw new GameError("Game not found", 404);
+	return state;
 }
 
-export async function initGame(
-	db: DrizzleD1Database,
+async function patchGameState(
+	db: DB,
 	userId: string,
-	haiyamaId: string,
-	tiles: Hai[],
+	values: Partial<typeof gameState.$inferInsert>,
 ) {
-	const tehai = tiles.slice(0, 13);
-	const tsumohai = tiles[13] ? [tiles[13]] : [];
-	const remainingHai = tiles.slice(14);
-	await repo.clearKyokuByUser(db, userId);
-	await repo.upsertGameState(db, userId, {
-		kyoku: 1,
+	await db.update(gameState).set(values).where(eq(gameState.userId, userId));
+}
+
+// 同じ牌山を何度も配らないため、そのユーザーがまだ遊んでいない牌山から選ぶ
+async function pickRandomHaiyama(db: DB, userId: string) {
+	const played = await db
+		.select({ haiyamaId: kyoku.haiyamaId })
+		.from(kyoku)
+		.where(eq(kyoku.userId, userId));
+	const playedIds = played.map((r) => r.haiyamaId);
+	const [picked] = await db
+		.select()
+		.from(haiyama)
+		.where(playedIds.length > 0 ? notInArray(haiyama.id, playedIds) : undefined)
+		.orderBy(sql`RANDOM()`)
+		.limit(1);
+	if (!picked) throw new GameError("No haiyama available", 404);
+	return picked;
+}
+
+function dealKyoku(haiyamaId: string, tiles: Hai[]) {
+	return {
 		junme: 1,
 		remainTsumo: 18,
-		score: 25000,
-		haiyama: remainingHai,
+		haiyama: tiles.slice(14),
 		sutehai: [],
-		tehai,
-		tsumohai,
+		tehai: tiles.slice(0, 13),
+		tsumohai: tiles[13] ? [tiles[13]] : [],
 		haiyamaId,
-	});
+	};
 }
 
-export async function startNewGame(db: DrizzleD1Database, userId: string) {
-	const randomHaiyama = await getRandomHaiyama(db, userId);
-	if (!randomHaiyama[0]) throw new GameError("No haiyama available", 404);
-	const { id: haiyamaId, tiles: haiData } = randomHaiyama[0];
-	await initGame(db, userId, haiyamaId, haiData);
+export async function startNewGame(db: DB, userId: string) {
+	const { id, tiles } = await pickRandomHaiyama(db, userId);
+	const values = { kyoku: 1, score: 25000, ...dealKyoku(id, tiles) };
+	await db.delete(kyoku).where(eq(kyoku.userId, userId));
+	await db
+		.insert(gameState)
+		.values({ userId, ...values })
+		.onConflictDoUpdate({ target: gameState.userId, set: values });
 }
 
-export async function tedashi(
-	db: DrizzleD1Database,
-	userId: string,
-	index: number,
-) {
-	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new GameError("Game not found", 404);
+export async function tedashi(db: DB, userId: string, index: number) {
+	const state = await requireGameState(db, userId);
 	if (state.tsumohai.length === 0)
 		throw new GameError("No tsumohai to discard");
 	if (index < 0 || index >= state.tehai.length)
 		throw new GameError("Invalid tile index");
 
-	const tsumohai = state.tsumohai[0];
 	const sortedTehai = sortTehai(state.tehai);
-	const discardedHai = sortedTehai[index];
-	const remainingTehai = sortedTehai.filter((_, i) => i !== index);
 	const newHaiyama = state.haiyama.slice(1);
-
-	await repo.patchGameState(db, userId, {
+	await patchGameState(db, userId, {
 		junme: state.junme + 1,
 		remainTsumo: state.remainTsumo - 1,
 		haiyama: newHaiyama,
-		sutehai: [...state.sutehai, discardedHai],
-		tehai: sortTehai([...remainingTehai, tsumohai]),
+		sutehai: [...state.sutehai, sortedTehai[index]],
+		tehai: sortTehai([
+			...sortedTehai.filter((_, i) => i !== index),
+			state.tsumohai[0],
+		]),
 		tsumohai: newHaiyama.length > 0 ? [newHaiyama[0]] : [],
 	});
 }
 
-export async function tsumogiri(db: DrizzleD1Database, userId: string) {
-	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new GameError("Game not found", 404);
+export async function tsumogiri(db: DB, userId: string) {
+	const state = await requireGameState(db, userId);
 	if (state.tsumohai.length === 0)
 		throw new GameError("No tsumohai to discard");
 
 	const newHaiyama = state.haiyama.slice(1);
-
-	await repo.patchGameState(db, userId, {
+	await patchGameState(db, userId, {
 		junme: state.junme + 1,
 		remainTsumo: state.remainTsumo - 1,
 		haiyama: newHaiyama,
@@ -110,112 +128,78 @@ export async function tsumogiri(db: DrizzleD1Database, userId: string) {
 	});
 }
 
-export async function jikyoku(db: DrizzleD1Database, userId: string) {
-	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new GameError("Game not found", 404);
-	await repo.patchGameState(db, userId, { kyoku: state.kyoku + 1 });
-}
-
-async function restartGame(
-	db: DrizzleD1Database,
+// 局の結果を記録し、次の局を配る。4 局終わっていたらゲーム状態を消して終局を返す
+async function finishKyoku(
+	db: DB,
 	userId: string,
-): Promise<{ isGameOver: boolean }> {
-	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new GameError("Game not found", 404);
-
-	const newKyoku = state.kyoku + 1;
-	if (newKyoku > 4) return { isGameOver: true };
-
-	const randomHaiyama = await getRandomHaiyama(db, userId);
-	if (!randomHaiyama[0]) throw new GameError("No haiyama available", 404);
-	const { id: newHaiyamaId, tiles } = randomHaiyama[0];
-	const tehai = tiles.slice(0, 13);
-	const tsumohai = tiles[13] ? [tiles[13]] : [];
-	const remainingHai = tiles.slice(14);
-
-	await repo.patchGameState(db, userId, {
-		kyoku: newKyoku,
-		junme: 1,
-		remainTsumo: 18,
-		haiyama: remainingHai,
-		sutehai: [],
-		tehai,
-		tsumohai,
-		haiyamaId: newHaiyamaId,
-	});
-
-	return { isGameOver: false };
-}
-
-async function recordKyoku(
-	db: DrizzleD1Database,
-	userId: string,
-	options: {
+	state: GameStateRecord,
+	result: {
 		didAgari: boolean;
 		agariJunme?: number;
 		shanten: number;
 		scoreDelta: number;
 	},
-) {
-	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new GameError("Game not found", 404);
-	if (!state.haiyamaId) throw new GameError("Haiyama ID not found");
+): Promise<{ isGameOver: boolean }> {
+	const haiyamaId = state.haiyamaId;
+	if (!haiyamaId) throw new GameError("Haiyama ID not found");
 
-	await repo.insertKyokuRecord(db, {
+	await db.insert(kyoku).values({
 		userId,
-		haiyamaId: state.haiyamaId,
-		didAgari: options.didAgari,
-		agariJunme: options.agariJunme ?? null,
-		shanten: options.shanten,
-		scoreDelta: options.scoreDelta,
+		haiyamaId,
+		didAgari: result.didAgari,
+		agariJunme: result.agariJunme ?? null,
+		shanten: result.shanten,
+		scoreDelta: result.scoreDelta,
 	});
-	await repo.patchGameState(db, userId, {
-		score: state.score + options.scoreDelta,
+	await db
+		.update(haiyama)
+		.set({
+			avgAgariJunme: sql`COALESCE(
+				(SELECT AVG(${kyoku.agariJunme}) FROM ${kyoku} WHERE ${kyoku.haiyamaId} = ${haiyama.id}),
+				0
+			)`,
+		})
+		.where(eq(haiyama.id, haiyamaId));
+
+	if (state.kyoku >= 4) {
+		await db.delete(gameState).where(eq(gameState.userId, userId));
+		return { isGameOver: true };
+	}
+
+	const { id, tiles } = await pickRandomHaiyama(db, userId);
+	await patchGameState(db, userId, {
+		kyoku: state.kyoku + 1,
+		score: state.score + result.scoreDelta,
+		...dealKyoku(id, tiles),
 	});
-	await repo.refreshHaiyamaStats(db, state.haiyamaId);
+	return { isGameOver: false };
 }
 
-export async function performAgari(
-	db: DrizzleD1Database,
-	userId: string,
-): Promise<{ isGameOver: boolean }> {
-	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new GameError("Game state not found", 404);
-
+export async function performAgari(db: DB, userId: string) {
+	const state = await requireGameState(db, userId);
 	const tsumohai = state.tsumohai[0];
 	if (!tsumohai) throw new GameError("No tile drawn - cannot declare win");
 	if (!judgeAgari(sortTehai([...state.tehai, tsumohai])))
 		throw new GameError("Hand does not form a valid winning combination");
 
-	const scoreDelta = getAgariScoreDelta(state.junme);
-	await recordKyoku(db, userId, {
+	return finishKyoku(db, userId, state, {
 		didAgari: true,
 		agariJunme: state.junme,
 		shanten: 0,
-		scoreDelta,
+		scoreDelta: getAgariScoreDelta(state.junme),
 	});
-
-	const { isGameOver } = await restartGame(db, userId);
-	if (isGameOver) await repo.removeGameState(db, userId);
-	return { isGameOver };
 }
 
-export async function performRyukyoku(
-	db: DrizzleD1Database,
-	userId: string,
-): Promise<{ isGameOver: boolean }> {
-	const state = await repo.fetchGameState(db, userId);
-	if (!state) throw new GameError("Game state not found", 404);
+export async function performRyukyoku(db: DB, userId: string) {
+	const state = await requireGameState(db, userId);
 	if (state.remainTsumo > 0) throw new GameError("Ryukyoku is not allowed yet");
 
 	const { shanten } = calculateShanten(state.tehai);
-	const scoreDelta = shanten === 0 ? 3000 : shanten === 1 ? 1000 : 0;
-
-	await recordKyoku(db, userId, { didAgari: false, shanten, scoreDelta });
-
-	const { isGameOver } = await restartGame(db, userId);
-	if (isGameOver) await repo.removeGameState(db, userId);
-	return { isGameOver };
+	return finishKyoku(db, userId, state, {
+		didAgari: false,
+		shanten,
+		scoreDelta: shanten === 0 ? 3000 : shanten === 1 ? 1000 : 0,
+	});
 }
 
 export function toGameState(record: GameStateRecord): GameState {
@@ -231,46 +215,61 @@ export function toGameState(record: GameStateRecord): GameState {
 	};
 }
 
+function fetchKyokuByUser(db: DB, userId: string) {
+	return db
+		.select()
+		.from(kyoku)
+		.where(eq(kyoku.userId, userId))
+		.orderBy(desc(kyoku.createdAt));
+}
+
+const totalScore = sql<number>`25000 + coalesce(sum(${kyoku.scoreDelta}), 0)`;
+
 export async function getGameOverData(
-	db: DrizzleD1Database,
+	db: DB,
 	userId: string,
 ): Promise<GameOverData> {
-	const allKyoku = await repo.fetchKyokuByUser(db, userId);
+	const allKyoku = await fetchKyokuByUser(db, userId);
 
 	const totalKyoku = allKyoku.length;
 	const agariCount = allKyoku.filter((k) => k.didAgari).length;
-	const ryukyokuCount = totalKyoku - agariCount;
 	const tenpaiCount = allKyoku.filter(
 		(k) => !k.didAgari && k.shanten === 0,
 	).length;
 	const finalScore =
 		25000 + allKyoku.reduce((sum, k) => sum + (k.scoreDelta ?? 0), 0);
 
-	const totals = await repo.fetchAllUserScoreTotals(db);
+	const totals = await db
+		.select({ userId: kyoku.userId, totalScore })
+		.from(kyoku)
+		.groupBy(kyoku.userId)
+		.orderBy(desc(totalScore));
 	const topScore = totals[0]?.totalScore ?? finalScore;
 	const userIndex = totals.findIndex((t) => t.userId === userId);
 	const userTotalScore = totals[userIndex]?.totalScore ?? finalScore;
-	const rank = userIndex === -1 ? totals.length + 1 : userIndex + 1;
 
 	return {
 		finalScore,
-		rank,
+		rank: userIndex === -1 ? totals.length + 1 : userIndex + 1,
 		totalPlayers: totals.length,
 		gapToTop: Math.max(0, topScore - userTotalScore),
 		totalKyoku,
 		agariCount,
-		ryukyokuCount,
+		ryukyokuCount: totalKyoku - agariCount,
 		tenpaiCount,
 	};
 }
 
-export async function getScoreData(
-	db: DrizzleD1Database,
-	userId: string,
-): Promise<ScoreData> {
-	const records = await repo.fetchKyokuByUser(db, userId);
-	const stats = await repo.fetchKyokuStatsByHaiyama(db);
-
+export async function getScoreData(db: DB, userId: string): Promise<ScoreData> {
+	const records = await fetchKyokuByUser(db, userId);
+	const stats = await db
+		.select({
+			haiyamaId: kyoku.haiyamaId,
+			playedCount: sql<number>`count(*)`,
+			agariCount: sql<number>`coalesce(sum(case when ${kyoku.didAgari} then 1 else 0 end), 0)`,
+		})
+		.from(kyoku)
+		.groupBy(kyoku.haiyamaId);
 	const statsByHaiyamaId = new Map(stats.map((s) => [s.haiyamaId, s]));
 
 	const recordsWithStats: KyokuRecord[] = records.map((r) => {
