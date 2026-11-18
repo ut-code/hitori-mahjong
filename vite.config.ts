@@ -1,14 +1,18 @@
 import { cloudflare } from "@cloudflare/vite-plugin";
-import { reactRouter } from "@react-router/dev/vite";
+import solid from "@solidjs/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
+import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+	resolve: {
+		tsconfigPaths: true,
+	},
 	plugins: [
 		cloudflare({ viteEnvironment: { name: "ssr" } }),
 		tailwindcss(),
-		reactRouter(),
-		tsconfigPaths(),
+		// 既存のコードを app/ に置いているため、TanStack Start の既定の src/ ではなく app/ を見させる
+		tanstackStart({ srcDirectory: "app" }),
+		solid({ ssr: true }),
 	],
 });

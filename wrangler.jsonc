@@ -9,7 +9,7 @@
 	"account_id": "4bd6f8a7a6ae9e00fa2d32eb8c65ad97",
 	"compatibility_date": "2025-04-04",
 	"compatibility_flags": ["nodejs_compat"],
-	"main": "./workers/app.ts",
+	"main": "@tanstack/solid-start/server-entry",
 	"vars": {
 		"BETTER_AUTH_URL": "https://mahjong.utcode.net"
 	},

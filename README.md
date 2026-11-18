@@ -4,7 +4,7 @@
 
 ## 技術スタック
 
-- **フレームワーク**: React Router v7 (SSR)
+- **フレームワーク**: TanStack Start (SSR) + Solid 2
 - **スタイリング**: TailwindCSS + DaisyUI
 - **デプロイ**: Cloudflare Workers
 - **データベース**: Cloudflare D1 (SQLite), Drizzle ORM
@@ -30,10 +30,12 @@ pnpm drizzle-kit migrate
 ### Better-Auth
 
 ```bash
-pnpx auth generate --output ./app/db/auth-schema.ts --adapter drizzle --dialect sqlite
+pnpx auth generate --output ./app/lib/service/db/auth-schema.ts --adapter drizzle --dialect sqlite
 ```
 
 ### リモート (Production)
+
+main への push で GitHub Actions がデプロイ前に適用する。手で当てるときは以下。
 
 ```bash
 pnpm wrangler d1 migrations apply hitori-mahjong-db --remote
@@ -41,8 +43,8 @@ pnpm wrangler d1 migrations apply hitori-mahjong-db --remote
 
 ## 牌山の seed
 
-`seed/haiyama.sql` は開発・検証用の牌山データです。D1 ではトランザクション文が使えないため、`BEGIN` / `COMMIT` は含めていません。
+`scripts/haiyama.sql` は開発・検証用の牌山データです。D1 ではトランザクション文が使えないため、`BEGIN` / `COMMIT` は含めていません。
 
 ```bash
-pnpm wrangler d1 execute hitori-mahjong-db --remote --file seed/haiyama.sql
+pnpm wrangler d1 execute hitori-mahjong-db --remote --file scripts/haiyama.sql
 ```
