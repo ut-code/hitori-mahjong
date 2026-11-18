@@ -203,9 +203,9 @@ importers:
       solid-js:
         specifier: ^2.0.0
         version: 2.0.0
-      zod:
-        specifier: ^4.3.6
-        version: 4.4.3
+      valibot:
+        specifier: ^1.5.0
+        version: 1.5.0
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: ^1.70.0
@@ -3517,6 +3517,14 @@ packages:
     resolution: {integrity: sha512-vzi9uRZ926x4XV73S/4qQaTwPXM2JBj6/6lI/byHH1jOpCzb0zDbfytgA9LcN/hzb2l7WQSQnxITOVx5un/wGw==}
     hasBin: true
 
+  valibot@1.5.0:
+    resolution: {integrity: sha512-nil6AkP2TChWL43Z5uJ6GTxX01CUA+g8LWUM+N/rB9NBbkUMaUsi9PUNzlUPgoKASgmx9f7eGOYpJ04/fSa6FQ==}
+    peerDependencies:
+      typescript: '>=5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   vite-plus@1.6.0:
     resolution: {integrity: sha512-h6aIA80QcAhICBp2Xga8lPM9jOZm2VvPn7Ls531C7RjD9herrT1rPDUMY72IdFf1XyWDmFVEwO+W3EgXtSSMLQ==}
     engines: {node: ^22.18.0 || ^24.11.0 || >=26.0.0}
@@ -6182,6 +6190,8 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@13.0.2: {}
+
+  valibot@1.5.0: {}
 
   vite-plus@1.6.0(@types/node@25.9.4)(@vitest/ui@5.1.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.22.4):
     dependencies:

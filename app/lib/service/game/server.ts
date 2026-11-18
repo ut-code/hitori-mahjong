@@ -1,6 +1,6 @@
 import { notFound, redirect } from "@tanstack/solid-router";
 import { createServerFn } from "@tanstack/solid-start";
-import { z } from "zod";
+import * as v from "valibot";
 import { getSessionUserId } from "@/lib/service/auth";
 import { getDB } from "@/lib/service/db";
 import {
@@ -34,9 +34,12 @@ export const getPlayStateFn = createServerFn({ method: "GET" }).handler(async ()
   return toGameState(state);
 });
 
-const discardSchema = z.discriminatedUnion("intent", [
-  z.object({ intent: z.literal("tedashi"), index: z.number().int().min(0) }),
-  z.object({ intent: z.literal("tsumogiri") }),
+const discardSchema = v.variant("intent", [
+  v.object({
+    intent: v.literal("tedashi"),
+    index: v.pipe(v.number(), v.integer(), v.minValue(0)),
+  }),
+  v.object({ intent: v.literal("tsumogiri") }),
 ]);
 
 export const discardFn = createServerFn({ method: "POST" })
@@ -54,8 +57,8 @@ export const discardFn = createServerFn({ method: "POST" })
     return toGameState(latest);
   });
 
-const finishKyokuSchema = z.object({
-  intent: z.enum(["agari", "ryukyoku"]),
+const finishKyokuSchema = v.object({
+  intent: v.picklist(["agari", "ryukyoku"]),
 });
 
 export const finishKyokuFn = createServerFn({ method: "POST" })
