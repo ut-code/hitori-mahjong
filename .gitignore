@@ -3,9 +3,10 @@
 /node_modules/
 *.tsbuildinfo
 
-# React Router
-/.react-router/
-/build/
+# TanStack Start
+/.tanstack/
+/.output/
+/dist/
 
 # Cloudflare
 .mf
@@ -20,3 +21,4 @@ worker-configuration.d.ts
 .direnv
 
 crash.log
+.vitest/
