@@ -1,5 +1,5 @@
 {
-  "include": ["app/**/*", "proxy/**/*", "*.ts", "worker-configuration.d.ts"],
+  "include": ["app/**/*", "proxy/**/*", "scripts/**/*", "*.ts", "worker-configuration.d.ts"],
   "compilerOptions": {
     "strict": true,
     "noEmit": true,
