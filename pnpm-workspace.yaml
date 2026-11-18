@@ -3,3 +3,18 @@ allowBuilds:
   esbuild: true
   lefthook: true
   workerd: true
+# Solid 2 の正式版は公開直後で既定の 1 日待ちに引っかかり CI のインストールが止まるため、このバージョンに限って除外する。
+# バージョンまで固定しているので、今後の更新は通常どおり待ち期間の対象になる
+minimumReleaseAgeExclude:
+  - solid-js@2.0.0
+  - "@solidjs/web@2.0.0"
+  - "@solidjs/signals@2.0.0"
+  - "@solidjs/vite-plugin@3.0.1"
+  - "@solidjs/compiler@2.0.0"
+  - "@solidjs/compiler-darwin-arm64@2.0.0"
+  - "@solidjs/compiler-darwin-x64@2.0.0"
+  - "@solidjs/compiler-linux-arm64-gnu@2.0.0"
+  - "@solidjs/compiler-linux-x64-gnu@2.0.0"
+  - "@solidjs/compiler-wasm32-wasi@2.0.0"
+  - "@solidjs/compiler-win32-x64-msvc@2.0.0"
+  - "@cloudflare/vite-plugin@1.70.0"
